@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- <record id="view_account_checkbook_search" model="ir.ui.view">
+            <field name="name">account.checkbook.search</field>
+            <field name="model">check.cancel</field>
+            <field name="arch" type="xml">
+                <search string="Checkbooks">
+                    <field name="name"/>
+                    <field name="account_bank_id"/>
+                    <field name="state"/>
+                </search>
+            </field>
+            El onchange de la linea 48 no lo agarra en la vista, hay que buscar la forma de hacerlo en el py.
+        </record> -->
+
+        <record id="view_check_cancel_tree" model="ir.ui.view">
+            <field name="name">check.cancel.tree</field>
+            <field name="model">check.cancel</field>
+            <field name="arch" type="xml">
+                <tree string="Cheques Anulados">
+                    <field name="date" string="Fecha de Anulación"/>
+                    <field name="user_id" string="Usuario"/>
+                    <field name="checkbook_id" string="Chequera"/>
+                    <field name="number" string="Número de Cheque"/>
+                    <field name="notas" string="Notas"/>
+                    <field name="state" string="Estado"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_check_cancel_form" model="ir.ui.view">
+            <field name="name">check.cancel.form</field>
+            <field name="model">check.cancel</field>
+            <field name="arch" type="xml">
+                <form string="Anular Número de Cheque">
+                <header string="Anular Cheque">
+                    <button name="wkf_cancel" string="Cancel" states="draft" type="object" class="oe_highlight"/>
+                    <!-- <button name="wkf_undo" string="Cancelar" states="cancel" type="object" class="oe_highlight"/> -->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,cancel" statusbar_colors='{"active":"blue"}'/>
+                </header>
+                <sheet string="Datos">
+                    <group colspan="4">
+                        <field name="bank_id" string="Banco" required = "1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="account_bank_id" string="Cuenta Bancaria" required = "1" domain="[('bank_id', '=', bank_id)]" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="checkbook_id" invisible="1"/>
+                        <field name="checkbook_ids" string="Chequera" required = "1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="checks_id" string="Cheques no utilizados" attrs="{'readonly': [('state', '!=', 'draft')]}" required = "1"/>
+                        <field name="numbers_id" string="Cheque a Cancelar" attrs="{'invisible':[('checks_id', '=', True)],'required':[('checks_id','=', 'True')],'readonly': [('state', '!=', 'draft')]}" domain="[('checkbook_id', '=', checkbook_ids), ('state', '=', 'draft')]"/>
+                        <field name="numbers" invisible="1"/>
+                        <!--<field name="actual" required = "1" attrs="{'invisible':[('checks_id', '=', False)]}"/>
+                        <field name="ultimo" required = "1" attrs="{'invisible':[('checks_id', '=', False)]}"/>-->
+                        <field name="number" string="Cheque a Cancelar" attrs="{'invisible':[('checks_id', '=', False)],'required':[('checks_id','=', 'False')],'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="user_id" string="Usuario" attrs="{'readonly': [('state','!=','draft')]}" domain = "[('user_id','=',user_id)]" options='{"no_create": 1, "no_create_edit": 1}'/>
+                        <field name="date" string="Fecha de Anulación" attrs="{'readonly': [('state','!=','draft')]}"/>
+                    	<field name="notas"  string="Notas" required = "1"/>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_check_cancel" model="ir.actions.act_window">
+            <field name="name">Cheques Anulados</field>
+            <field name="res_model">check.cancel</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="search_view_id" ref=""/> -->
+        </record>
+
+       <menuitem action="action_view_check_cancel" id="view_check_cancel" parent="l10n_ve_account_check_duo.menu_account_check" sequence="104"/>
+
+    </data>
+</odoo>
