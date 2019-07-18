@@ -50,8 +50,8 @@ class L10nUt(models.Model):
         """ Return the number of tributary
         units depending on an amount of money.
         """
-        if context is None:
-            context = {}
+        #if context is None:
+        #    context = {}
         result = 0.0
         ut = self.get_amount_ut(date=date)
         if ut:
@@ -61,34 +61,33 @@ class L10nUt(models.Model):
     def compute_ut_to_money(self,amount_ut, date=False,context=None):
         """ Transforms from tax units into money
         """
-        if context is None:
-            context = {}
+        #if context is None:
+        #    context = {}
         money = 0.0
         ut = self.get_amount_ut(date)
         if ut:
             money = amount_ut * ut
         return money
 
-    def exchange(self, from_amount, from_currency_id, to_currency_id,
-                 exchange_date, context=None):
-        context = context or {}
+    def exchange(self, from_amount, from_currency_id, to_currency_id, exchange_date, context=None):
+        #context = context or {}
         if from_currency_id == to_currency_id:
             return from_amount
-        rc_obj = self.pool.get('res.currency')
-        # euranga07122016 modificacion
-        context = {'date': exchange_date}
-        return rc_obj.compute(self, from_currency_id, to_currency_id,from_amount, context=context)
 
-    def sxc(self, from_currency_id, to_currency_id, exchange_date,
-            context=None):
+        rc_obj = self.env['res.currency']
+        # euranga07122016 modificacion
+        #context = {'date': exchange_date}
+        fci = rc_obj.browse(from_currency_id)
+        tci = rc_obj.browse(to_currency_id)
+        return rc_obj._compute(fci, tci,from_amount)
+
+    def sxc(self, from_currency_id, to_currency_id, exchange_date, context=None):
         '''
         This is a clousure that allow to use the exchange rate conversion in a
         short way
         '''
-        context = context or {}
+        #context = context or {}
 
         def _xc(from_amount):
-            return self.exchange(from_amount, from_currency_id,
-                                 to_currency_id, exchange_date,
-                                 context=context)
+            return self.exchange(from_amount, from_currency_id, to_currency_id, exchange_date)
         return _xc

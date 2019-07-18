@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="action_account_invoice_with_payment_report_me"
+            string="Factura M/E"
+            model="account.invoice"
+            report_type="qweb-pdf"
+            name="intel_account_invoice_report.report_invoice_document_with_payment_me"
+            file="intel_account_invoice_report.report_invoice_document_with_payment_me"
+            paperformat ="intel_account_invoice_report.paperformat_account_invoice"
+            menu = "True"
+    />
+      <template id="report_invoice_document_with_payment_me">
+          <div class="page" style="page-break-before:always;">
+               <div class="article">
+                   <t t-foreach="docs" t-as="o">
+                        <div class="text-right" style=" font-size: 20px;">
+                            <strong>FACTURA: <span t-field="o.number"/><br></br>
+                                 N° DE CONTROL: <span t-field="o.nro_ctrl"/><br></br></strong>
+                        </div><br></br>
+                        <table class="text-right" style=" font-size: 12px; width:100%; height:100px;">
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%;">
+                                    CLIENTE:
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <span t-field="o.partner_id.name"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%;">
+                                    RIF:
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <span t-field="o.partner_id.vat"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%;">
+                                    DIRECCIÓN:
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <span t-field="o.partner_id.street"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%;">
+                                    CONTACTO:
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <t t-foreach="o.partner_id.child_ids" t-as="a">
+                                        <span t-field="a.name"/>,
+                                    </t>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%;">
+                                    TELÉFONOS:
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <span t-field="o.partner_id.phone"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%;">
+                                    FAX:
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <span t-field="o.partner_id.fax"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%; height: 10px;">
+                                    EMAIL:
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <span t-field="o.partner_id.email"/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 10px;">
+                                <td class="text-left" style="width:15%;">
+                                    <h5>PROYECTO:</h5>
+                                </td>
+                                <td class="text-left" style="width:55%;">
+                                    <h5><span t-field="o.account_analytic_name"/></h5>
+                                </td>
+                                <td class="text-right" style="width:30%;">
+                                    <h5>Fecha de Emisión:    <span t-field="o.date_invoice"/></h5>
+                                </td>
+                            </tr>
+                        </table><br></br><br></br>
+                       <t t-set="moneda" t-value="any([l.price_subtotal for l in o.invoice_line_ids])"/>
+                       <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+                        <table style="width:100%;">
+                            <thead>
+                                <tr class="text-center table-bordered" style="height:20px; border: 1px solid #000000; font-size: 12px;">
+                                    <th class="text-center table-bordered" style="width:10%; vertical-align: middle; border: 1px solid #000000; ">ITEM/COD</th>
+                                    <th class="text-center table-bordered" style="width:35%; vertical-align: middle; border: 1px solid #000000;">DESCRIPCIÓN</th>
+                                    <th class="text-center table-bordered" style="width:5%; vertical-align: middle; border: 1px solid #000000;">CANT.</th>
+                                    <th class="text-center table-bordered" style="width:10%; vertical-align: middle; border: 1px solid #000000;">UNID.</th>
+                                    <th t-if="display_discount" class="text-center table-bordered" style="width:10%; vertical-align: middle; border: 1px solid #000000;">DESC(%).</th>
+                                    <th class="text-center table-bordered" style="width:10%; vertical-align: middle; border: 1px solid #000000;">PRECIO UNIT.</th>
+                                    <th class="text-center table-bordered" style="width:15%; vertical-align: middle; border: 1px solid #000000;">PRECIO TOTAL Bs.</th>
+                                    <th t-if="moneda" class="text-center table-bordered" style="width:15%; vertical-align: middle; border: 1px solid #000000;">PRECIO TOTAL <span t-esc="o.currency_id.name"/>.</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="invoice_tbody">
+                                <t t-set="contador" t-value="1"/>
+                                <tr t-foreach="o.invoice_line_ids" t-as="l" style=" border: 1px solid #000000; height: 25px;" class="text-center">
+                                    <td style=" border: 1px solid #000000; vertical-align: middle; " ><span t-esc="contador"/></td>
+                                    <td class="text-left" style=" border: 1px solid #000000; vertical-align: middle; "><span t-field="l.name"/></td>
+                                    <td style=" border: 1px solid #000000; vertical-align: middle;">
+                                        <span t-esc="str(l.quantity).strip('.0')"/>
+                                    </td>
+                                    <td style=" border: 1px solid #000000; vertical-align: middle;">
+                                        <span t-field="l.uom_id"/>
+                                    </td>
+                                    <td class="text-right" t-if="display_discount" style=" border: 1px solid #000000; vertical-align: middle;">
+                                        <span t-field="l.discount"/>
+                                    </td>
+                                    <td class="text-right" style=" border: 1px solid #000000; vertical-align: middle;" >
+                                        <span t-field="l.price_unit"/>
+                                    </td>
+                                   <td class="text-right" style=" border: 1px solid #000000; vertical-align: middle; ">
+                                        <span t-field="l.tasa_me"/>
+                                    </td>
+                                    <td class="text-right" t-if="moneda" style=" border: 1px solid #000000; vertical-align: middle; ">
+                                        <span t-field="l.price_total" />
+                                    </td>
+                                    <t t-set="contador" t-value="contador+1"/>
+                                </tr>
+                                <tr>
+                                    <td rowspan="1"><p> &amp;nbsp;</p></td>
+                                </tr>
+                                <tr style="border-top: 1px solid black; height: 25px;" >
+                                    <td colspan="3"></td>
+                                    <td colspan="2" class="table table-condensed text-left"><strong>SUBTOTAL <!--span t-esc="o.currency_id.name"/--></strong></td>
+                                    <td class="text-right">
+                                       Bs. <span t-field="o.amount_untaxed_bs"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_untaxed"/>
+                                    </td>
+                                </tr>
+                                <tr style="height: 25px;">
+                                    <td colspan="3"></td>
+                                    <td colspan="2" class="text-left"><strong>IMPUESTO <t t-esc="o.invoice_line_ids[0].invoice_line_tax_ids.tax_group_id.name" /></strong></td>
+                                    <td class="text-right">
+                                       Bs. <span t-field="o.amount_tax_bs"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_tax"/>
+                                    </td>
+                                </tr>
+                                <tr style="height: 25px;">
+                                    <td colspan="3"></td>
+                                    <td colspan="2" class="text-left"><strong>PRECIO TOTAL <!--span t-esc="o.currency_id.name"/--></strong></td>
+                                    <td class="text-right">
+                                        <strong>Bs. <span t-field="o.amount_total_bs"/></strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong><span t-field="o.amount_total"/></strong>
+                                    </td>
+                                </tr>
+                                <t t-set="payments_vals" t-value="o._get_payments_vals()"/>
+                                <t t-foreach="payments_vals" t-as="payment_vals">
+                                    <tr style="height: 25px;">
+                                        <td colspan="3"></td>
+                                        <td style="border-top: 1px solid black;" colspan="2"><br></br>
+                                            <i class="oe_form_field text-right oe_payment_label">Cobro el <t t-esc="payment_vals['date']"  t-options="{'widget': 'date'}"/></i>
+                                        </td>
+                                        <td class="text-right" style="border-top: 1px solid black;"><br></br>
+                                          Bs. <span t-esc="payment_vals['amount_bs']"/>
+                                        </td>
+                                        <td class="text-right" style="border-top: 1px solid black;"><br></br>
+                                           <span t-esc="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="len(payments_vals) > 0">
+                                    <tr style="height: 30px;">
+                                        <td colspan="3"></td>
+                                        <td colspan="2"><strong>Saldo</strong></td>
+                                        <td class="text-right">
+                                            Bs. <span t-field="o.residual_company_signed" />
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.residual" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table><br></br><br></br>
+                        <div>
+                            <p t-if="o.comment">
+                                <strong><h5>CONDICIONES GENERALES</h5></strong>
+                                <p><span t-field="o.comment"/></p>
+                            </p>
+                        </div>
+                    </t>
+               </div>
+          </div>
+        </template>
+    </data>
+</odoo>

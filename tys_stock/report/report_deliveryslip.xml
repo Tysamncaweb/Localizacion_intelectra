@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="deliveryslip_layout_headers">
+        <div class="header">
+            <div  style="border-bottom: 2px solid black">
+                <table  cellspacing="0" cellpadding="0" border="0" style="width:100%; height:15px;">
+                    <tr>
+                        <td style="width:17%;">
+                            <img t-att-src="'data:image/png;base64,%s' %(to_text(res_company.logo))" style="width:280px; height:140px; margin-top:40px; margin-bottom:0px;"/>
+                        </td>
+                        <td  style="width:43%;">
+                            <p><b><span t-field="o.company_id.street"/>, <span t-field="o.company_id.city"/> <span t-field="o.company_id.zip"/>. <span t-field="o.company_id.country_id.name"/>
+                            TF.: (0212) <span t-field="o.company_id.phone"/> / Fax.: (212) <span t-field="o.company_id.fax"/> / Email: <span t-field="o.company_id.email"/> / <span t-field="o.company_id.website"/></b></p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_delivery_reception">
+        <div class="page">
+            <t t-call= "tys_stock.deliveryslip_layout_headers"/>
+            <div class="article">
+                <br/>
+                <table style="width:100%;">
+                    <tbody>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:40%" colspan="2">
+                                <h1 style="font-size:16px;text-align: right;"><b>RECEPCIÓN DE PRODUCTOS</b></h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: left;"><b>N° DE CONTROL</b></h1>
+                            </td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: center;"><span t-field="o.name"/></h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: ;"><b>Fecha de Recepción:</b></h1>
+                            </td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: center;"><span t-field="o.date" t-field-options = '{"format": "d/M/Y"}'/></h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: ;"><b>Documento de Origen:</b></h1>
+                            </td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: center;"><span t-field="o.origin"/></h1>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <table style="width:100%; height:110px;">
+                    <tbody>
+                        <tr style="height:25%;" >
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align: ;"><b>Proveedor:</b></span>
+                            </td>
+                            <td class="text-left" style="width:50%;">
+                                <span t-field="o.partner_id.name"/>
+                            </td>
+                            <td style="width:20%;">
+                                <span style="font-size:14px;text-align: left;"><b>R.I.F.:</b></span>
+                            </td>
+                            <td style="width:20%;">
+                                <span t-field="o.partner_id.vat"/>
+                            </td>
+                        </tr>
+                        <tr style="height:25%;">
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align: ;"><b>Dirección:</b></span>
+                            </td>
+                            <td class="text-left"  colspan="3" style="width:50%;">
+                                <span t-field="o.partner_id.street"/>
+                            </td>
+                        </tr>
+                        <tr style="height:25%;">
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align: ;"><b>Contacto:</b></span>
+                            </td>
+                            <td class="text-left" style="width:50%;">
+                                <span>___________________________________________________</span>
+                            </td>
+                            <td style="width:20%;">
+                                <span style="font-size:14px;text-align: left;"><b>Teléfono:</b></span>
+                            </td>
+                            <td style="width:20%;">
+                                <span t-field="o.partner_id.mobile"/>
+                            </td>
+                        </tr>
+                        <tr style="height:25%;">
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align:left;"><b>Proyecto:</b></span>
+                            </td>
+                            <td class="text-left" colspan="3" style="width:50%;">
+                                <span t-field="o.project"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="width:100%;border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="width:10%;text-align:center;vertical-align: middle;border: 1px solid black;">CODIGO</th>
+                            <th style="width:5%;text-align:center; vertical-align: middle;border: 1px solid black;"></th>
+                            <th style="width:40%;text-align:center;vertical-align: middle;border: 1px solid black;">PRODUCTO</th>
+                            <th style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;">CANTIDAD PEDIDA</th>
+                            <th style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;">CANTIDAD RECIBIDA</th>
+                            <th style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;">CANTIDAD PENDIENTE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr t-foreach="o.move_lines" t-as="lines" style="height:20px;">
+                                <t t-set="total_departmento" t-value="(lines.product_uom_qty - lines.quantity_done)"/>
+                                <td style="width:10%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-field="lines.default_code"/></td>
+                                <td style="width:5%; text-align:center; vertical-align: middle;border: 1px solid black;height:15px;"></td>
+                                <td style="width:40%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-field="lines.product_id.name"/></td>
+                                <td style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-esc="'%.0f'% lines.product_uom_qty"/> <span t-field="lines.product_uom"/></td>
+                                <td style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-esc="'%.0f'% lines.quantity_done"/> <span t-field="lines.product_uom"/></td>
+                                <td style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;">
+                                    <t t-if="total_departmento > 0">
+                                        <span t-esc="'%.0f'% total_departmento"/> <span t-field="lines.product_uom"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span>0</span>
+                                    </t>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <table style="width:100%;border-collapse: collapse; height:140px;">
+                    <tbody>
+                        <tr style="border-top: 1px solid black; border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;<b>DESPACHA</b></td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;<b>TRANSPORTA</b></td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;<b>RECIBE</b></td>
+                        </tr>
+                        <tr style="border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Firma: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Firma: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Firma: ________________________</td>
+                        </tr>
+                        <tr style="border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Nombre: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Nombre: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Nombre: _______________________</td>
+                        </tr>
+                        <tr style="border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Cédula: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Cédula: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Cédula: _______________________</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid black;border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Fecha: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Fecha: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Fecha: ________________________</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <table style="width:100%;height:50px;">
+                    <tbody>
+                        <tr style="height:10%;">
+                            <td style="width:7%;"><b>Observaciones:</b></td>
+                            <td style="width:93%;border-bottom: 1px solid black;">&amp;nbsp;</td>
+                        </tr>
+                        <tr style="height:80%;">
+                            <td colspan="2">&amp;nbsp;</td>
+                        </tr>
+                        <tr style="height:10%;">
+                            <td colspan="2" style="width:100%;border-bottom: 1px solid black;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_delivery_order">
+        <div class="page">
+            <t t-call= "tys_stock.deliveryslip_layout_headers"/>
+            <div class="article">
+                <br/>
+                <table style="width:100%;">
+                    <tbody>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:40%" colspan="2">
+                                <h1 style="font-size:16px;text-align: right;"><b>SALIDA DE PRODUCTOS</b></h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: left;"><b>N° DE CONTROL</b></h1>
+                            </td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: center;"><span t-field="o.name"/></h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: ;"><b>Fecha de Despacho:</b></h1>
+                            </td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: center;"><span t-field="o.date" t-field-options = '{"format": "d/M/Y"}'/></h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:60%"></td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: ;"><b>Documento de Origen:</b></h1>
+                            </td>
+                            <td style="width:20%">
+                                <h1 style="font-size:14px;text-align: center;"><span t-field="o.origin"/></h1>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <table style="width:100%; height:110px;">
+                    <tbody>
+                        <tr style="height:20%;" >
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align: ;"><b>Cliente:</b></span>
+                            </td>
+                            <td class="text-left" style="width:50%;">
+                                <span t-field="o.partner_id.name"/>
+                            </td>
+                            <td style="width:20%;">
+                                <span style="font-size:14px;text-align: left;"><b>R.I.F.:</b></span>
+                            </td>
+                            <td style="width:20%;">
+                                <span t-field="o.partner_id.vat"/>
+                            </td>
+                        </tr>
+                        <tr style="height:20%;">
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align: ;"><b>Dirección:</b></span>
+                            </td>
+                            <td class="text-left"  colspan="3" >
+                                <span t-field="o.partner_id.street"/>
+                            </td>
+                        </tr>
+                        <tr style="height:20%;">
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align: ;"><b>Contacto:</b></span>
+                            </td>
+                            <td class="text-left" style="width:50%;">
+                                <span>___________________________________________________</span>
+                            </td>
+                            <td style="width:20%;">
+                                <span style="font-size:14px;text-align: left;"><b>Teléfono:</b></span>
+                            </td>
+                            <td style="width:20%;">
+                                <span t-field="o.partner_id.mobile"/>
+                            </td>
+                        </tr>
+                        <tr style="height:20%;">
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align:left;"><b>Proyecto:</b></span>
+                            </td>
+                            <td class="text-left" colspan="3">
+                                <span t-field="o.project"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="width:100%;height:20px;">
+                    <tbody>
+                        <tr style="height:100%;">
+                            <td style="width:10%;" >
+                                <span style="font-size:14px;text-align: ;"><b>Origen:</b></span>
+                            </td>
+                            <td class="text-left" style="width:40%;">
+                                <span>___________________________________________________</span>
+                            </td>
+                            <td style="width:10%;">
+                                <span style="font-size:14px;text-align: left;"><b>Destino:</b></span>
+                            </td>
+                            <td class="text-left" style="width:40%;">
+                                <span>___________________________________________________</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <table style="width:100%;border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="width:10%;text-align:center;vertical-align: middle;border: 1px solid black;">CODIGO</th>
+                            <th style="width:40%;text-align:center;vertical-align: middle;border: 1px solid black;">PRODUCTO</th>
+                            <th style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;">DEMANDA INICIAL</th>
+                            <th style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;">CANTIDAD DESPACHADA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t >
+
+                            <tr t-foreach="o.move_lines" t-as="lines" style="height:20px;">
+                                <t t-set="total_departmento" t-value="(lines.product_uom_qty - lines.quantity_done)"/>
+                                <td style="width:10%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-field="lines.default_code"/></td>
+                                <td style="width:40%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-field="lines.product_id.name"/></td>
+                                <td style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-esc="'%.0f'% lines.product_uom_qty"/> <span t-field="lines.product_uom"/></td>
+                                <td style="width:15%;text-align:center;vertical-align: middle;border: 1px solid black;height:15px;"><span t-esc="'%.0f'% lines.quantity_done"/> <span t-field="lines.product_uom"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <br/>
+                <table style="width:100%;border-collapse: collapse; height:140px;">
+                    <tbody>
+                        <tr style="border-top: 1px solid black; border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;<b>DESPACHA</b></td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;<b>TRANSPORTA</b></td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;<b>RECIBE</b></td>
+                        </tr>
+                        <tr style="border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Firma: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Firma: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Firma: ________________________</td>
+                        </tr>
+                        <tr style="border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Nombre: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Nombre: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Nombre: _______________________</td>
+                        </tr>
+                        <tr style="border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Cédula: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Cédula: _______________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Cédula: _______________________</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid black;border-right:1px solid black; border-left:1px solid black;height:20%;">
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Fecha: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;border-right:1px solid black;">&amp;nbsp;Fecha: ________________________</td>
+                            <td style="width:33,33%;text-align:left;vertical-align: middle;">&amp;nbsp;Fecha: ________________________</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <table style="width:100%;height:70px;">
+                    <tbody>
+                        <tr style="height:8%;">
+                            <td style="width:7%;"><b>Observaciones:</b></td>
+                            <td style="width:93%;border-bottom: 1px solid black;">&amp;nbsp;</td>
+                        </tr>
+                        <tr style="height:30%;">
+                            <td colspan="2">&amp;nbsp;</td>
+                        </tr>
+                        <tr style="height:8%;">
+                            <td colspan="2" style="width:100%;border-bottom: 1px solid black;"></td>
+                        </tr>
+                        <tr style="height:46%;">
+                            <td colspan="2">&amp;nbsp;</td>
+                        </tr>
+                        <tr style="height:8%;">
+                            <td colspan="2" style="width:100%;border-bottom: 1px solid black;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_deliveryslip_inherit" inherit_id="stock.report_deliveryslip">
+        <t t-foreach="docs" t-as="o" position="replace">
+            <t t-foreach="docs" t-as="o">
+                <t t-if="o['var_id'] == '3'">
+                    <t t-call="tys_stock.report_delivery_reception"/>
+                </t>
+                <t t-elif="o['var_id'] == '2'">
+                    <t t-call="tys_stock.report_delivery_order"/>
+                </t>
+                <t t-elif="o['var_id'] == '1'">
+                    <t t-call="stock.report_delivery_document"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

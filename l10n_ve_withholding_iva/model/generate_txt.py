@@ -301,7 +301,7 @@ class TxtIva(models.Model):
     def get_period(self, date):
         split_date = date.split('-')
 
-        return str(split_date[1]) + str(split_date[0])
+        return str(split_date[0]) + str(split_date[1])
 
     @api.multi
     def generate_txt(self):

@@ -1,0 +1,64 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="stock_view_picking_form_inherit">
+            <field name="name">stock.view.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+
+
+
+            <!--Cambio de nombre de los campos-->
+
+                <!--Variable de validación-->
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="var_id" invisible="1" />
+                </xpath>
+
+                <!--Campos modificados-->
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="partner_id" string="Cliente" attrs="{'invisible': ['|',('var_id', '!=', '2'),('picking_type_code', '=', 'internal')]}"/>
+                    <field name="partner_id" string="Proveedor" attrs="{'invisible': ['|',('var_id', '!=', '3'),('picking_type_code', '=', 'internal')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='product_uom_id']" position="replace">
+                    <field name="product_uom_id" string="Cantidad Pedida" force_save="1" attrs="{'readonly': [('state', '!=', 'draft')]}" groups="product.group_uom"/>
+                </xpath>
+                <xpath expr="//field[@name='quantity_done']" position="replace">
+                    <field name="quantity_done" string="Cantidad Recibida" attrs="{'readonly': [('is_quantity_done_editable', '=', False)]}"/>
+                </xpath>
+
+            <!--Agregar campos-->
+
+                <!--Barra de estados-->
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" widget="statusbar" attrs="{'invisible': [('var_id','!=','2')]}" statusbar_visible="draft,confirmed,partially_available,assigned,done,delivered"/>
+                    <field name="state" widget="statusbar" attrs="{'invisible': [('var_id','=','2')]}" statusbar_visible="draft,confirmed,partially_available,assigned,done" />
+                </xpath>
+
+
+                <!--Boton de entrega-->
+                <xpath expr="//button[@name='button_validate']" position="after">
+                    <button name="button_entrega" attrs="{'invisible': ['|',('state', 'not in', 'done'),('var_id','not in','2')]}" string="Entregar Productos" groups="stock.group_stock_user" type="object" class="oe_highlight"/>
+                </xpath>
+
+                <!--Proyecto-->
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="project" string="Proyecto" required="1" attrs="{'readonly': [('state', '=', ['waiting','confirmed','done','cancel'])]}"/>
+                </xpath>
+
+                <!--Operations-->
+                <xpath expr="//field[@name='move_lines']/tree/field[@name='product_id']" position="before">
+                    <field name="default_code" string="Código" force_save="1" readonly="1" />
+                </xpath>
+
+                <!--Info Adicional-->
+                <xpath expr="/form/sheet/notebook/page[@name='extra']/group" position="after">
+                    <group>
+                        <field name="observations" string="Observaciones" attrs="{'readonly': [('state', '=', ['waiting','confirmed','done','cancel'])]}"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

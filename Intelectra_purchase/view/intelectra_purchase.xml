@@ -1,0 +1,182 @@
+<odoo>
+	<data>
+         <record model="ir.ui.view" id="purchase_order_form_inherit">
+             <field name="name">purchase.order.form.inherit</field>
+             <field name="model">purchase.order</field>
+             <field name="inherit_id" ref="purchase.purchase_order_form"/>
+             <field name="arch" type="xml">
+                 <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="before" >
+                     <field name="Rif"/>
+                 </xpath>
+                 <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="after" >
+                     <field name="Type_of_provider"/>
+                     <field name="date_offer"/>
+                     <field name="project_id"/>
+                 </xpath>
+                 <xpath expr="//form/sheet/group/group/field[@name='partner_ref']" position="after" >
+                     <field name="observations"/>
+                 </xpath>
+                 <xpath expr="//form/sheet/group/group/field[@name='company_id']" position="after" >
+                     <div class="oe_title" colspan="2">
+                     <h2>Configuraciones Generales</h2>
+                     </div><br/>
+                     <!--label colspan="2" name="Payment_Methods" class="oe_title" string="Configuraciones Generales"/-->
+                     <field name="Payment_Methods"/>
+                     <field name="date_created"/>
+                     <field name="user_id"/>
+                     <field name="email" widget="email" context="{'gravatar_image': True}" />
+                     <field name="phone" widget="phone"/>
+                     <field name="delivery_time"/>
+                     <field name="place_of_delivery"/>
+                 </xpath>
+                 <xpath expr="//form/sheet/notebook/page/field/tree" position="replace">
+                            <tree string="Productos" editable="bottom">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" string="Items/Código de producto" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}" force_save="1"/>
+                                    <field name="name" />
+                                    <field name="product_qty"/>
+                                    <field name="product_uom" groups="product.group_uom" attrs="{'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))]}" force_save="1"/>
+                                    <field name="price_unit"/>
+                                    <field name="taxes_id" />
+                                    <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" options="{'no_create': True}" invisible="1"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                            </tree>
+                  </xpath>
+                  <xpath expr="//form/sheet/notebook/page/group/field[@name='amount_untaxed']" position="replace">
+                        <field name="amount_untaxed" string='Subtotal' widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  </xpath>
+                  <xpath expr="//form/sheet/notebook/page/group/field[@name='amount_tax']" position="replace">
+                        <field name="amount_tax" string='I.V.A. (16%)' widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                  </xpath>
+                  <xpath expr="//form/sheet/notebook/page/group/div" position="replace">
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total" string='Precio Total'/>
+                        </div>
+                  </xpath>
+                  <xpath expr="//form/sheet/notebook/page/field[@name='notes']" position="replace">
+                        <field name="notes" class="oe_inline" placeholder="Define your terms and conditions ..."/>
+                            <div class="oe_clear"/>
+                  </xpath>
+             </field>
+         </record>
+
+
+        <record id="purchase_order_tree_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.tree.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='name']" position="replace" >
+                    <field name="name" string="Nº de Orden de Compra"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='partner_id']" position="after" >
+                    <field name="Rif"/>
+                </xpath>
+            </field>
+        </record>
+
+         <record id="res_config_settings_view_form_purchase" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.purchase</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="25"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='po_double_validation']" position="before">
+                    <h2>Quotations &amp; Orders</h2>
+                        <div class="row mt16 o_settings_container">
+                          <div class="col-xs-12 col-md-6 o_setting_box" >
+                            <div class="o_setting_left_pane">
+                                <field name="use_purchase_note"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="use_purchase_note"/>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
+                                <div class="text-muted">
+                                    Show standard terms &amp; conditions on orders
+                                </div>
+                                <div class="content-group" attrs="{'invisible': [('use_purchase_note','=',False)]}">
+                                    <div class="row mt16">
+                                        <field name="notes" placeholder="Insert your terms &amp; conditions here..."/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </xpath>
+            </field>
+         </record>
+
+            <record id="config_general_purchase_inte_tree_payment" model="ir.ui.view">
+                <field name="name">settings.intelectra</field>
+                <field name="model">settings.intelectra</field>
+                <field name="arch" type="xml">
+                    <tree string="General Settings Purchase Intelectra" editable="bottom">
+                        <field name="Payment_Methods"/>
+                </tree>
+            </field>
+        </record>
+
+         <record id="config_general_purchase_inte_tree_delivery" model="ir.ui.view">
+                <field name="name">settings.intelectra.delivery</field>
+                <field name="model">settings.intelectra.delivery</field>
+                <field name="arch" type="xml">
+                    <tree string="General Settings Purchase Intelectra" editable="bottom">
+                        <field name="delivery_time"/>
+                </tree>
+            </field>
+        </record>
+
+         <record id="config_general_purchase_inte_tree_place" model="ir.ui.view">
+                <field name="name">settings.intelectra.place</field>
+                <field name="model">settings.intelectra.place</field>
+                <field name="arch" type="xml">
+                    <tree string="General Settings Purchase Intelectra" editable="bottom">
+                        <field name="place_of_delivery"/>
+                </tree>
+            </field>
+        </record>
+
+
+         <record id="config_general_purchase_inte_action" model="ir.actions.act_window">
+                <field name="name">Metodos de Pago</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">settings.intelectra</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="Intelectra_purchase.config_general_purchase_inte_tree_payment"/>
+            </record>
+
+        <record id="config_general_purchase_inte_action_lugar" model="ir.actions.act_window">
+                <field name="name">Lugar de Entrega</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">settings.intelectra.place</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="Intelectra_purchase.config_general_purchase_inte_tree_place"/>
+            </record>
+
+         <record id="config_general_purchase_inte_action_tiempo" model="ir.actions.act_window">
+                <field name="name">Tiempo de Entrega</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">settings.intelectra.delivery</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="Intelectra_purchase.config_general_purchase_inte_tree_delivery"/>
+            </record>
+
+        <menuitem name="Configuraciones Generales Compras Intelectra" id="menu_purchase_uom_categ_form_action"
+                  parent="purchase.menu_procurement_management" sequence="14" />
+
+        <menuitem action="config_general_purchase_inte_action" id="menu_purchase_uom_categ_form"
+                  parent="menu_purchase_uom_categ_form_action"  sequence="1" />
+
+        <menuitem action="config_general_purchase_inte_action_lugar" id="menu_purchase_uom_categ_form_lugar"
+                  parent="menu_purchase_uom_categ_form_action"  sequence="2" />
+
+          <menuitem action="config_general_purchase_inte_action_tiempo" id="menu_purchase_uom_categ_form_tiempo"
+                  parent="menu_purchase_uom_categ_form_action"  sequence="3" />
+
+	</data>
+</odoo>
