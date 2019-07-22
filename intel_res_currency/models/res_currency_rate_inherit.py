@@ -54,22 +54,22 @@ class Currency(models.Model):
                         fecha_dia_rate.append(a.id)
                     else:
                         fecha_next.append(a.id)
-            if fecha_dia_rate:
-                rate_id = self.env['res.currency.rate'].search([('id', 'in', fecha_dia_rate)])
-                currency.rate = rate_id[0].rate
-                currency.rate_real = rate_id[0].rate_real
-                currency.rate_rounding = rate_id[0].rate
-                currency.write({'rate_real': currency.rate_real,
-                                'rate_rounding':currency.rate_rounding,
-                                })
-            else:
-                rate_id_next = self.env['res.currency.rate'].search([('id', 'in', fecha_next)])
-                currency.rate = rate_id_next[0].rate
-                currency.rate_real = rate_id_next[0].rate_real
-                currency.rate_rounding = rate_id[0].rate
-                currency.write({'rate_real': currency.rate_real,
-                                'rate_rounding': currency.rate_rounding,
-                                })
+                if fecha_dia_rate:
+                    rate_id = self.env['res.currency.rate'].search([('id', 'in', fecha_dia_rate)])
+                    currency.rate = rate_id[0].rate
+                    currency.rate_real = rate_id[0].rate_real
+                    currency.rate_rounding = rate_id[0].rate
+                    currency.write({'rate_real': currency.rate_real,
+                                    'rate_rounding':currency.rate_rounding,
+                                    })
+                else:
+                    rate_id_next = self.env['res.currency.rate'].search([('id', 'in', fecha_next)])
+                    currency.rate = rate_id_next[0].rate
+                    currency.rate_real = rate_id_next[0].rate_real
+                    currency.rate_rounding = rate_id[0].rate
+                    currency.write({'rate_real': currency.rate_real,
+                                    'rate_rounding': currency.rate_rounding,
+                                    })
 
 
     @api.multi
@@ -77,7 +77,8 @@ class Currency(models.Model):
     def _compute_date(self):
         for currency in self:
             a = currency.rate_ids
-            currency.date = currency.rate_ids[0].name
+            if currency.rate_ids:
+                currency.date = currency.rate_ids[0].name
 
     def _get_conversion_rate(self, from_currency, to_currency):
         from_currency = from_currency.with_env(self.env)
