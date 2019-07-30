@@ -37,47 +37,50 @@
         <td>
             <table border="1" style="width:100%;">
                 <tr rowspan="2">
-                    <td>Nro. Comprobante:</td>
-                    <td><span t-esc="d.number"/></td>
-                    <td>Fecha de Emisión:</td>
-                    <td><span t-esc="model.get_date(d.date_ret)"/></td>
+                    <td style="font-weight:bold;font-size: 1.125em;font-style: italic;border-left:1px solid;border-top:1px solid;border-bottom:1px solid;">Nro. Comprobante:</td> <!--/* 16px/16=2.5em */-->
+                    <td style="font-weight:bold;font-size: 1.125em;font-style: italic;border-top:1px solid;border-bottom:1px solid;"><span t-esc="d.number"/></td>
+                    <td style="font-weight:bold;font-size: 1.125em;font-style: italic;border-top:1px solid;border-bottom:1px solid;">Fecha de Emisión:</td>
+                    <td style="font-size: 1.125em;font-style: italic;border-right:1px solid;border-top:1px solid;border-bottom:1px solid;"><span t-esc="model.get_date(d.date_ret)"/></td>
                 </tr>
                 <tr></tr>
             </table>
         </td>
     </tr>
 </table>
-<table border="1" style="width:100%;">
+<table style="width:100%;">
     <tr>
-        <td colspan="2" style="text-align:left;border:1px solid #000;">Nombre y Apellido o Razón Social del Agente de Retención:</td>
-        <td colspan="2" style="text-align:left;border:1px solid #000;">Registro de Indentificación Fiscal del Agente de Retención</td>
-        <td colspan="2" style="text-align:left;border:1px solid #000;">Período Fiscal</td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align:left;border:1px solid #000;"><span t-esc="d.company_id.partner_id.name"/></td>
-        <td colspan="2" style="text-align:left;border:1px solid #000;"><span t-esc="d.company_id.partner_id.vat"/></td>
-        <td colspan="2" style="text-align:left;border:1px solid #000;"><span t-esc="model.get_period(d.date_ret)"/></td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-top:1px solid;">Nombre y Apellido o Razón Social del Agente de Retención:</td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-top:1px solid;">Registro de Indentificación Fiscal del Agente de Retención</td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-top:1px solid;border-right:1px solid;">Período Fiscal</td>
     </tr>
     <tr>
-        <td colspan="6" style="text-align:left;border:1px solid #000;">Dirección Fiscal del Agente de Retención:</td>
-    </tr>
-    <tr><!--AQUI VAN LOS CAMPOS DE LA BASE DE DATOS-->
-        <td colspan="6" style="text-align:left;border:1px solid #000;"><span t-esc="model.get_direction(d.company_id.partner_id)"/></td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align:left;border:1px solid #000;">Nombre y Apellido o Razón Social del Agente Retenido:</td>
-        <td colspan="4" style="text-align:left;border:1px solid #000;">Registro de Indentificación Fiscal del Agente Retenido</td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;"><span t-esc="d.company_id.partner_id.name"/></td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;"><span t-esc="d.company_id.partner_id.vat"/></td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;"><span t-esc="model.get_period(d.date_ret)"/></td>
     </tr>
     <tr>
-        <td colspan="2" style="text-align:left;border:1px solid #000;"><span t-esc="d.partner_id.name"/></td>
-        <td colspan="4" style="text-align:left;border:1px solid #000;"><span t-esc="d.partner_id.vat"/></td>
+        <td colspan="6" style="text-align:left;border-left:1px solid;border-right:1px solid;">Dirección Fiscal del Agente de Retención:</td>
     </tr>
     <tr>
-        <td colspan="6" style="text-align:left;border:1px solid #000;">Dirección Fiscal del Agente Retenido:</td>
+        <td colspan="6" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;"><span t-esc="model.get_direction(d.company_id.partner_id)"/></td>
     </tr>
     <tr>
-        <td colspan="6" style="text-align:left;border:1px solid #000;"><span t-esc="model.get_direction(d.partner_id)"/></td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;">Nombre y Apellido o Razón Social del Agente Retenido:</td>
+        <td colspan="4" style="text-align:left;border-left:1px solid;border-right:1px solid;">Registro de Indentificación Fiscal del Agente Retenido</td>
     </tr>
+    <tr>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;"><span t-esc="d.partner_id.name"/></td>
+        <td colspan="4" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;"><span t-esc="d.partner_id.vat"/></td>
+    </tr>
+    <tr>
+        <td colspan="6" style="text-align:left;border-left:1px solid;border-right:1px solid;">Dirección Fiscal del Agente Retenido:</td>
+    </tr>
+    <tr>
+        <td colspan="6" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;"><span t-esc="model.get_direction(d.partner_id)"/></td>
+    </tr>
+    <tr>
+                        <td colspan="6" style="padding: 5px;"></td>
+                    </tr>
 </table>
 <table width="100%;margin-top:30px;">
                     <tr>
@@ -176,27 +179,31 @@
                             <b><span t-esc="d.total_tax_ret"/></b>
                         </td>
                     </tr-->
-                    <tr style="border:1px solid">
-                        <td width="50%" colspan="7" style="text-align:right;">Total General:</td>
-                        <td width="6%" style="text-align:center;">
+                    <tr>
+                        <td colspan="14" style="padding: 5px;"></td>
+                    </tr>
+                    <tr >
+                        <td width="44%" colspan="6" style="text-align:right;"></td>
+                        <td width="6%" style="text-align:right;border-left:1px solid;border-top:1px solid;border-bottom:1px solid;">Total General:</td>
+                        <td width="6%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;">
                             <t t-esc="'{:,.2f}'.format(doc_total_amount).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
-                        <td width="6%" style="text-align:center;">
+                        <td width="6%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;">
                             <!--t t-esc="'{:,.2f}'.format(exe_total_amount).replace(',', '@').replace('.', ',').replace('@', '.')" /--> <!--El campo no esta definido en la vista. Se debe revisar-->
                         </td>
-                        <td width="8%" style="text-align:center;">
+                        <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;">
                             <t t-esc="'{:,.2f}'.format(base_tax_total_amount).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
-                        <td width="8%" style="text-align:center;">
+                        <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;">
 
                         </td>
-                        <td width="8%" style="text-align:center;">
+                        <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;">
 
                         </td>
-                        <td width="8%" style="text-align:center;">
+                        <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;">
                             <t t-esc="'{:,.2f}'.format(tax_total_amount).replace(',', '@').replace('.', ',').replace('@', '.')" />
                         </td>
-                        <td width="8%" style="text-align:center;">
+                        <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;border-right:1px solid;">
                             <t t-esc="'{:,.2f}'.format(wh_tax_total_amount).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                     </tr>

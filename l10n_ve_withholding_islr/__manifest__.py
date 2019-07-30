@@ -66,7 +66,7 @@
         #"wizard/employee_income_wh.xml",
         #"data/partner_income_wh_report_data.xml",
         #"report/partner_income_wh_report.xml",
-        "report/wh_islr_report .xml",
+        "report/wh_islr_report.xml",
     ],
     'test': [
         #'test/supplier_wh_islr_invoice.yml',
