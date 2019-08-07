@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="report.paperformat" id="paperformat_recibo_nomina">
+
+        <field name="name">paperformat.recibo.nomina</field>
+        <field name="default" eval="True"/>
+        <field name="format">Letter</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">25</field>
+        <field name="margin_right">20</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">20</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">2</field>
+        <field name="dpi">90</field>
+
+    </record>
+
+    <template id="template_recibo_nomina" >
+
+
+        <div class="article">
+            <div class="page" style="page-break-before:always;">
+                <div class="text-left">
+                     <h4 class="text-center"><b>REPORTE DE PAGO NÓMINA SEMANAL</b>
+                     </h4>
+                     <br/>
+
+                             <table class="table-bordered" style="width:100%;font-size: 13px;">
+                                  <t t-foreach="docs" t-as="doc">
+                                        <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Nombre del Trabajador:</td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['name']"/></td>
+                                        </tr>
+                                        <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Fecha de Ingreso:</td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['fecha_ingreso']"/></td>
+                                        </tr>
+                                         <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Salario Básico Semanal:</td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="sal_semanal"/> </td>
+                                        </tr>
+                                         <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Período del Pago de la Nómina:</td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%;"><span t-esc="doc['date_from']"/></td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%;">AL</td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%;"><span t-esc="doc['date_to']"/></td>
+                                        </tr>
+                                         <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;RIF:</td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['rif']"/></td>
+                                        </tr>
+                                         <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Cédula de Identidad:</td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['cedula']"/></td>
+                                        </tr>
+                                         <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Cargo:</td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['cargo']"/></td>
+                                        </tr>
+                                         <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Salario Diario:</td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="sal_diario"/></td>
+                                        </tr>
+                                  </t>
+
+                             </table>
+                             <br/>
+                             <table class="table-bordered" style="width:100%;font-size: 13px;">
+                                <tr style=" height: 6mm;">
+                                              <th class="text-center" scope="col" style="border: 1px solid #000000; width:50%; border-spacing: 0;">ASIGNACIONES</th>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;">Días/%</td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;">Salario Diario</td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;">Monto</td>
+                                </tr>
+                                <t t-foreach="docs2" t-as="doc2">
+                                    <div>
+
+                                        <tr >
+                                              <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%; border-spacing: 0;"><span t-esc="doc2['descripcion']"/> </td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="doc2['cant_sueldo']"/></td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="doc2['unidad']"/></td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="doc2['total_alw']"/></td>
+                                        </tr>
+                                        <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-bottom: 1px solid #000000;  width:50%; border-spacing: 0;">Total Asignaciones</td>
+                                              <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-center" scope="col" style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="asig_total"/></td>
+
+                                        </tr>
+                                    </div>
+                                </t>
+                                        <tr >
+                                              <th class="text-center" scope="col" style="border: 1px solid #000000; width:50%; border-spacing: 0;">DEDUCCIONES</th>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                              <td class="text-center" scope="col"  style="border: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                        </tr>
+                                <t t-foreach="docs3" t-as="doc3">
+                                    <div>
+                                        <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-bottom: 1px solid #000000;  width:50%; border-spacing: 0;"><span t-esc="doc3['descripcion']"/></td>
+                                              <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-center" scope="col" style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="doc3['total_ded']"/></td>
+                                        </tr>
+
+                                    </div>
+                                </t>
+                                <div>
+                                        <tr style=" height: 6mm;">
+                                              <td class="text-left" scope="col" style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-bottom: 1px solid #000000;  width:50%; border-spacing: 0;">Total Deducciones</td>
+                                              <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-center" scope="col" style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="ded_total"/></td>
+                                        </tr>
+                                        <tr style=" height: 6mm;">
+                                            <td class="text-left" scope="col" style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-bottom: 1px solid #000000;  width:50%; border-spacing: 0;"><b>SUMA NETA</b></td>
+                                              <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-center" scope="col" style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="net_total"/></td>
+                                        </tr>
+                                </div>
+                             </table>
+
+
+                          <br/>
+                             <table style="width:100%;font-size: 13px;">
+                                <tr style="height: 95px" >
+                                    <td style="width:40%"></td>
+                                    <td class="img img-responsive text-center" style="width:40%"><img  style="width:60%; max-height: 90px;" src="/int_hr_recibo_nomina/static/src/img/FIRMA_ADM.png"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:60%"></td>
+                                    <td class="text-center" style="width:50%;border-top: 2px solid #000000;"><b>Firma por Soluciones Intelectra, C.A</b> </td>
+                                </tr>
+                             </table>
+                            <br/>
+                         <t t-foreach="docs" t-as="doc">
+                            <table class="table-bordered" style="width:100%;font-size: 13px; border-color: #0000FF;">
+                                <tr style="border-color: #0000FF;">
+                                    <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000; border-color: #000000;">Fecha:</td>
+                                    <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000;  border-color: #000000;"><span t-esc="doc['fecha_genera']"/></td>
+
+                                </tr>
+                                <tr style="border-color: #0000FF;" >
+                                    <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000;">Nombre y Apellido:</td>
+                                    <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000;"><span t-esc="doc['empleador']"/></td>
+
+                                </tr>
+                            </table>
+                            <br/>
+                            <table class="table-bordered" style="width:100%;font-size: 13px;">
+                               <tr style="text-align:justify; border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; border-bottom: 1px solid #000000; heigth: 8mm;">
+                                   <td>Por medio de la presente declaro que he recibido a mi más total y entera satisfacción la Suma Neta señalada anteriormente, por concepto de pago semanal.
+                                        Asimismo, dejo constancia que he autorizado a Soluciones Intelectra, C.A. para que el pago de la Suma Neta sea realizado a mi persona a través de depósito o
+                                        transferencia realizada en mi cuenta nómina.
+                                   </td>
+                               </tr>
+                            </table>
+                            <br/><br/><br/><br/>
+                           <table style="width:100%;font-size: 13px;">
+                                <tr >
+                                    <td style="width:60%"></td>
+                                    <td class="text-center" style="width:40%;border-top: 2px solid #000000;"><b>Firma</b> </td>
+                                </tr>
+                            </table>
+                            <br/>
+                           <table class="table-bordered" style="width:100%;font-size: 13px;">
+                                <tr >
+                                    <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000;">Fecha:</td>
+                                    <td class="text-center" scope="col"  style="width:50%;border: 1px solid #000000;"><span t-esc="doc['fecha_genera']"/></td>
+
+                                </tr>
+                                <tr >
+                                    <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000;">Nombre y Apellido:</td>
+                                    <td class="text-center" scope="col"  style="width:50%;border: 1px solid #000000;"><span t-esc="doc['name']"/></td>
+
+                                </tr>
+                                <tr >
+                                    <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000;">Número de Documento de Identidad:</td>
+                                    <td class="text-center" scope="col"  style="width:50%;border: 1px solid #000000;"><span t-esc="doc['cedula']"/></td>
+                                </tr>
+                            </table>
+                         </t>
+
+                </div>
+            </div>
+         </div>
+
+    </template>
+
+    <report
+            id="action_hr_report_recibo_nomina"
+            string="Recibo de Nomina"
+            model="hr.payslip"
+            report_type="qweb-pdf"
+            name="int_hr_recibo_nomina.template_recibo_nomina"
+            file="int_hr_recibo_nomina.template_recibo_nomina"
+            paperformat="paperformat_recibo_nomina"
+    />
+</odoo>

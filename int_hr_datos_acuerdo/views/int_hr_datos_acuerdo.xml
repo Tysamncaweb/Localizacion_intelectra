@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_datos_acuerdo_view_inherit" model="ir.ui.view">
+            <field name="name">hr.datos.acuerdo.view.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//page[@name='public']/field[@name='notes']" position="before">
+                   <group>
+                       <group name="datos_acuerdo" string="Datos del Acuerdo">
+                           <field name="lugar_acuerdo" required="1"/>
+                           <field name="fecha_acuerdo" required="1"/>
+                           <field name="hora_acuerdo" required="1" placeholder="Ejemplo:   hh:mm"/>
+                       </group>
+                   </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

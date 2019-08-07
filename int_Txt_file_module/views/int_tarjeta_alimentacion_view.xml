@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+       <!--Vista de fechas y generar Txt-->
+    <record id="account_wizard_tarjeta" model="ir.ui.view">
+       	    <field name="name"></field>
+            <field name="model">account.wizard.solicitud.tarjeta</field>
+    	    <field name="arch" type="xml">
+                <form string="Generar Solicitud Tarjeta de Alimentacion">
+                    <field invisible="1" name="state"/>
+                    <div states="choose">
+                        <group >
+                            <field name="empleados" string="Empleados" required="1"/>
+
+                        </group>
+                    </div>
+                    <div states="get">
+                        <group>
+                            <field name="name" colspan="4" invisible="1"/>
+                            <field name="report" filename="name" colspan="4"/>
+                        </group>
+                    </div>
+                    <footer states="choose">
+                        <button name="print_bono" string="Exportar TXT" type="object" class="oe_highlight" />
+                        <button special="cancel" string="Cancel" class="oe_highlight" />
+                    </footer>
+                    <footer states="get">
+                        <button special="cancel" string="Cancel" class="oe_highlight" />
+                    </footer>
+                </form>
+    	    </field>
+    </record>
+    <act_window id="action_tarjeta"
+        name="Asistente para impresion de factura de Clientes"
+        src_model="account.wizard.solicitud.tarjeta"
+        res_model="account.wizard.solicitud.tarjeta"
+        view_mode="form"
+        target="new" multi="True"
+    />
+    <record id="action_account_common_menu_tarjeta" model="ir.actions.act_window">
+        	<field name="name">Generar Solicitud Tarjeta de Alimentacion</field>
+        	<field name="res_model">account.wizard.solicitud.tarjeta</field>
+        	<field name="view_type">form</field>
+        	<field name="view_mode">form</field>
+        	<field name="view_id" ref="account_wizard_tarjeta"/>
+        	<field name="target">new</field>
+    </record>
+
+    <menuitem name="Solicitud Tarjeta de Alimentación" parent="int_Txt_file_module.descarga_menu" id="account_tarjeta" action="action_account_common_menu_tarjeta"/>
+    </data>
+</odoo>

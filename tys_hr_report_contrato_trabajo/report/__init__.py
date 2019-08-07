@@ -1,0 +1,1 @@
+from . import tys_hr_report_contrato_trabajo

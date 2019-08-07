@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="salary_increase_ajuste_tasa_form" model="ir.ui.view">
+            <field name="name">salary.increase.ajuste.tasa.form</field>
+            <field name="model">salary.increase.ajuste.tasa</field>
+            <field name="arch" type="xml">
+                 <form string="Ajustes Salariales" duplicate="0">
+                    <header>
+						<button name="funcion_confirmar" string="Confirmar" states="draft" type="object"/>
+						<button name="funcion_aprobar" string="Aprobar" states="confirm" type="object"/>
+                        <button name="set_to_draft"  string="Cambiar a Borrador" states="confirm" type="object"/>
+						<field name="state" widget="statusbar"/>
+	                </header>
+                    <sheet>
+                        <group>
+	                        <group >
+								<field name="name" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+		                        <field name="tasa" attrs="{'readonly': [('state','!=', 'draft')]}" domain="[('name', '=', fecha_actual),('rate_real','>','0')]" options="{'no_create': True, 'no_edit': True, 'no_open':True}" />
+		                        <field name="fecha_actual" readonly="True"/>
+		                        <field name="user_id" attrs="{'readonly': [('state','=', 'done')]}" readonly="True"/>
+
+	                        </group>
+							<notebook colspan="4">
+                         		<page string="Empleados" name="employee_salary">
+                                    <label string="Empleados" />
+                                    <field name="Empleado" attrs="{'readonly': [('state','!=', 'draft')]}">
+                                            <tree string="Historico de Incrementos Salariales" editable="button">
+					            		<field name="name"/>
+                                        <field name="identification_id_2"/>
+				            			</tree>
+	                    			</field>
+
+                         		</page>
+                    		</notebook>
+
+						</group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="salary_increase_ajuste_tasa_action" model="ir.actions.act_window">
+            <field name="name">Ajuste de Banda Salarial</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">salary.increase.ajuste.tasa</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                <!-- Add Text Here -->
+                  Gestiona los incrementos de Salario
+              </p><p>
+                <!-- More details about what a user can do with this object will be OK -->
+              </p>
+            </field>
+        </record>
+	    <!-- This Menu Item must have a parent and an action -->
+	    <!--menuitem id="salary_increase_ajuste_tasa_menu" name="Ajustes Salariales" parent="hr.menu_hr_main" groups="group_hr_manager" action="salary_increase_ajuste_tasa_action"/-->
+
+
+		<menuitem
+            id="salary_increase_ajuste_tasa_menu_2"
+            name="Ajuste de Banda Salarial"
+            parent="int_hr_salary_increase_dolar.salary_increase_menu"
+            action="salary_increase_ajuste_tasa_action"
+			sequence="1"
+           />
+
+
+
+    </data>
+</odoo>
