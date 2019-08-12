@@ -20,7 +20,9 @@
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="rif" string="Rif"/>
-                    <field name="nro_ctrl" string="numero de control" required="True" attrs="{'readonly': [('state','=','open')]}"/>
+                    <field name="nro_ctrl" string="numero de control" required="0" attrs="{'readonly': [('state', 'in', ('draft', 'paid'))]}"/>
+                    <field name="marck_paper" string="Papel para anular" required="0" attrs="{'invisible': [('state','!=','paid')]}"/>
+
                 </xpath>
                 <xpath expr="//page[@name='other_info']/group/group[2]" position="after">
                     <group>
@@ -30,7 +32,8 @@
                         <field name="invoice_printer" attrs="{'invisible':[('loc_req','=',True)]}"/>
                         <field name="fiscal_printer" attrs="{'invisible':[('loc_req','=',True)]}"/>
                         <field name="z_report" attrs="{'invisible':[('loc_req','=',True)]}"/>
-                        <field name="nro_ctrl" required="True" attrs="{'invisible': [('state','=','draft')],'readonly': [('state','=','open')]}"/>
+                        <!--Se cambia el campo de numero de control para que no sea requerido-->
+                        <field name="nro_ctrl" required="0" attrs="{'invisible': [('state','=','draft')],'readonly': [('state','=','paid')]}"/>
                         <button name="%(action_wiz_nroctrl)d" type="action" string="Change control number" colspan="6" attrs="{'invisible': [('state','=','draft')]}"/>
                     </group>
                 </xpath>
@@ -95,7 +98,26 @@
                 </xpath>
             </field>
         </record>
+        <!-- ##############################################
+               Se agrega filtro para las facturas con papel dañado
+         ###################################################
+         -->
+        <record id="paper_anulado_view_invoice_search" model="ir.ui.view">
+            <field name="name">paper.anulado.view.invoice.search</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
 
+                    <xpath expr="//filter[@name='late']" position="after">
+                    <!--separator-->
+                        <filter name="paper_anu" string="Papel Dañado" domain="[('paper_anu', '=', True)]"/>
+                    <!--/separator-->
+                    </xpath>
+
+
+            </field>
+        </record>
+        <!-- ##########################################################-->
 
         <record id="action_sale_debit_tree" model="ir.actions.act_window">
             <field name="name">Customer Debit Notes</field>

@@ -19,8 +19,6 @@ class ResCompany(models.Model):
             'Manages fiscal printer',
             help='Indicates that the company can operate a fiscal printer')
 
-    fax=fields.Char( string="Fax", size=13)
-
 
     def create(self,val):
         """ To create a new record,

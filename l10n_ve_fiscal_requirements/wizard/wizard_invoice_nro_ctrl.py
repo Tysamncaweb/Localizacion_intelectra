@@ -1,9 +1,10 @@
 # coding: utf-8
 
-
-from odoo.osv import  osv
+from odoo.osv import osv
 from odoo.tools.translate import _
 from odoo import models,fields
+from odoo import models, fields, api
+
 
 
 class WizardInvoiceNroCtrl(osv.osv_memory):
@@ -14,10 +15,25 @@ class WizardInvoiceNroCtrl(osv.osv_memory):
             'account.invoice', 'Invoice',
             help="Invoice to be declared damaged.")
 
-    date = fields.Date('Date',help="Date used for declared damaged paper. Keep empty to use the")
+    date = fields.Date('Date',default=fields.Date.today,
+                       help="Date used for declared damaged paper. Keep empty to use the")
 
-    sure =  fields.Boolean('Are You Sure?')
+    sure = fields.Boolean('Are You Sure?')
 
+    nro_ctrl = fields.Char(
+        'Control Number', size=32,
+        help="Number used to manage pre-printed invoices, by law you will"
+             " need to put here this number to be able to declarate on"
+             " Fiscal reports correctly.", store=True)
+
+    comment_paper = fields.Char('Comment')
+    paper_anu = fields.Boolean(default='False')
+    marck_paper = fields.Boolean(default='False')
+
+    @api.onchange('invoice_id')
+    def _get_nro_control(self):
+        self.nro_ctrl = self.invoice_id.nro_ctrl
+        return
 
     def action_invoice_create(self,wizard_brw, inv_brw):
 
@@ -36,8 +52,14 @@ class WizardInvoiceNroCtrl(osv.osv_memory):
         res_company = self.env['res.company'].search([('id','=',uid)])
         if inv_brw.nro_ctrl:
             invoice = ({
-                'name': 'PAPELANULADO_NRO_CTRL_%s' % (
-                    inv_brw.nro_ctrl and inv_brw.nro_ctrl or ''),
+                'number': '%s (%s)' % (inv_brw.number, 'PAPELANULADO_NRO_CTRL_%s' % (
+                                        inv_brw.nro_ctrl and inv_brw.nro_ctrl or '')),
+                #'name': 'PAPELANULADO_NRO_CTRL_%s' % (
+                #    inv_brw.nro_ctrl and inv_brw.nro_ctrl or ''),
+                'comment_paper': self.comment_paper,
+                'paper_anu': True,
+                'marck_paper': False
+
             })
             invoice = invoice
             inv_brw = inv_brw.id

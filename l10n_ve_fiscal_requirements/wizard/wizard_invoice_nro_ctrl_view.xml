@@ -6,9 +6,13 @@
             <field name="model">wizard.invoice.nro.ctrl</field>
             <field name="arch" type="xml">
                 <form string="Create an invoice to justify the damaged one">
-                    <group colspan="8" col="8">
-                        <field name="invoice_id" domain="[('state','=','open'),('type', '=', 'out_invoice')]"/>
-                        <field name="date"/>
+                    <group colspan="8" col="6">
+                       <field name="invoice_id" domain="['|',('marck_paper','=',True),('state','=','open'),('type', '=', 'out_invoice')]"/>
+                    <field name="date"/>
+                    </group>
+                    <group colspan="8" col="2">
+                        <field name="nro_ctrl" readonly="1"/>
+                        <field name="comment_paper"/>
                     </group>
                     <separator string="Are you sure you want to do this?" colspan="4"/>
                     <field name="sure"/>

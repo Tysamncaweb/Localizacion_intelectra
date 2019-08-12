@@ -47,7 +47,10 @@ class AccountInvoice(models.Model):
 
     z_report = fields.Char(string='Report Z', size=64, help="")
 
-    # date_document = lambda *a: time.strftime('%Y-%m-%d')
+    comment_paper = fields.Char('Comment')
+
+    paper_anu = fields.Boolean('papel dañado', defeult=False)
+    marck_paper = fields.Boolean(default=False)
 
     def _get_journal(self, context):
         """ Return the journal which is
