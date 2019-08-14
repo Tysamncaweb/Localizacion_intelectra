@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<odoo>
+
+        <record model="report.paperformat" id="paperformat_constancia_trabajo">
+
+        <field name="name">paperformat.constancia.trabajo</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_right">20</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">20</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+
+    </record>
+    <template id="deliveryslip_layout_headers_constancia">
+        <div class="header">
+            <div  style="border-bottom: 2px solid black">
+                <table  cellspacing="0" cellpadding="0" border="0" style="width:100%; height:15px;">
+                    <tr>
+                        <td style="width:17%;">
+                            <img t-att-src="'data:image/png;base64,%s' %(to_text(res_company.logo))" style="width:280px; height:140px; margin-top:40px; margin-bottom:0px;"/>
+                        </td>
+                        <td  style="width:43%;">
+                            <p><b><span t-field="res_company.street"/>, <span t-field="res_company.city"/> <span t-field="res_company.zip"/>. <span t-field="res_company.country_id.name"/>
+                            TF.: (0212) <span t-field="res_company.phone"/> / Fax.: (212) <span t-field="res_company.fax"/> / Email: <span t-field="res_company.email"/> / <span t-field="res_company.website"/></b></p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="template_constancia_trabajo" >
+        <div class="page">
+            <t t-call= "int_hr_constancia_trabajo.deliveryslip_layout_headers_constancia"/>
+                <div class="article">
+                    <t t-foreach="docs" t-as="doc">
+                        <br/><br/><br/><br/><br/><br/>
+                        <h4 class="text-right"> <span t-field="res_company.city"/>, <span t-esc="doc['fecha']"/></h4>
+                        <br/><br/><br/>
+                        <h4 class="text-left">Atención,</h4>
+                        <h4 class="text-left"><span t-esc="doc['dirigido']"/></h4>
+                        <br/><br/><br/>
+                        <h4 class="text-justify">Por medio de la presente, Yo, <span t-esc="doc['nombre_empleador']"/>, titular de la cédula de identidad <span t-esc="doc['letra_empleador']"/>-<span t-esc="doc['cedula_empleador']"/>, actuando en este caso como <span t-esc="doc['cargo_empleador']"/> de la empresa SOLUCIONES INTELECTRA, C.A, número de identificación fiscal RIF: J-29472987-8, hago constar que el ciudadano <span t-esc="doc['nombre_trabajador']"/>, titular de la cédula de identidad <span t-esc="doc['letra_trabajador']"/>-<span t-esc="doc['cedula_trabajador']"/>, trabaja en nuestra empresa como <span t-esc="doc['cargo_trabajador']"/> desde el <span t-esc="doc['fecha_ingreso']"/> devengando para la presente fecha un salario mensual de <span t-esc="doc['salario_cifra']"/> BOLIVARES (Bs <span t-esc="doc['salario']"/>).</h4>
+                        <br/><br/>
+                        <h4 class="text-left">Sin otro particular, se despide</h4>
+                        <br/><br/>
+                        <h4>Constancia que se expide a solicitud de la parte interesada al día <span t-esc="doc['fecha']"/></h4>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <h4 class="text-center"><span t-esc="doc['nombre_empleador']"/></h4>
+                        <h4 class="text-center"><span t-esc="doc['cargo_empleador']"/></h4>
+                        <h4 class="text-center">CI: <span t-esc="doc['cedula_empleador']"/></h4>
+
+                    </t>
+                </div>
+         </div>
+    </template>
+
+    <report
+            id="action_hr_report_constancia_reporte"
+            string="Recibo Cestaticket"
+            model="hr.constancia"
+            report_type="qweb-pdf"
+            name="int_hr_constancia_trabajo.template_constancia_trabajo"
+            file="int_hr_constancia_trabajo.template_constancia_trabajo"
+            paperformat="paperformat_constancia_trabajo"
+    />
+</odoo>

@@ -6,7 +6,7 @@
              <field name="inherit_id" ref="purchase.purchase_order_form"/>
              <field name="arch" type="xml">
                  <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="before" >
-                     <field name="Rif"/>
+                     <field name="Rif_prueba"/>
                  </xpath>
                  <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="after" >
                      <field name="Type_of_provider"/>
@@ -72,7 +72,7 @@
                     <field name="name" string="Nº de Orden de Compra"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='partner_id']" position="after" >
-                    <field name="Rif"/>
+                    <field name="Rif_prueba"/>
                 </xpath>
             </field>
         </record>
@@ -179,6 +179,29 @@
                   parent="menu_purchase_uom_categ_form_action"  sequence="3" />
 
 
-  
+        <delete id="purchase.menu_purchase_form_action" model="ir.ui.menu"/>
+
+
+        <record id="purchase_form_action_prueba" model="ir.actions.act_window">
+            <field name="name">Orden de Compra</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="context">{'search_default_todo':1, 'show_purchase': True}</field>
+            <field name="domain">[('state','not in',('draft','sent','bid', 'confirmed'))]</field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation that will be converted into a purchase order.
+              </p><p>
+                Use this menu to search within your purchase orders by
+                references, vendor, products, etc. For each purchase order,
+                you can track the related discussion with the vendor, control
+                the products received and control the vendor bills.
+              </p>
+            </field>
+        </record>
+        <menuitem action="purchase_form_action_prueba" id="menu_purchase_rfq" name="Orden de Compra" parent="purchase.menu_procurement_management" sequence="4"/>
+
 	</data>
 </odoo>
