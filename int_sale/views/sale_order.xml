@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+    	<record model="ir.ui.view" id="sale_order_form_inherit">
+            <field name="name">sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="type_of_sale" string="Type of Sales"/>
+                    <field name="rif" string='Rif'/>
+                    <field name="direction" string="Direction"/>
+                    <field name="contact" string="Contact" domain="[('parent_id', '=',partner_id)]" options="{'no_create': True}"/>
+                    <field name="phone" string='Phone'/>
+                    <field name="email" string='E-Mail'/>
+                    <field name="project" string="Project"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <!--field name ="date_time_emit" string="Date of Issue and Time"/-->
+                    <field name="site" string="Lugar de Entrega" invisible="1"/>
+                    <field name="name_seller" string="Created by"/>
+                    <field name ="date_time" string='Date of Creation'/>
+                    <field name="email_seller" string="E-Mail"/>
+                    <field name="phone_seller" string="Telephone of the seller"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale_order_inherit" model="ir.ui.view">
+            <field name="name">sale.order.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/notebook/page/field[@name='note']" position="replace">
+                    <group col="4">
+                        <group colspan="2" string="TÉRMINOS Y CONDICIONES GENERALES:">
+                            <div class="o_address_format">
+                                <field name="note" placeholder="Setup default terms and conditions in your sales settings..." class="o_address_street"/>
+                            </div>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='analytic_tag_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group[1]/field[@name='partner_id']" position="attributes">
+                    <attribute name="domain">[('customer','=',True),('parent_id','=',False)]</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>
+
+

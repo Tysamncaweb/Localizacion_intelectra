@@ -167,7 +167,7 @@
             </record>
 
         <menuitem name="Configuraciones Generales Compras Intelectra" id="menu_purchase_uom_categ_form_action"
-                  parent="purchase.menu_procurement_management" sequence="14" />
+                  parent="purchase.menu_purchase_general_settings" sequence="14" />
 
         <menuitem action="config_general_purchase_inte_action" id="menu_purchase_uom_categ_form"
                   parent="menu_purchase_uom_categ_form_action"  sequence="1" />
@@ -178,5 +178,7 @@
           <menuitem action="config_general_purchase_inte_action_tiempo" id="menu_purchase_uom_categ_form_tiempo"
                   parent="menu_purchase_uom_categ_form_action"  sequence="3" />
 
+
+  
 	</data>
 </odoo>

@@ -8,8 +8,6 @@
       <t t-foreach="o.with_context({'lang':o.partner_id.lang})" t-as="o">
         <div class="page">
             <div class="oe_structure"/>
-
-
             <div class="header">
                  <table cellspacing="0" cellpadding="0" border="0" style="width:100%; height:40px;">
                     <tr style="height:40px;">
@@ -86,7 +84,6 @@
                         <td class="text-center"><span t-field="order_line.product_uom"/></td>
                         <td class="text-right"> <span t-field="order_line.price_unit"/> </td>
                         <td class="text-right"><span t-field="order_line.price_subtotal" groups="product.group_uom"/> </td>
-
                     </tr>
                 </tbody>
             </table><br/><br/>

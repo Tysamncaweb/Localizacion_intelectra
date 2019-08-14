@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="header_report_analytic_account">
+            <div class="header">
+                <table border="0px" style="width:100%; height:10px; font-size: 12px;">
+                    <tr>
+                        <td class="text-left" width="30%">
+                            <strong>Fecha:</strong><span t-esc="today"/>
+                        </td>
+                        <td class="text-center" width="40%">
+                            <h5><u><span t-esc="res_company.name" /></u></h5>
+                        </td>
+                        <td class="text-right" width="30%">
+                            <ul class="list-inline" style="margin-top:10px;">
+                                <li>Page:</li>
+                            <li>
+                                <span class="page"/>
+                            </li>
+                            <li>/</li>
+                            <li>
+                                <span class="topage"/>
+                            </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <table width="100%">
+                        <td><h3>Reporte Analítico por Cuenta</h3></td>
+                        <tr>
+                            <td width="25%"><strong>Fecha Desde:</strong><t t-esc="date_start"/></td>
+                            <td width="25%"><strong>Ver cuenta:</strong></td>
+                            <td width="25%"><strong>Movimiento Destino:</strong></td>
+                            <td width="25%"><strong>Ordenado por:</strong></td>
+                        </tr>
+                        <tr>
+                            <td width="25%"><strong>Fecha Hasta:</strong><t t-esc="date_end"/></td>
+                            <td width="25%">
+                                <span t-if="cuentas_contables == 'all'">Todas las cuentas</span>
+                                <span t-if="cuentas_contables == 'move'">cuentas con movimiento</span>
+                                <span t-if="cuentas_contables == 'saldo_cero'">Con saldo distinto a cero</span>
+                            </td>
+                            <td width="25%">
+                                <span t-if="move_dest == 'all'">Todos los asientos</span>
+                                <span t-if="move_dest == 'validate'">Todos los asientos validados</span>
+                            </td>
+                            <td width="25%"><t t-esc="ordenado_fecha"/></td>
+                        </tr>
+                    </table>
+                    <table width="100%">
+                        <td><h4>N° de cuenta: <t t-esc= "datos_cuentas['codigo']"/></h4></td>
+                        <td><h4>Nombre cuenta contable: <t t-esc= "datos_cuentas['nombre']"/></h4></td>
+                        <td><h4>Moneda: </h4></td>
+                        <td t-foreach="currency" t-as="c">
+                            <td><span t-esc="c['nombre']"/></td>
+                        </td>
+                    </table>
+                </table>
+            </div>
+        </template>
+
+        <record model="report.paperformat" id="paperformat_report_analitico_cuenta">
+
+        <field name="name">paperformat.report.analitico.cuenta</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_width">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">40</field>
+        <field name="margin_right">5</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">40</field>
+        <field name="dpi">90</field>
+
+    </record>
+
+        <report
+            id = "action_reporte_analitico"
+            model = "wizard.report.analytic.account"
+            string = "Reporte analitico por cuenta"
+            report_type = "qweb-pdf"
+            paperformat="paperformat_report_analitico_cuenta"
+            name = "inte_report_analitico_cuenta.report_analytic_por_cuenta"
+            file = "inte_report_analitico_cuenta.report_analytic_por_cuenta"
+        />
+
+        <template id="report_analytic_por_cuenta" >
+             <div class="page" style="page-break-before:always;">
+                 <t t-call="inte_report_analitico_cuenta.header_report_analytic_account"/>
+
+                    <div class="article">
+                        <table class="table table-condensed">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Date</th>
+                            <!--th>JRNL</th-->
+                            <th>Partner</th>
+                            <th>Ref</th>
+                            <th>Account Analytic</th>
+                            <th>Etiqueta Analytic</th>
+                            <th>Entry Label</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Balance</th>
+                            <th groups="base.group_multi_currency">Currency</th>
+                            <th t-foreach="currency" t-as="c">
+                                <span t-if="c['nombre'] == 'USD'">Saldo Inicial (USD)</span>
+                                <th>debit (USD)</th>
+                                <th>credit (USD)</th>
+                                <th>balnce (USD)</th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="Account" t-as="account">
+                            <tr style="font-weight: bold;">
+                                <td colspan="6">
+                                    <span style="color: white;" t-esc="'..'"/>
+                                    <span t-esc="account['code']"/>
+                                    <span t-esc="account['name']"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="account['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="account['credit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="account['balance']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td groups="base.group_multi_currency"/>
+                                <!--Columnas para los montos en dolares-->
+                                <!--td t-foreach="currency" t-as="c">
+                                    <span t-if="c['nombre'] == 'USD'"/>
+                                    <td><span t-esc="account['debit_USD']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
+                                    <td><span t-esc="account['credit_USD']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
+                                    <td><span t-esc="account['balance_USD']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
+
+                                </td-->
+
+                            </tr>
+                            <tr t-foreach="account['move_lines']" t-as="line">
+                                <td><span t-esc="line['ldate']"/></td>
+                                <!--td><span t-esc="line['lcode']"/></td-->
+                                <td><span t-esc="line['partner_name']"/></td>
+                                <td><span t-if="line['lref']" t-esc="line['lref']"/></td>
+                                <td><span t-esc="line['analytic_account_code']"/></td>
+                                <td><span t-esc="line['analytic_account_name']"/></td>
+                                <!--td><span t-esc="line['move_name']"/></td-->
+                                <td><span t-esc="line['lname']"/></td>
+                                <td class="text-right">
+                                    <span t-esc="line['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="line['credit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="line['balance']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td class="text-right" groups="base.group_multi_currency">
+                                    <!--span t-esc="line['amount_currency'] if line['amount_currency'] &gt; 0.00 else ''"/-->
+                                    <!--span t-esc="line['currency_code']"/-->
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                    </div>
+
+             </div>
+
+                <div class="footer">
+                    <div class="row text-center" style="border-top: 1px solid black;">
+                        <div class="col-xs-3 col-xs-offset-9 text-right">
+                            <ul class="list-inline" style="margin-top:10px;">
+                                <li>Page:</li>
+                                <li>
+                                    <span class="page"/>
+                                </li>
+                                <li>/</li>
+                                <li>
+                                    <span class="topage"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+    </template>
+    </data>
+</odoo>
+
+<!--table class="table table-condensed table-bordered">
+                            <thead>
+
+
+                                <tr>
+                                    <th class="text-center" colspan="4">Datos Generales</th>
+                                    <th class="text-center" colspan="5">Movimiento en Bolivares</th>
+                                    <th class="text-center" colspan="5">Movimiento en Dólares</th>
+                                    <th class="text-center" colspan="5">Movimiento en Euros</th>
+                                </tr>
+                                <tr>
+                                    <th  style="width: 15%">codigo</th>
+                                    <th  style="width: 15%">Fecha</th>
+                                    <th class="text-center" style="width: 15%">Empresa</th>
+                                    <th class="text-center" style="width: 15%">Descripción</th>
+                                    <th class="text-center" style="width: 15%">Etiqueta analítica</th>
+                                    <th class="text-center" style="width: 15%">Saldo Inicial</th>
+                                    <th class="text-center" style="width: 15%">Débitos</th>
+                                    <th class="text-center" style="width: 15%">Créditos</th>
+                                    <th class="text-center" style="width: 15%">Balance</th>
+
+                                    <th class="text-center" style="width: 15%">Tipo de cambio</th>
+                                    <th class="text-center" style="width: 15%">Saldo Inicial</th>
+                                    <th class="text-center" style="width: 15%">Débitos</th>
+                                    <th class="text-center" style="width: 15%">Créditos</th>
+                                    <th class="text-center" style="width: 15%">Balance</th>
+
+
+                                    <th class="text-center" style="width: 15%">Tipo de cambio</th>
+                                    <th class="text-center" style="width: 15%">Saldo Inicial</th>
+                                    <th class="text-center" style="width: 15%">Débitos</th>
+                                    <th class="text-center" style="width: 15%">Créditos</th>
+                                    <th class="text-center" style="width: 15%">Balance</th>
+
+                                </tr>
+                            </thead>
+
+                             <tbody>
+                                 <td style="width: 100%">Cuenta Contable</td>
+                                    <t t-foreach="Account" t-as="account" style="height: 25px">
+                                     <td class="text-left" style=" vertical-align: middle; "><span t-esc="l['codigo']"/></td>
+
+                                        <tr t-foreach="l[move_lines]" t-as="line" style=" height: 25px;">
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['codigo']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['fecha']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['empresa']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['descripcion']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['cuenta_analitica_nombre']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['saldo_inicial']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['debe']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['haber']"/></td>
+                                            <td class="text-left" style=" vertical-align: middle; "><span t-esc="line['saldo']"/></td>
+                                        </tr>
+                                    </t>
+                            </tbody>
+                         </table-->

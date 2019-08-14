@@ -59,7 +59,6 @@
                  sequence="6"
         />
       <menuitem id="retention_islr_finanzas" name="Financiero" parent="retention_islr"  sequence="1"/>
-      <menuitem id="analitico_cuenta" name="Analítico por Cuenta" parent="retention_islr_finanzas" action="action_retention_islr" sequence="1"/>
       <menuitem id="retention_islr_details" name="Detalle Retención ISLR" parent="retention_islr_finanzas" action="action_retention_islr" sequence="2"/>
 
   </data>

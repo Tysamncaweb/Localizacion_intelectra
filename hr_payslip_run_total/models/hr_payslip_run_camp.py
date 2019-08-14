@@ -56,16 +56,20 @@ class hr__days_period(models.Model):
             if check_struct == False:
                 for var in payslip_run:
                     if var.code == 'WORK100':
-                        if var.number_of_days > 16:
-                            raise exceptions.except_orm(_('Advertencia!'), (u'El Período seleccionado para la nómina que esta intentando generar es mayor al Período de una Quincena.\n \
-                                                Por favor recuerde que las Reglas Salariales estan basadas en una Quincena.'))
-                        if var.number_of_days > 15:
-                            var.write({'number_of_days': '15'})
-                        if var.number_of_days < 15:
-                            if a.date_from[5:7] == '02':
-                                if (a.date_from[8:10] == '16') and ((a.date_to[8:10]== '28')or (a.date_to[8:10]== '29')):
-                                    var.write({'number_of_days': '15'})
-
+                        if var.number_of_days > 8:
+                            raise exceptions.except_orm(_('Advertencia!'), (u'El Período seleccionado para la nómina que esta intentando generar es mayor al Período de una Semana.\n \
+                                                Por favor recuerde que las Reglas Salariales estan basadas Semanalmente.'))
+                        if var.number_of_days > 7:
+                            var.write({'number_of_days': '7'})
+                        if var.number_of_days == 5:
+                          #  if a.date_from[5:7] == '02':
+                           #     if (a.date_from[8:10] == '16') and ((a.date_to[8:10]== '28')or (a.date_to[8:10]== '29')):
+                            #        var.write({'number_of_days': '15'})
+                          var.write({'number_of_days': '7'})
+                        if var.number_of_days == 6:
+                           var.write({'number_of_days': '7'})
+                        if var.number_of_days == 5:
+                            var.write({'number_of_days': '7'})
         return
 
             
