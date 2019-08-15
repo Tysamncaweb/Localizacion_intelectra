@@ -52,6 +52,8 @@ class AccountInvoice(models.Model):
     paper_anu = fields.Boolean('papel dañado', defeult=False)
     marck_paper = fields.Boolean(default=False)
 
+    # date_document = lambda *a: time.strftime('%Y-%m-%d')
+
     def _get_journal(self, context):
         """ Return the journal which is
         used in the current user's company, otherwise

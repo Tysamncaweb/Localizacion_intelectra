@@ -45,7 +45,7 @@ class gc_cliente_proveedor(models.Model):
             res =self.validate_rif_er(vals.get('vat', False))
             if not res:
                 raise exceptions.except_orm(('Advertencia!'), ('El rif tiene el formato incorrecto. Ej: VEV012345678, VEE012345678, VEJ012345678 o VEG012345678. Por favor intente de nuevo'))
-            if not self.validate_rif_duplicate(vals.get('vat', False)):
+            if  self.validate_rif_duplicate(vals.get('vat', False)):
                 raise exceptions.except_orm(('Advertencia!'),
                                             (u'El cliente o proveedor ya se encuentra registrado con el rif: %s') % (
                                                 vals.get('vat', False)))
