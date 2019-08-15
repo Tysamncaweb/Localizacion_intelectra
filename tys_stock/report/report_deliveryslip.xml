@@ -379,13 +379,14 @@
     <template id="report_deliveryslip_inherit" inherit_id="stock.report_deliveryslip">
         <t t-foreach="docs" t-as="o" position="replace">
             <t t-foreach="docs" t-as="o">
-                <t t-if="o['var_id'] == '3'">
+                <t t-if="o['var_id'] == '1'">
                     <t t-call="tys_stock.report_delivery_reception"/>
                 </t>
                 <t t-elif="o['var_id'] == '2'">
                     <t t-call="tys_stock.report_delivery_order"/>
                 </t>
-                <t t-elif="o['var_id'] == '1'">
+                <!--En la local el var_id = 1 - es report_delivery_document y el var_id = 3 - es report_delivery_reception-->
+                <t t-elif="o['var_id'] == '3'">
                     <t t-call="stock.report_delivery_document"/>
                 </t>
             </t>
