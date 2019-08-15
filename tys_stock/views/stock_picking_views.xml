@@ -21,7 +21,7 @@
                     <field name="partner_id" string="Proveedor" attrs="{'invisible': ['|',('var_id', '!=', '3'),('picking_type_code', '=', 'internal')]}"/>
                 </xpath>
                 <xpath expr="//field[@name='product_uom_id']" position="replace">
-                    <field name="product_uom_id" string="Cantidad Pedida" force_save="1" attrs="{'readonly': [('state', '!=', 'draft')]}" groups="product.group_uom"/>
+                    <field name="product_uom_qty" string="Cantidad Pedida" force_save="1" attrs="{'readonly': [('state', '!=', 'draft')]}" groups="product.group_uom"/>
                 </xpath>
                 <xpath expr="//field[@name='quantity_done']" position="replace">
                     <field name="quantity_done" string="Cantidad Recibida" attrs="{'readonly': [('is_quantity_done_editable', '=', False)]}"/>

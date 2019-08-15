@@ -385,10 +385,10 @@
                 <t t-elif="o['var_id'] == '2'">
                     <t t-call="tys_stock.report_delivery_order"/>
                 </t>
-                <!--En la local el var_id = 1 - es report_delivery_document y el var_id = 3 - es report_delivery_reception-->
                 <t t-elif="o['var_id'] == '3'">
                     <t t-call="stock.report_delivery_document"/>
                 </t>
+                <!--En la local el var_id = 1 - es report_delivery_document y el var_id = 3 - es report_delivery_reception-->
             </t>
         </t>
     </template>
