@@ -119,6 +119,11 @@ msgid "GENERAL TERMS AND CONDITIONS:"
 msgstr "TÉRMINOS Y CONDICIONES GENERALES:"
 
 #. module: int_sale
+#: model:ir.ui.view,arch_db:int_sale.sale_order_inherit
+msgid "Setup default terms and conditions in your sales settings..."
+msgstr "Configure los términos y condiciones predeterminados en su configuración de ventas..."
+
+#. module: int_sale
 #: model:ir.ui.view,arch_db:int_sale.sale_order_form_inherit
 msgid "Telephone of the seller"
 msgstr "Teléfono"
