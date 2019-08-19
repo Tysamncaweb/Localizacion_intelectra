@@ -7,7 +7,7 @@ class StockPickingAdaptation(models.Model):
     _inherit = 'stock.picking'
 
     var_id = fields.Char()
-    project = fields.Char(size=60)
+    project = fields.Many2one('project.project')
     observations = fields.Char(size=250)
 
     state = fields.Selection([
