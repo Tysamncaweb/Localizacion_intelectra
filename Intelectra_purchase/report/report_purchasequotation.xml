@@ -35,7 +35,7 @@
                  </td>
                         <tr>
                              <td><strong>RIF: </strong> <span t-field="o.partner_id.vat"/></td>
-                             <td class="text-right"><strong>SOLICITUD DE PRESUPUESTO</strong></td>
+                             <td class="text-right"><strong>SOLICITUD DE PRESUPUESTO </strong></td>
                         </tr>
                         <tr>
                              <td><strong>DIRECCIÓN: </strong> <span t-field="o.partner_id.street"/></td>
@@ -552,7 +552,7 @@
                  </td>
                         <tr>
                              <td><strong>RIF: </strong> <span t-field="o.partner_id.vat"/></td>
-                             <td class="text-right"><strong>ORDEN DE COMPRA</strong></td>
+                             <td class="text-right"><strong>ORDEN DE COMPRA </strong></td>
                         </tr>
                         <tr>
                              <td><strong>DIRECCIÓN: </strong> <span t-field="o.partner_id.street"/></td>
