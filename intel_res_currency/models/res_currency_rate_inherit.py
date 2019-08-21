@@ -2,7 +2,7 @@
 
 from odoo import models, fields, api
 from datetime import timedelta, date, datetime
-
+#Moneda
 class CurrencyRate(models.Model):
     _inherit = "res.currency.rate"
 

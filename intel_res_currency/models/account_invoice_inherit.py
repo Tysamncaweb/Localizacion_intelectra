@@ -33,7 +33,7 @@ class AccountInvoice(models.Model):
         self.amount_total_signed = self.amount_total * sign
         self.amount_untaxed_bs = self.amount_untaxed_signed = amount_untaxed_signed * sign
 
-
+#Heredamos la vista de las lineas para presentar los totales en moneda extranjera.
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 

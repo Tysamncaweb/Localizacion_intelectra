@@ -36,7 +36,7 @@
                 </xpath>
             </field>
         </record>
-
+        <!-- vista de proveedores-->
         <record model="ir.ui.view" id="invoice_supplier_form_inherit">
             <field name="name">invoice.supplier.form.inherit</field>
             <field name="model">account.invoice</field>

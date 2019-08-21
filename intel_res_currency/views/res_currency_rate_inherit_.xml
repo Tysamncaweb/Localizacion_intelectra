@@ -21,6 +21,7 @@
             </field>
         </record>
 
+        <!-- vista de las tasas monetarias-->
         <record id="view_currency_tree_inherit" model="ir.ui.view">
             <field name="name">res.currency.tree.inherit</field>
             <field name="model">res.currency</field>

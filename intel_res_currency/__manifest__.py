@@ -15,7 +15,7 @@
     # any module necessary for this one to work correctly
     'depends': ['base', 'account'],
 
-    # always loaded
+    # always loaded ..
     'data': [
         # 'security/ir.model.access.csv',
         'views/res_currency_rate_inherit_.xml',
