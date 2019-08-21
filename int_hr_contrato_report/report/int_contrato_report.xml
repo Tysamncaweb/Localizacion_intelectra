@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+        <record model="report.paperformat" id="paperformat_contrato_report">
+
+        <field name="name">paperformat.contrato.report</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_right">20</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">20</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+
+    </record>
+
+    <template id="template_contrato_report" >
+        <div class="page">
+                <div class="article">
+                    <t t-foreach="docs" t-as="doc">
+                        <h4  class="text-center"><b>CONTRATO DE TRABAJO A TIEMPO INDETERMINADO</b></h4>
+                        <br/><br/>
+                        <h4 class="text-justify">Entre <b>SOLUCIONES INTELECTRA, C.A.</b>, sociedad mercantil de este domicilio inscrita ante el Registro Mercantil Quinto la Circunscripción Judicial del Distrito Capital y Estado Miranda, en fecha 15 de agosto de 2007, quedando anotada bajo el N° 54, Tomo 1642A, e inscrita en el Registro de Información Fiscal (RIF) bajo el N° J-29472987-8 y ubicada específicamente en la Calle Providencia, entre Avenida San Sebastián y Calle Bolívar, Galpón N° 34, la Trinidad, Caracas (en lo sucesivo referida como la “COMPAÑÍA”), representada en este acto por <span t-esc="doc['nombre_empleador']"/>, de nacionalidad <span t-esc="doc['empleador_edad']"/>, domiciliado en <span t-esc="doc['empleador_ciudad']"/>, y titular de la cédula de identidad No. <span t-esc="doc['cedula_empleador']"/>,actuando en su carácter de <span t-esc="doc['cargo_empleador']"/>, por una parte, y, por la otra el Sr. <span t-esc="doc['nombre_trabajador']"/> ciudadano <span t-esc="doc['empleado_nac']"/>, de <span t-esc="doc['empleado_edad']"/> años de edad, estado civil <span t-esc="doc['estado_civil']"/>, titular de la Cédula de Identidad No. <span t-esc="doc['cedula_trabajador']"/> y domiciliado en <span t-esc="doc['domicilio']"/>, en lo sucesivo referida como el “TRABAJADOR”, han convenido celebrar, como en efecto hacen por este medio, este contrato de trabajo, el cual se regirá por las siguientes cláusulas:</h4>
+                        <br/>
+                        <h4 class="text-left"><b><u>PRIMERA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>OBJETIVO</u></b></h4>
+                        <br/>
+                        <h4 class="text-justify">El objetivo de este contrato es contratar al TRABAJADOR para que preste servicios como <span t-esc="doc['cargo_trabajador']"/>, así como establecer las normas que regirán la relación de trabajo establecida entre las partes por este medio.</h4>
+                        <br/>
+                        <h4 class="text-left"><b><u>SEGUNDA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>CARGO Y SITIO DE TRABAJO</u></b></h4>
+                        <br/>
+                        <h4 class="text-justify">Durante el período de vigencia de este contrato, el TRABAJADOR deberá prestar sus servicios personales como <span t-esc="doc['cargo_trabajador']"/>, en el Departamento de  <span t-esc="doc['departamento_trabajador']"/>, ubicado en  <span t-esc="doc['ubicacion_trabajo']"/>. Sin embargo, por este medio	3 el TRABAJADOR reconoce y conviene expresamente que, en vista de la naturaleza de sus deberes, podría prestar servicios ocasionales en  otras localidades, por lo que las partes convienen que el lugar asignado   para el desarrollo de la labor por parte del TRABAJADOR no es de carácter definitivo y que el mismo podrá variar si la materia del trabajo así lo exige o si se presentan razones objetivas que ameriten un cambio.</h4>
+                        <br/>
+                        <h4 class="text-left"><b><u>TERCERA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>DEBERES Y FUNCIONES</u></b></h4>
+                        <br/>
+                        <h4 class="text-justify">A partir de la entrada en vigencia de este contrato, el TRABAJADOR estará obligado a realizar, de forma diligente, las siguientes funciones, deberes y responsabilidades:</h4>
+                        <br/>
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">A.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR debe cumplir en forma total, permanente, adecuada y oportuna con las funciones, deberes y responsabilidades que se indican en la descripción de cargo, que marcada con la letra “A” forma parte integrante de este contrato de trabajo, así como las indicadas en este contrato de trabajo.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">B.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá reportar sus actividades a su Supervisor inmediato,<span t-esc="doc['cargo_empleador']"/>.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">C.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá desempeñar a cabalidad y dentro del tiempo requerido los trabajos asignados.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">D.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá abstenerse de realizar actos que acarreen conflictos para el negocio o las actividades de la COMPAÑÍA, o que de alguna forma pongan en riesgo los intereses de la COMPAÑÍA.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">E.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR aplicará toda su experiencia y esfuerzo profesional en la prestación de sus servicios, los cuales serán realizados con la debida diligencia y en cumplimiento de todas y cada una de las instrucciones y políticas internas de la COMPAÑÍA, la descripción de cargo, así como todas las leyes aplicables.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">F.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá obligarse a cumplir con todas las órdenes e instrucciones que la COMPAÑÍA emita con respecto a la lista de funciones, deberes y responsabilidades indicadas en este contrato de trabajo y en cualquier otro documento.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">G.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá reportar en forma inmediata, cualquier anomalía que se presente en las instalaciones de la COMPAÑÍA. </h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">H.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá mantener buenas relaciones con sus compañeros de trabajo, los supervisores, clientes y terceras personas, teniendo como norte los principios de cooperación, cordialidad y respeto mutuo.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">I.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá solicitar los permisos no remunerados en forma escrita y de acuerdo a los procedimientos internos de la COMPAÑÍA.</h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left">J.</h4></td>
+                                <td style="width:93%;"><h4 class="text-justify">El TRABAJADOR deberá abstenerse de hacer uso de su teléfono celular durante la jornada de trabajo, a menos que ello sea necesario en virtud de la prestación de servicios o por un asunto personal urgente.</h4></td>
+                            </tr>
+                        </table>
+                    <br/>
+                        <h4 class="text-justify">Además, el TRABAJADOR deberá cumplir con todas las políticas, reglamentos internos y demás normas de la COMPAÑÍA, así como de las leyes vigentes en Venezuela, en la medida en que éstas le sean aplicables dependiendo de las funciones a ser desempeñadas por el TRABAJADOR. El TRABAJADOR declara que está en conocimiento de las políticas, reglamentos internos y demás normas aplicables a los trabajadores de la COMPAÑÍA.</h4>
+                    <br/>
+                        <h4 class="text-justify">Queda expresamente entendido que, como parte de los términos y condiciones de trabajo del TRABAJADOR, la lista de funciones, deberes y responsabilidades que antecede no se considerará limitativa y, por lo tanto, el TRABAJADOR debe cumplir cualesquiera otras funciones, deberes, responsabilidades, limitaciones o instrucciones que la COMPAÑÍA le asigne ocasionalmente, que se deriven o relacionen con este contrato y que sean compatibles con sus fuerzas, aptitudes, estado o condición. Dichas otras funciones, deberes y responsabilidades que deba realizar ocasionalmente ya se encuentran remuneradas en el salario básico y demás beneficios del TRABAJADOR de conformidad con este contrato.</h4>
+                    <br/>
+                    <h4 class="text-left"><b><u>CUARTA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>EXCLUSIVIDAD DE LOS SERVICIOS Y PROHIBICIÓN DE COMPETIR</u></b></h4>
+                    <br/><h4 class="text-justify">Por este medio, el TRABAJADOR conviene expresamente en prestar sus servicios personales exclusivamente para la COMPAÑÍA durante el período de vigencia de este contrato. En consecuencia, este empleo no causará responsabilidad solidaria de cualquier otra compañía con la COMPAÑÍA, ya que la COMPAÑÍA es su único y exclusivo patrono. Además, por este medio, el TRABAJADOR conviene en cumplir con su “Obligación de no Competir”, según ésta se describe más adelante y, al respecto, por este medio se compromete, durante el período de vigencia de este contrato, a no adquirir ni mantener interés, ni convertirse en accionista, socio, funcionario, participante, miembro, administrador, asesor, empleado, colaborador, miembro de alguna junta directiva, intermediario y/o contratista, directa o indirectamente, en beneficio y/o a través de cualquier corporación, entidad, asociación, compañía y/o actividad comercial que sea o que haya sido cliente o competidor de la COMPAÑÍA o que de alguna otra forma se relacione con alguna de las actividades a las que la COMPAÑÍA esté o pudiera estar dedicadas.  </h4>
+                    <br/><h4 class="text-justify">Además, esta Obligación de no Competir obligará al TRABAJADOR a: (i) abstenerse de dedicarse a cualquier actividad que represente o dé como resultado la competencia contra cualquiera de los servicios, y/o productos, y/o actividades de la COMPAÑÍA; y/o (ii) prestar o fomentar la prestación de servicios, directa o indirectamente, a cualquier corporación, persona, entidad, compañía o grupo de compañías que compitan con cualquiera de los servicios, y/o actividades, y/o productos de la COMPAÑÍA; y/o (iii) realizar cualquier acción para ayudar a cualquier otra entidad, persona, corporación, compañía o grupo de compañías en el reclutamiento o contratación de trabajadores que trabajen actualmente o hayan trabajado en el pasado para la COMPAÑÍA; y/o (v) cualquier otra acción, omisión, o conducta que pueda estar en conflicto con la Obligación de No Competencia aquí prevista.</h4>
+                    <br/><h4 class="text-left"><b><u>QUINTA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>SISTEMA APLICABLE DE SALARIO Y PRESTACIONES SOCIALES</u></b></h4>
+                    <br/><h4 class="text-justify">Las partes convienen que el sistema de salario y prestaciones sociales que regirá su relación de trabajo durante la vigencia de este contrato será el previsto en los Artículos 104, 122, 142 y 143 de la Ley Orgánica del Trabajo, los Trabajadores y las Trabajadoras que entró en vigencia el 7 de mayo de 2012 (la “LOTTT”).  En este sentido, el TRABAJADOR manifiesta a la COMPAÑÍA por este medio su deseo de que la COMPAÑÍA le acredite la garantía de prestaciones sociales en la contabilidad de la COMPAÑÍA de conformidad con lo previsto en el Artículo 143 de la LOTTT.</h4>
+                    <br/><h4 class="text-left"><b><u>SEXTA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>PERÍODO DE PRUEBA.  DURACIÓN DEL CONTRATO.</u></b></h4>
+                    <br/><h4 class="text-justify">La COMPAÑÍA y el TRABAJADOR ratifican que el presente contrato es a tiempo indeterminado, y por ende, cualquiera de las partes podrá darlo por terminado en cualquier momento, de conformidad con la ley. </h4>
+                     <br/><h4 class="text-justify">Durante los primeros treinta (30) días de prestación de servicios regirá un período de prueba durante el cual cualquiera de las partes podrá terminar este contrato sin obligación de pagar a la otra indemnización alguna.  En cualquier caso, el presente contrato de trabajo es celebrado por tiempo indeterminado, y cualquiera de las partes podrá darlo por terminado en cualquier momento, sujeto a lo establecido en la LOTTT y en este contrato.</h4>
+                    <br/><h4 class="text-left"><b><u>SÉPTIMA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>SALARIO BÁSICO MENSUAL</u></b></h4>
+                    <br/><h4 class="text-justify">El TRABAJADOR recibirá, durante el período de vigencia de este contrato, un salario básico mensual equivalente a <span t-esc="doc['salario_cifra']"/> (<span t-esc="doc['salario']"/>) (“Salario Básico Mensual”), en el cual, de conformidad con lo previsto en el artículo 119 de la LOTTT, ya estará comprendido el pago de los días feriados y de descanso semanal obligatorio. El Salario Básico Mensual será pagado en dos porciones quincenales iguales, y serán depositadas en la cuenta nómina del TRABAJADOR. Es importante destacar que el Salario Básico Mensual será pagado previa deducción de las retenciones por concepto de contribuciones sociales, fiscales y de cualquier otra naturaleza aplicables al salario devengado en el respectivo mes.</h4>
+                    <br/><h4 class="text-justify">Queda entendido entre las partes que la compensación prevista en este contrato constituirá la única remuneración pagadera al TRABAJADOR como contraprestación por sus servicios durante el período de vigencia de este contrato, y que éste remunerará y compensará totalmente al TRABAJADOR por todos los servicios que preste a la COMPAÑÍA, según lo que la COMPAÑÍA especifique ocasionalmente, de conformidad con la Cláusula TERCERA contrato.</h4>
+                    <br/><h4 class="text-left"><b><u>OCTAVA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>VACACIONES ANUALES Y BONO VACACIONAL</u></b></h4>
+                    <br/><h4 class="text-justify">El TRABAJADOR disfrutará de vacaciones anuales equivalentes a quince (15) días hábiles por cada año de servicio ininterrumpido, más un (1) día hábil adicional por cada año adicional de servicio ininterrumpido después del primer año hasta un máximo de treinta (30) días hábiles, remunerados sobre la base de su salario mensual normal. Además, el TRABAJADOR tendrá derecho a un bono vacacional anual equivalente a quince (15) días de su salario mensual normal, más un (1) día adicional de salario por cada año adicional de servicio ininterrumpido después del primer año, hasta un máximo de treinta (30) días hábiles. El TRABAJADOR comprende que las fechas de disfrute de sus vacaciones anuales deberán convenirse con su Gerente. </h4>
+                    <br/><h4 class="text-justify">El disfrute y pago de las vacaciones y del bono vacacional indicado en la presente Cláusula comprende los beneficios previstos en los artículos 190 y 192 de la LOTTT.</h4>
+                    <br/><h4 class="text-left"><b><u>NOVENA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>UTILIDADES ANUALES</u></b></h4>
+                    <br/><h4 class="text-justify">De conformidad con las disposiciones de la LOTTT, la COMPAÑÍA deberá pagar al TRABAJADOR utilidades anuales equivalentes a sesenta (60) días de su salario calculado en función de los salarios devengados en el respectivo ejercicio económico de la COMPAÑÍA, a condición de que el TRABAJADOR haya prestado servicios durante todo el ejercicio económico de la COMPAÑÍA.</h4>
+                    <br/><h4 class="text-justify">Se entiende y así lo convienen ambas partes, que el beneficio previsto en esta cláusula ya está comprendido aquel consagrado en el artículo 131 de la LOTTT.</h4>
+                    <br/><h4 class="text-left"><b><u>DÉCIMA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>ALCANCE DE LAS FUNCIONES.  JORNADA</u></b></h4>
+                    <br/><h4 class="text-justify">La jornada de trabajo del TRABAJADOR será de 8:00 a.m. a 5:00 p.m., con el siguiente horario: desde las 8:00 a.m. hasta las 12:30 m. y de 1:30 pm a 5:00 pm, con una hora de descanso para reposo y comida entre la 12:30 m. y la 1:30 p.m.  El TRABAJADOR disfrutará dos (2) días continuos semanales de descanso, que serán los días sábados y domingos. El TRABAJADOR acatará cualquier cambio de horario que se requiera por necesidades del servicio, bien sean éstas ambientales, técnicas, de fuerza mayor o de cualquier otra naturaleza. El TRABAJADOR no podrá laborar horas extraordinarias o de sobretiempo a menos que cuente en cada caso con la autorización previa de su jefe inmediato.</h4>
+                    <br/><h4 class="text-left"><b><u>DÉCIMA PRIMERA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>REEMBOLSO DE GASTOS</u></b></h4>
+                    <br/><h4 class="text-justify">En aquellos casos en los cuales, en cumplimiento de instrucciones expresas de la COMPAÑÍA, el TRABAJADOR deba incurrir en gastos y/o tenga que viajar desde su respectivo lugar de trabajo a otros sitios con la finalidad de prestar los servicios estipulados en este contrato, la COMPAÑÍA conviene en reembolsar al TRABAJADOR aquellos gastos normales y necesarios incurridos por él que hayan sido expresamente autorizados por la COMPAÑÍA.  Para estos fines, el reembolso de dichos gastos (incluyendo gastos de viaje, comidas, hoteles, llamadas de negocio a través de teléfonos celulares y demás gastos autorizados por la COMPAÑÍA) se realizará de conformidad con las reglas, procedimientos y políticas vigentes de la COMPAÑÍA y con cualquier otra que pueda ser aplicable en el futuro. En cualquier caso, el TRABAJADOR está obligado a llevar cuenta de sus gastos, utilizando para este fin los correspondientes reportes de gastos, y a justificar y entregar a la COMPAÑÍA los comprobantes, facturas y demás documentos de soporte relevantes.  La COMPAÑÍA se reserva el derecho de autorizar el reembolso de los montos que considere apropiados. Queda expresamente entendido que el propósito de estos reembolsos no es remunerar de manera alguna los servicios prestados por el TRABAJADOR, por lo que dichos reembolsos no se considerarán parte de su salario.</h4>
+                    <br/>
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="width:30%;"><h4> <b><u>DÉCIMA SEGUNDA:</u></b></h4></td>
+                                <td style="width:70%;"><h4> <b><u>CONFIDENCIALIDAD Y DEVOLUCIÓN DE PROPIEDADES DE LA COMPAÑÍA</u></b></h4></td>
+                            </tr>
+                        </table>
+                    <br/><h4 class="text-justify">Por este medio, el TRABAJADOR se compromete a mantener confidencial y a abstenerse de usar para otro fin distinto al beneficio de la COMPAÑÍA y/o de las COMPAÑÍAS, así como de revelar a terceros, directa o indirectamente, cualquier información o conocimiento de carácter financiero, técnico, contable, comercial, gerencial, administrativo y/o de cualquier otra naturaleza, sobre precios o políticas de precios, costos, presupuestos, información relacionada con alguna base de datos de clientes, información técnica privilegiada sobre productos, volúmenes de ventas, listas de proyectos, listas de precios, listas de clientes que pertenezcan o que haya obtenido de la COMPAÑÍA y/o de las COMPAÑÍAS y/o de sus clientes actuales o futuros, antiguos clientes o proveedores y personas relacionadas, secretos industriales, patentes e inventos, know-how (entendido como conocimiento no patentado) y software desarrollado o licenciado por la COMPAÑÍA, que el TRABAJADOR pudiera recibir en la COMPAÑÍA y/o como resultado de la prestación de sus servicios a la COMPAÑÍA. El TRABAJADOR no deberá permitir el uso de dicha información o dicho conocimiento por parte de terceros, salvo mediante expresa autorización escrita otorgada por el Representante Legal de la COMPAÑÍA. Igualmente, en la fecha de terminación de sus servicios, el TRABAJADOR deberá devolver a la COMPAÑÍA todos los documentos, manuales, libros, correo, publicaciones, herramientas, códigos de programas computarizados y otros activos y literatura que haya obtenido, preparado o utilizado como resultado de su trabajo durante la prestación de sus servicios a la COMPAÑÍA.  Esta cláusula de confidencialidad sobrevivirá indefinidamente a la terminación de este contrato. </h4>
+                    <table style="width:100%;">
+                             <tr>
+                                <td style="width:30%;"><h4> <b><u>DÉCIMA TERCERA:</u></b></h4></td>
+                                <td style="width:70%;"><h4> <b><u>USO DE LOS SISTEMAS O RECURSOS INFORMÁTICOS O DE TECNOLOGÍA DE LA INFORMACIÓN</u></b></h4></td>
+                            </tr>
+                    </table>
+                    <br/><h4 class="text-justify">Las partes expresamente convienen que los recursos o sistemas de tecnología de la información de la COMPAÑÍA, tales como computadores (portátiles o no), servidores, redes, acceso a Internet, red interna o privada enlazada con el Internet, correo electrónico, cuentas de correo electrónico, y cualesquiera otros (en lo sucesivo los “Recursos o Sistemas Tecnológicos o Informáticos”), solamente podrán ser utilizados por el TRABAJADOR para el cumplimiento de sus labores o funciones, deberes y responsabilidades como empleado al servicio de la COMPAÑÍA, en ejecución o consecución de los negocios, intereses y actividades de la COMPAÑÍA. Por lo tanto, el TRABAJADOR expresamente conviene en no utilizar los Recursos o Sistemas Tecnológicos o Informáticos de la COMPAÑÍA para asuntos personales del TRABAJADOR o de cualquier otra persona distinta a la COMPAÑÍA. Igualmente, dado que su uso está restringido única y exclusivamente al desempeño de las labores del TRABAJADOR y a los intereses, negocios y actividades de la COMPAÑÍA, las partes convienen que la COMPAÑÍA tendrá pleno acceso, uso, goce, disfrute y disposición, en forma permanente, de sus Recursos o Sistemas Tecnológicos o Informáticos y de toda información en ellos almacenada o contenida.  Por lo tanto, la COMPAÑÍA podrá inspeccionar, revisar, retirar, almacenar, o de cualquier otra forma usar, gozar, disfrutar y disponer de dichos Recursos o Sistemas Tecnológicos o Informáticos, y podrá copiar, transmitir, reproducir, revelar, remover, usar, gozar, disfrutar y disponer de la información almacenada o contenida en dichos Recursos o Sistemas Tecnológicos o Informáticos. Cuando la COMPAÑÍA haya asignado al TRABAJADOR uno o más de dichos Recursos o Sistemas Tecnológicos o Informáticos para su uso en el cumplimiento de sus labores, el TRABAJADOR estará obligado a permitir que la COMPAÑÍA, en cualquier momento en que la COMPAÑÍA así lo resuelva o considere conveniente, lo(s) inspeccione, revise, retire, almacene o de cualquier otra forma lo(s) use, disfrute, goce o disponga, y estará obligado a permitir que la COMPAÑÍA, en cualquier momento en que la COMPAÑÍA así lo resuelva o considere conveniente, copie, transmita, reproduzca, revele, remueva, use, goce, disfrute y disponga de la información almacenada o contenida en dicho(s) Recurso(s) o Sistema(s) Tecnológico(s) o Informático(s). Asimismo, el TRABAJADOR conviene en entregar a la COMPAÑÍA todo Recurso(s) o Sistema(s) Tecnológico(s) o Informático(s) de la COMPAÑÍA que haya sido asignado al TRABAJADOR para su uso en el desempeño de sus labores, inmediatamente en la misma fecha en que la COMPAÑÍA así lo solicite (sin que pueda por ello alegar desmejora de sus condiciones de trabajo o despido indirecto), o en la misma fecha en que concluya por cualquier causa la relación laboral del TRABAJADOR con la COMPAÑÍA. Cuando por cualquier causa termine la relación de trabajo del TRABAJADOR con la COMPAÑÍA, el TRABAJADOR dejará de tener acceso a los Recursos o Sistemas Tecnológicos o Informáticos de la COMPAÑÍA, y mientras los entrega a la COMPAÑÍA deberá abstenerse de utilizarlos o de copiar, revelar, remover, transmitir o de alguna otra forma hacer uso de la información en ellos contenida. </h4>
+                    <br/><h4 class="text-left"><b><u>DÉCIMA CUARTA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>PROTECCIÓN DE DATOS</u></b></h4>
+                    <br/><h4 class="text-justify">El TRABAJADOR autoriza a la COMPAÑÍA para el procesamiento de datos personales incluyendo, pero sin limitarse a, información general del TRABAJADOR (nombre, dirección particular, título académico), afiliaciones al sistema de seguridad social, situación laboral, permisos de trabajo, información salarial, beneficios laborales y en general información requerida por nómina y recursos humanos sobre el TRABAJADOR, información que puede ser considerada “sensible” (los “Datos Personales”). Los Datos Personales son procesados para cualquier fin relacionado con la prestación de servicios del TRABAJADOR a favor de la COMPAÑÍA, por lo que el TRABAJADOR manifiesta que conoce y acepta que la COMPAÑÍA puede en cualquier momento poner los Datos Personales a disposición de las COMPAÑÍA para el fin antes señalado.  </h4>
+                    <br/><h4 class="text-left"><b><u>DÉCIMA QUINTA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>HERRAMIENTAS DE TRABAJO</u></b></h4>
+                    <br/><h4 class="text-justify">El TRABAJADOR declara que la asignación de cualquier herramienta de trabajo por parte de la COMPAÑÍA no tendrá carácter salarial, ya que no se otorga con el propósito de remunerar al TRABAJADOR sino para que el TRABAJADOR pueda efectivamente prestar sus servicios a la COMPAÑÍA, y cuyo costo debe ser soportados por la COMPAÑÍA y no por el TRABAJADOR. EL TRABAJADOR se compromete a utilizar en forma correcta y con el cuidado de un buen padre de familia, las herramientas de trabajo entregadas por la COMPAÑÍA y a devolver todas las herramientas al final de la relación de trabajo, o en caso de cambio de cargo. En caso de deterioro o destrucción de las herramientas de trabajo derivado de su uso normal y adecuado, el TRABAJADOR deberá devolverlos a la COMPAÑÍA, quien, de acuerdo a su disponibilidad y a sus posibilidades, los podría reponer. </h4>
+                    <br/><h4 class="text-left"><b><u>DÉCIMA SEXTA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>BENEFICIOS NO SALARIALES</u></b></h4>
+                    <br/><h4 class="text-justify">La COMPAÑÍA concederá al TRABAJADOR los siguientes beneficios: </h4>
+                    <table style="width:100%;">
+                        <tr>
+                            <td style="width:7%;"><h4 class="text-left"><b>•</b></h4></td>
+                            <td style="width:93%;"><h4 class="text-justify">
+                                <b><u>Cestaticket Socialista:</u> </b> La COMPAÑÍA otorgará al TRABAJADOR el beneficio de alimentación previsto en la Ley del Cestaticket Socialista para los Trabajadores y Trabajadoras. Este beneficio tiene carácter social y no forma parte del salario del TRABAJADOR a tenor de lo previsto en el parágrafo tercero del artículo 105 de la LOTTT</h4></td>
+                        </tr>
+                        <tr>
+                            <td style="width:7%;"><h4 class="text-left"><b>•</b></h4></td>
+                            <td style="width:93%;"><h4 class="text-justify">
+                                <b><u>Ayuda adicional:</u> </b> La COMPAÑÍA otorgará al TRABAJADOR una ayuda adicional a través de recargas en una tarjeta electrónica que actualmente es proporcionada por la empresa TODOTICKET y se denomina TODOTICKET Integral (la “Ayuda Adicional”). Por medio de dicho instrumento el TRABAJADOR podrá adquirir alimentos, medicinas y productos esenciales únicamente en los supermercados, abastos, farmacias y demás establecimientos afiliados, de acuerdo con las normas que rigen este tipo de productos electrónicos y que el TRABAJADOR declara conocer y aceptar. La Ayuda Adicional se otorgará al TRABAJADOR aún durante la época de vacaciones.  La COMPAÑÍA podrá modificar en cualquier momento la ayuda aquí establecida, sin incurrir en ningún tipo de responsabilidad para con el TRABAJADOR, y sin que ello pueda considerarse como una desmejora de condiciones de trabajo o como un despido indirecto. Esta Ayuda Adicional se otorga en virtud de las necesidades esenciales de alimentación y salud del trabajador y de su familia y a los fines de paliar el alto costo de la vida, agravada por los constantes aumentos de precio, en consecuencia, no tiene carácter salarial por ser un beneficio social de carácter no remunerativo de conformidad con el artículo 105 de la LOTTT.  Adicionalmente, esta ayuda también califica como un subsidio otorgado por el patrono, dentro del ámbito del contrato de trabajo, y que posee un esencial carácter de ayuda.</h4></td>
+                        </tr>
+                        <tr>
+                            <td style="width:7%;"><h4 class="text-left"><b>•</b></h4></td>
+                            <td style="width:93%;"><h4 class="text-justify">
+                                <b><u>Seguro de HCM:</u></b> La COMPAÑÍA suministrará al TRABAJADOR la cobertura de un seguro de hospitalización, cirugía y maternidad (HCM), sujeto a los términos y condiciones de la respectiva póliza de seguro de HCM contratada por la COMPAÑÍA, según sea modificada de vez en cuando. Este beneficio tiene carácter social y no forma parte del salario del TRABAJADOR a tenor de lo previsto en el artículo 105 de la LOTTT. El TRABAJADOR tendrá la posibilidad de incorporar en el seguro de HCM a sus hijos, cónyuge, concubina(o), o padres a su propio costo, por lo que por este medio autoriza a la COMPAÑÍA para descontar por nómina de su salario mensual o de cualquier otro beneficio la(s) prima(s) del seguro de HCM, correspondiente(s).</h4></td>
+                        </tr>
+                    </table>
+                    <br/><h4 class="text-left"><b><u>DÉCIMA SÉPTIMA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>DESCUENTOS</u></b></h4>
+                    <br/><h4 class="text-justify">La COMPAÑÍA actuará como agente de retención de conformidad con la legislación del impuesto sobre la renta y de la seguridad social de Venezuela, y deducirá de la remuneración del TRABAJADOR cualquier monto que se deba retener según las leyes venezolanas aplicables, tales como aquéllas que regulan la seguridad social y cualesquiera otras contribuciones sociales similares</h4>
+                    <br/><h4 class="text-justify">Además, el TRABAJADOR autoriza por este medio a la COMPAÑÍA a descontar de su salario, beneficios, prestaciones e indemnizaciones, hasta el límite legal máximo permitido: i) el valor de reposición de cualquier bien propiedad de la COMPAÑÍA que el TRABAJADOR destruya, dañe o sustraiga; ii) cualquier cargo referido a los dependientes incluidos por voluntad del TRABAJADOR en las pólizas de seguro colectivo; y/o iii) cualquier otro descuento con ocasión a deudas que tenga el TRABAJADOR con la COMPAÑÍA. </h4>
+                    <br/><h4 class="text-justify">Es entendido entre las partes que el valor de reposición de cualquier bien de la COMPAÑÍA que se descuente de acuerdo al numeral i) de la presente cláusula, no constituye una forma de sanción, por el contrario, es el resarcimiento económico por la acción imprudente del TRABAJADOR en la pérdida o deterioro de dicho bien.</h4>
+                    <table style="width:100%;">
+                             <tr>
+                                <td style="width:30%;"><h4> <b><u>DÉCIMA OCTAVA:</u></b></h4></td>
+                                <td style="width:70%;"><h4> <b><u>PROPIEDAD DE LAS INVENCIONES, INNOVACIONES O MEJORAS </u></b></h4></td>
+                            </tr>
+                    </table>
+                    <br/><h4 class="text-justify">Las partes convienen que los derechos sobre todas y cada una de las invenciones, innovaciones o mejoras desarrolladas por el TRABAJADOR durante el cumplimiento de sus obligaciones establecidas en este contrato, serán regulados de acuerdo con las disposiciones que a tal efecto prevé la LOTTT. En este sentido, el TRABAJADOR manifiesta que a fin de poder prestar los servicios personales acordados en este contrato y, por lo tanto, de poder desarrollar programas, invenciones, mejoras, nuevos procedimientos y/o sistemas, las costosas y sofisticadas instalaciones, equipos, procedimientos, métodos, instrumentos y/o programas de investigación y capacitación de la COMPAÑÍA son esenciales y determinantes.</h4>
+                    <table style="width:100%;">
+                             <tr>
+                                <td style="width:30%;"><h4> <b><u>DÉCIMA NOVENA:</u></b></h4></td>
+                                <td style="width:70%;"><h4> <b><u>SEGURIDAD, HIGIENE Y AMBIENTE</u></b></h4></td>
+                            </tr>
+                    </table>
+                    <br/><h4 class="text-justify">El TRABAJADOR reconoce que la COMPAÑÍA le ha advertido por escrito y por otros medios idóneos de todos y cada uno de los riesgos que rodean las actividades de la COMPAÑÍA y las de su propio trabajo, tareas o actividades que constituyen el objeto del presente contrato, así como de los daños que dichos riesgos pueden causar y la forma de prevenirlos o evitarlos, <u>tal y como se evidencia del ________________ que se anexa a este contrato marcada con la letra “B”</u>. Asimismo, el TRABAJADOR reconoce que es filosofía de la COMPAÑÍA, la preservación y no afectación del medio ambiente por lo que en la ejecución de sus actividades y/o funciones que constituyen el objeto del presente contrato, deberá estar atento y vigilante del cumplimiento de la legislación vigente en materia de prevención como también de las normas y/o políticas de protección ambiental y de seguridad industrial establecidas por la COMPAÑÍA las cuales están disponibles para su revisión  y conocimiento. El TRABAJADOR igualmente reconoce que ha recibido de la COMPAÑÍA las herramientas de higiene y seguridad industrial requeridos para desempeñar sus labores y se obliga a respetar y cumplir las disposiciones de la LOTTT, la Ley Orgánica de Prevención, Condiciones y Medio Ambiente del Trabajo, su Reglamento, el Reglamento de Higiene y Seguridad Industrial y los reglamentos y/o normas establecidas por la COMPAÑÍA en los distintos sitios donde se encuentre prestando sus servicios, reportando a la COMPAÑÍA y/o sus representantes, de inmediato, cualquier condición insegura que hubiere observado en la ejecución de sus funciones. EL TRABAJADOR se compromete a utilizar en forma correcta las herramientas de higiene y seguridad industrial entregados por la COMPAÑÍA. El TRABAJADOR se obliga a reportar las herramientas de higiene y seguridad industrial que por su uso resulten deteriorados, los cuales entregará a la COMPAÑÍA para su control y reposición. El TRABAJADOR se compromete a asistir a las charlas organizadas por la COMPAÑÍA sobre cuidado y prevención de accidentes de trabajo y asistir a las charlas dictadas por la COMPAÑÍA sobre prevención y aplicación de las políticas internas en materia de higiene y seguridad industrial.</h4>
+                    <br/><h4 class="text-left"><b><u>VIGÉSIMA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>LEY APLICABLE</u></b></h4>
+                    <br/><h4 class="text-justify">Este contrato de trabajo a tiempo indeterminado se regirá por la LOTTT, el Reglamento Parcial de la LOTTT sobre el Tiempo de Trabajo (el "Reglamento Parcial LOTTT"), el Reglamento de la Ley Orgánica del Trabajo que rigió con anterioridad al 7 de mayo de 2012 y cualesquiera otras disposiciones laborales aplicables de la República Bolivariana de Venezuela, así como las políticas, reglamentos internos y demás normas de la COMPAÑÍA. </h4>
+                    <br/><h4 class="text-justify">En caso de que alguna disposición de este contrato sea inválida, ilegal o inexigible, la validez, legalidad y exigibilidad de las demás disposiciones no se verán afectadas o perjudicadas por ésta. </h4>
+                    <br/><h4 class="text-left"><b><u>VIGÉSIMA PRIMERA:</u></b>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<b><u>INCUMPLIMIENTO</u></b></h4>
+                    <br/><h4 class="text-justify">Queda expresamente entendido que la violación o incumplimiento por parte del TRABAJADOR de alguna disposición estipulada en este contrato, en las normas previstas en la LOTTT o en cualquier otra norma vigente, en las políticas, reglamentos internos y demás normas de la COMPAÑÍA, se considerará una “falta grave a las obligaciones que impone la relación de trabajo”, de conformidad con las disposiciones del Artículo 79 de la LOTTT, y dará lugar a que la COMPAÑÍA, unilateralmente, pueda dar por terminado en forma justificada el presente contrato o relación de trabajo.</h4>
+                    <br/><h4 class="text-justify">Adicionalmente, el TRABAJADOR acepta y reconoce que, si incurre en alguna de las siguientes faltas, la COMPAÑÍA tendrá el derecho de despedir al TRABAJADOR con causa: </h4>
+                    <table style="width:100%;">
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left"> a)</h4></td>
+                                <td style="width:93%;"><h4>Violación de cualquiera de sus obligaciones legales, contractuales o reglamentarias o de una orden que le imparta la COMPAÑÍA;  </h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left"> b)</h4></td>
+                                <td style="width:93%;"><h4>Preste directa o indirectamente servicios laborales a otra u otras empresas o personas, o trabaje por cuenta propia en forma independiente, a menos que exista permiso escrito de la COMPAÑÍA; </h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left"> c)</h4></td>
+                                <td style="width:93%;"><h4>Suministre a la COMPAÑÍA información inexacta o falsa en su planilla de empleo o suministre al médico de la COMPAÑÍA informaciones inexactas al practicarse el examen pre empleo, post empleo, pre vacacional, post vacacional, o cualquier otro examen requerido;  </h4></td>
+                            </tr>
+                            <tr>
+                                <td style="width:7%;"><h4 class="text-left"> d)</h4></td>
+                                <td style="width:93%;"><h4>Revele secretos, información confidencial o datos reservados de la COMPAÑÍA o retire, altere o modifique información confidencial o bienes de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> e)</h4></td>
+                                <td style="width:93%;"><h4>Incumpla su horario de trabajo, sin excusa suficiente a juicio de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> f)</h4></td>
+                                <td style="width:93%;"><h4>Llegue al trabajo en estado de embriaguez o bajo el efecto de sustancias estupefacientes o psicotrópicas o ingiera bebidas embriagantes o sustancias estupefacientes o psicotrópicas en el sitio de trabajo, aunque sea por primera vez; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> g)</h4></td>
+                                <td style="width:93%;"><h4>Tenga desavenencias, peleas, o discusiones con sus compañeros de trabajo o supervisores o jefes; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> h)</h4></td>
+                                <td style="width:93%;"><h4>Practique juegos de suerte y azar en las instalaciones de la COMPAÑÍA, o celebre dentro de la misma con compañeros el contrato de mutuo o préstamo de dineros, mediante pago de intereses que excedan lo permitido por la ley; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> i)</h4></td>
+                                <td style="width:93%;"><h4>Negocie los productos de propiedad de la COMPAÑÍA o los utilice con intención personal de lucro; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> j)</h4></td>
+                                <td style="width:93%;"><h4>Solicite préstamos o ayuda económica a los clientes de la COMPAÑÍA en provecho de su cargo, o acepte donaciones que los clientes de la COMPAÑÍA hagan sin previa autorización de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> k)</h4></td>
+                                <td style="width:93%;"><h4>Autorice o ejecute operaciones que no estén comprendidas en el ejercicio de sus funciones y que afecten los intereses de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> l)</h4></td>
+                                <td style="width:93%;"><h4>Utilice el buen nombre de la COMPAÑÍA o se valga de las labores encomendadas por ella, para emprender, respaldar o acreditar negocios o actividades comerciales en su beneficio; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> m)</h4></td>
+                                <td style="width:93%;"><h4>Incumpla las responsabilidades y funciones asignadas a su cargo; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> n)</h4></td>
+                                <td style="width:93%;"><h4>Retire de las instalaciones de la COMPAÑÍA elementos, equipos, máquinas, útiles, papelería o cualquier material u objeto de propiedad de la COMPAÑÍA sin previa autorización por escrito de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> o)</h4></td>
+                                <td style="width:93%;"><h4>Retenga dinero o cobre cheques girados a favor de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> p)</h4></td>
+                                <td style="width:93%;"><h4>Incumpla a las políticas laborales, de ética y conducta de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> q)</h4></td>
+                                <td style="width:93%;"><h4>Desempeñe funciones directivas, laborales o de asesoría en otra compañía con la cual la COMPAÑÍA tenga relaciones comerciales, ya sea directa o indirectamente, sin autorización previa expresa y por escrito de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> r)</h4></td>
+                                <td style="width:93%;"><h4>Entregue u ofrezca cualquier dádiva a un funcionario público con el ánimo de comprometer la ética profesional y la honestidad del funcionario público y que de manera directa o indirecta comprometa la responsabilidad de la COMPAÑÍA; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> s)</h4></td>
+                                <td style="width:93%;"><h4>Solicite o acepte, en su propio nombre o a nombre de un tercero, dinero, dadiva, o favores de un cliente o terceros, para evadir los procesos regulares y legales implementados por la COMPAÑÍA o las autoridades, a fin de satisfacer solicitudes de clientes o terceros; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> t)</h4></td>
+                                <td style="width:93%;"><h4>Se extralimite en el ejercicio de sus funciones, y/o eluda u omita el cumplimiento de las obligaciones que le corresponden y/o se ocupe de actividades no laborales distintas de las que le corresponden a su cargo durante la jornada de trabajo; </h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> u)</h4></td>
+                                <td style="width:93%;"><h4>Practicar conductas maliciosas en complicidad con los compañeros de trabajo para perjudicar a la COMPAÑÍA;</h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> v)</h4></td>
+                                <td style="width:93%;"><h4>Delegar sus responsabilidades a otra persona sin autorización de la COMPAÑÍA; y</h4></td>
+                            </tr> <tr>
+                                <td style="width:7%;"><h4 class="text-left"> w)</h4></td>
+                                <td style="width:93%;"><h4>Adquiera o mantenga interés, directa o indirectamente, se convierta en accionista, socio participante, miembro, administrador, asesor, trabajador, colaborador, consultor, miembro de alguna junta directiva, intermediario y/o contratista, directa o indirectamente a través de un familiar, en beneficio y/o a través de cualquier corporación, entidad, asociación, compañía y/o negocio que sea o haya sido cliente o competencia de la COMPAÑÍA, o que de alguna manera se relacione con alguna actividad a la cual se dedique o pueda dedicarse la COMPAÑÍA, o que preste un servicio como contratista de la COMPAÑÍA.</h4></td>
+                            </tr>
+                    </table>
+                    <table style="width:100%;">
+                             <tr>
+                                <td style="width:30%;"><h4> <b><u>VIGÉSIMA SEGUNDA:</u></b></h4></td>
+                                <td style="width:70%;"><h4> <b><u>ACUERDO TOTAL, ENMIENDAS, ENCABEZADOS</u></b></h4></td>
+                            </tr>
+                    </table>
+                    <br/><h4 class="text-justify">Este documento representa el acuerdo definitivo entre las partes y el mismo sustituye, invalida, deroga y deja sin efecto cualesquiera acuerdos, contratos, convenios, términos, condiciones y beneficios que puedan haber existido entre las partes antes de la fecha de este documento. Las enmiendas a este contrato sólo serán válidas cuando se evidencien por escrito y estén firmadas por ambas partes. Los encabezados utilizados en este contrato para identificar sus cláusulas, se incluyen únicamente por conveniencia y para facilitar la orientación dentro del contrato, y su propósito no es el de interpretar, definir o complementar las respectivas estipulaciones, párrafos, o secciones, las cuales, en caso de conflicto, prevalecerán sobre los encabezados. </h4>
+                    <br/><h4 class="text-justify">De conformidad con lo establecido en el artículo 59 de la LOTTT, se hacen y firman dos (2) ejemplares de un mismo tenor y a un solo efecto del presente contrato, de los cuales uno se entrega en este mismo acto al TRABAJADOR y el otro queda en poder de la COMPAÑÍA. Firmado en <span t-esc="doc['lugar_acuerdo']"/>, siendo las <span t-esc="doc['hora_acuerdo']"/> <span t-esc="doc['tiempo']"/> del día <span t-esc="doc['fecha_acuerdo']"/>.</h4>
+
+                    <table style="width:100%;">
+                             <tr>
+                                <td style="width:40%;"><h4  class="text-center">Por la COMPAÑÍA</h4></td>
+                                 <td style="width:10%;"> &amp;nbsp;</td>
+                                 <td style="width:10%;"> &amp;nbsp;</td>
+                                <td style="width:40%;"><h4  class="text-center">El TRABAJADOR</h4></td>
+                            </tr>
+                        <tr><td> &amp;nbsp;</td></tr>
+                        <tr><td> &amp;nbsp;</td></tr>
+                        <tr><td> &amp;nbsp;</td></tr>
+                        <tr><td> &amp;nbsp;</td></tr>   
+                        <tr><td> &amp;nbsp;</td></tr>        <tr>
+                                <td style="width:40%;"><h4  class="text-center">_____________________</h4></td>
+                             <td style="width:10%;"> &amp;nbsp;</td>
+                            <td style="width:10%;"> &amp;nbsp;</td>
+                                <td style="width:40%;"><h4  class="text-center">_____________________</h4></td>
+                            </tr>
+                        <tr style="width:100%;">
+                            <td style="width:40%;border-top: 2px solid black;border-left: 2px solid black;border-right: 2px solid black"><h4  class="text-center"> <b><span t-esc="doc['nombre_empleador']"/></b></h4></td>
+                            <td style="width:10%;"> &amp;nbsp;</td>
+                            <td style="width:10%;"> &amp;nbsp;</td>
+                            <td style="width:40%;border-top: 2px solid black;border-left: 2px solid black;border-right: 2px solid black"><h4  class="text-center"> <b><span t-esc="doc['nombre_trabajador']"/></b></h4></td>
+
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:40%;border-left: 2px solid black;border-right: 2px solid black"><h4  class="text-center"><span t-esc="doc['cargo_empleador']"/></h4></td>
+                            <td style="width:10%;"> &amp;nbsp;</td>
+                            <td style="width:10%;"> &amp;nbsp;</td>
+                            <td style="width:40%;border-bottom: 2px solid black;border-left: 2px solid black;border-right: 2px solid black"><h4  class="text-center">Cédula de Identidad N° <span t-esc="doc['cedula_trabajador']"/></h4></td>
+
+                        </tr>
+                        <tr style="width:100%;">
+                            <td style="width:40%;border-bottom: 2px solid black;border-left: 2px solid black;border-right: 2px solid black"><h4  class="text-center">Cédula de Identidad N° <span t-esc="doc['cedula_empleador']"/></h4></td>
+                            <td style="width:10%;"> &amp;nbsp;</td>
+                            <td style="width:10%;"> &amp;nbsp;</td>
+
+                        </tr>
+                    </table>
+
+                    </t>
+                </div>
+         </div>
+    </template>
+
+    <report
+            id="action_hr_report_constancia_reporte"
+            string="Contrato de Trabajo"
+            model="hr.contrato.report"
+            report_type="qweb-pdf"
+            name="int_hr_contrato_report.template_contrato_report"
+            file="int_hr_contrato_report.template_contrato_report"
+            paperformat="paperformat_contrato_report"
+    />
+</odoo>
