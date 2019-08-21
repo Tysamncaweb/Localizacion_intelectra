@@ -8,10 +8,10 @@ class AccountInvoice(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency',
                                   required=True, readonly=True, states={'draft': [('readonly', False)]},
                                   track_visibility='always')
-    amount_untaxed_bs = fields.Float('Base Imponible Bs', digits=(12, 2))
-    amount_tax_bs = fields.Float('Impuesto Bs', digits=(12, 2))
-    amount_total_bs = fields.Float('Total Bs', digits=(12, 2))
-    residual_bs = fields.Float('Saldo', digits=(12, 2))
+    amount_untaxed_bs = fields.Float('Base Imponible Bs', digits=(12, 2), compute='_compute_amount')
+    amount_tax_bs = fields.Float('Impuesto Bs', digits=(12, 2), compute='_compute_amount')
+    amount_total_bs = fields.Float('Total Bs', digits=(12, 2), compute='_compute_amount')
+    residual_bs = fields.Float('Saldo', digits=(12, 2), compute='_compute_amount')
 
     @api.one
     @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
@@ -37,7 +37,7 @@ class AccountInvoice(models.Model):
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
-    tasa_me = fields.Float('Precio Total  Bs.', digits=(12, 2))
+    tasa_me = fields.Float('Precio Total  Bs.', digits=(12, 2), compute='_compute_price')
     currency_id = fields.Many2one('res.currency', related='invoice_id.currency_id', store=True, related_sudo=False)
 
     @api.one

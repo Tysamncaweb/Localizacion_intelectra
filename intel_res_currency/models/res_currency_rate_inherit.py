@@ -32,7 +32,7 @@ class CurrencyRate(models.Model):
 class Currency(models.Model):
     _inherit = "res.currency"
 
-    rate_real = fields.Float(digits=(12, 2), help='se introduce la tasa real del mercado')
+    rate_real = fields.Float(compute='_compute_current_rate', digits=(12, 2), help='se introduce la tasa real del mercado')
     rate = fields.Float(compute='_compute_current_rate', string='Current Rate', digits=(12, 9),
                         help='The rate of the currency to the currency of rate 1.')
     rate_rounding = fields.Float(digits=(12, 9), help='la tasa inversa del mercado')
