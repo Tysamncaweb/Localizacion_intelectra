@@ -65,6 +65,9 @@
                         <field name="job_id" required="1"/>
                     </div>
                 </xpath>
+                <xpath expr="//field[@name='department_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
             </field>
         </record>
 
