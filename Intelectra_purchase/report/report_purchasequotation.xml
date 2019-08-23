@@ -313,8 +313,8 @@
 
             <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td><br></br><br></br><br></br>
 
-            <table width="100%"><br></br><br></br>
-                 <h3>INSTRUCCIONES DE DESPACHO</h3>
+            <table width="100%"><br></br>
+                 <strong>INSTRUCCIONES DE DESPACHO</strong>
                 <tr><td><strong>1. Consignee:</strong>SOLUCIONES INTELECTRA, C.A. / Calle Providencia, Galpon No, 34, Zona Industrial La Trinidad, Caracas 1080. Venezuela / Phone: +58 (212) 944.52.86 / Fax: +58 (212) 945.05.62</td></tr>
                 <tr><td><strong>2. Notify:</strong>SOLUCIONES INTELECTRA, C.A. / Calle Providencia, Galpon No, 34, Zona Industrial La Trinidad, Caracas 1080. Venezuela / Phone: +58 (212) 944.52.86 / Fax: +58 (212) 945.05.62</td></tr>
                 <tr><td><strong>3.</strong>(Very Important) Do not declare value (N.V.D) in the Bill of Lading</td></tr>
@@ -826,12 +826,12 @@
                 <tr>
                     <td class="text-left"><span t-field="o.phone"/></td>
                 </tr>
-            </table><br/><br></br><br></br>
+            </table><br/><br></br>
 
             <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td><br/><br></br><br></br><br></br>
 
-            <table width="100%"><br></br><br></br><br></br>
-                 <h3>INSTRUCCIONES DE DESPACHO</h3>
+            <table width="100%"><br></br>
+                 <strong>INSTRUCCIONES DE DESPACHO</strong>
                 <tr><td><strong>1. Consignee:</strong>SOLUCIONES INTELECTRA, C.A. / Calle Providencia, Galpon No, 34, Zona Industrial La Trinidad, Caracas 1080. Venezuela / Phone: +58 (212) 944.52.86 / Fax: +58 (212) 945.05.62</td></tr>
                 <tr><td><strong>2. Notify:</strong>SOLUCIONES INTELECTRA, C.A. / Calle Providencia, Galpon No, 34, Zona Industrial La Trinidad, Caracas 1080. Venezuela / Phone: +58 (212) 944.52.86 / Fax: +58 (212) 945.05.62</td></tr>
                 <tr><td><strong>3.</strong>(Very Important) Do not declare value (N.V.D) in the Bill of Lading</td></tr>
