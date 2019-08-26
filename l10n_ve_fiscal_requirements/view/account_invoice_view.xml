@@ -20,7 +20,7 @@
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="rif" string="Rif"/>
-                    <field name="nro_ctrl" string="numero de control" required="0" attrs="{'readonly': [('state', 'in', ('draft', 'paid'))]}"/>
+                    <field name="nro_ctrl" string="Número de control" required="0" attrs="{'readonly': [('state', 'in', ('draft', 'paid','open'))]}"/>
                     <field name="marck_paper" string="Papel para anular" required="0" attrs="{'invisible': [('state','!=','paid')]}"/>
 
                 </xpath>
@@ -32,7 +32,10 @@
                         <field name="invoice_printer" attrs="{'invisible':[('loc_req','=',True)]}"/>
                         <field name="fiscal_printer" attrs="{'invisible':[('loc_req','=',True)]}"/>
                         <field name="z_report" attrs="{'invisible':[('loc_req','=',True)]}"/>
-                        <field name="nro_ctrl" required="0" attrs="{'invisible': [('state','=','draft')],'readonly': [('state','=','paid')]}"/>
+                        <!--Se cambia el campo de numero de control para que no sea requerido-->
+                        <field name="nro_ctrl" required="0" attrs="{'invisible': [('state','=','draft')],'readonly': [('state', 'in', ('draft', 'paid','open'))]}"/>
+                       <field name="nro_ctrl" required="0" attrs="{'invisible': [('state','=','draft')],'readonly': [('state','=','paid')]}"/>
+
                         <button name="%(action_wiz_nroctrl)d" type="action" string="Change control number" colspan="6" attrs="{'invisible': [('state','=','draft')]}"/>
                     </group>
                 </xpath>
@@ -70,13 +73,13 @@
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="rif" string="Rif"/>
                     <field name="supplier_invoice_number" string="Supplier Invoice Number" required="True" />
-                    <field name="nro_ctrl" string="numero de control" required="True" attrs="{'readonly': [('state','=','open')]}"/>
+                    <field name="nro_ctrl" string="Número de control" required="True" attrs="{'readonly': [('state', 'in', ('draft', 'paid','open'))]}"/>
                 </xpath>
                 <xpath expr="//page[@name='other_info']/group/group[2]" position="after">
                     <group>
                        <separator string="Fiscal Information"/>
                         <field name="sin_cred"/>
-                        <field name="nro_ctrl" required="True" attrs="{'invisible': [('state','=','draft')],'readonly': [('state','=','open')]}" />
+                        <field name="nro_ctrl" required="True" attrs="{'invisible': [('state','=','draft')],'readonly': [('state', 'in', ('draft', 'paid','open'))]}" />
                         <button name="%(action_wiz_nroctrl)d" type="action" string="Change control number" colspan="6" attrs="{'invisible': [('state','=','draft')]}"/>
                     </group>
                 </xpath>

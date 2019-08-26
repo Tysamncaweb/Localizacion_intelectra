@@ -29,7 +29,12 @@
                      <group>
                             <field name="cuenta_especifica" string="Cuenta específica" widget="checkboxes"/>
                             <field name="num_cuenta_contables" string="Número Cuenta Contable" attrs="{'invisible':[('cuentas_contables', '=', 'all')],'required':[('cuenta_especifica', '=', True)]}"/>
-                        </group>
+                     </group>
+
+                     <group>
+                        <field name="name" colspan="4" invisible="1"/>
+                        <field name="report" filename="name" colspan="4"/>
+                     </group>
 
 
                 <footer>
