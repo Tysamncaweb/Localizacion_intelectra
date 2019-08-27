@@ -40,6 +40,7 @@
                 #'account_cancel',
                 'l10n_ve_withholding_iva',
                 'l10n_ve_fiscal_requirements',
+                'intel_account_people_type',
                 #'debit_credit_note',
                 #'l10n_mx_edi'
                 ],

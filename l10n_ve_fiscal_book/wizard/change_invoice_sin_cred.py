@@ -48,9 +48,11 @@ class ChangeInvoiceSinCredwizard(models.TransientModel):
         inv_obj = self.env['account.invoice']
         inv_ids = context.get('active_ids', [])
         data = self.browse(ids[0])
+        invoice = inv_obj.browse(self._context['active_id'])
+
         if not data.sure:
             raise exceptions("Error!",
                 "Please confirm that you want to do this by checking the option")
         if inv_ids:
-            inv_obj.write(inv_ids, {'sin_cred': data.sin_cred})
+            invoice.write({'sin_cred': self.sin_cred})
         return {}
