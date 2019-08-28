@@ -9,13 +9,13 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 class hr_payslip(models.Model):
     _inherit = 'hr.payslip'
 
-    salario_mensual_util = fields.Float('Salario Mensual Utilidades', digits=(10, 4))
-    salario_integral_util =fields.Float('Salario Integral Utilidades', digits=(10, 4))
-    total_util = fields.Float('Total a pagar', digits=(10, 4))
-    alic_bono_vac_util = fields.Float('Alicuota Bono Vacacional', digits=(10, 4))
-    anticipos_util = fields.Float('Anticipos Utilidades', digits=(10, 4))
+    salario_mensual_util = fields.Float('Salario Mensual Utilidades', digits=(10, 2))
+    salario_integral_util =fields.Float('Salario Integral Utilidades', digits=(10, 2))
+    total_util = fields.Float('Total a pagar', digits=(10, 2))
+    alic_bono_vac_util = fields.Float('Alicuota Bono Vacacional', digits=(10, 2))
+    anticipos_util = fields.Float('Anticipos Utilidades', digits=(10, 2))
     util_days_to_pay_ps = fields.Integer('Dias a pagar utilidades')
-
+    dias_x_anio= fields.Char('Dias por año')
 
 
     _defaults = {
@@ -55,7 +55,7 @@ class hr_payslip(models.Model):
                 for payslip_id in self.ids:
                     payslip = self.search([('id', '=', payslip_id)])
                 #    if payslip.contract_id.date_end:    #Si el contrato no esta ctivo no ss hace nomina de utilidades
-                 #       continue
+                #       continue
                     dias_str = config_obj._hr_get_parameter('hr.dias.bono.vacacional')
                     tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
                     vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
@@ -98,19 +98,27 @@ class hr_payslip(models.Model):
                         sueldo_promedio, vacaciones.get('asignacion')
                         if int(dias_str) == 0
                         else int(dias_str), dias_util)
-                    total_a_pagar = salario_integral_diario*dias_util
-                    if is_anticipo:
-                        contract_obj.set_anticipo_data(total_a_pagar, payslip.date_from, payslip.date_to, special_id)
-                    else:
-                        payslip.contract_id.write({'total_anticipo': 0})
-                    total_anticipos = contract_obj.get_anticipo_acum()
+                    #total_a_pagar = salario_integral_diario*dias_util
+                    total_a_pagar = float(sueldo_promedio)*(int(dias_util)/360)
+
+                    #if is_anticipo:
+                     #   contract_obj.set_anticipo_data(total_a_pagar, payslip.date_from, payslip.date_to, special_id)
+                   # else:
+                    #    payslip.contract_id.write({'total_anticipo': 0})
+                   # total_anticipos = contract_obj.get_anticipo_acum()
+                    #dias_x_anio = config_obj._hr_get_parameter('hr.payroll.max.dias.año')
+                 #   salario_utilidades_prom = sueldo_promedio.replace('.', '')
+                 #   salario_utilidades_prom = float(salario_utilidades_prom)
+                 #   salario_util_mensual = '{0:,.2f}'.format(sueldo_promedio)
+
                     payslip_values.update({
-                        'salario_mensual_util': sueldo_promedio,
+                        'salario_mensual_util':  sueldo_promedio,
                         'salario_integral_util': salario_integral_diario,
                         'util_days_to_pay_ps': dias_util,
                         'total_util': total_a_pagar,
                         'alic_bono_vac_util':alic_b_v,
-                        'anticipos_util':total_anticipos if not period_end else 0.0
+                    #    'anticipos_util':total_anticipos if not period_end else 0.0,
+                        #'dias_x_anio':dias_x_anio
                     })
                     self.write(payslip_values)
         res = super(hr_payslip, self).compute_sheet()
@@ -163,9 +171,12 @@ class hr_payslip(models.Model):
                 fecha_desde = fecha_desde + relativedelta.relativedelta(months=+1)
                 ultimo_sueldo += sueldo_temp
                 mes_ult_sueldo = fecha_desde.month
+                if fecha_desde.month == 12:
+                    ultimo_sueldo += sueldo_temp
                 if sueldo_temp == 0:
                     break
                 sueldo_x_mes = sueldo_temp
+
             ultimo_sueldo = ultimo_sueldo + sueldo_x_mes*(mes_pago - mes_ult_sueldo)
         else:
             fecha_desde = datetime.strftime(
@@ -176,8 +187,8 @@ class hr_payslip(models.Model):
                 DEFAULT_SERVER_DATE_FORMAT)
             ultimo_sueldo = self.get_amount_util(code, employee_id.id, fecha_desde, fecha_hasta, is_anticipo)  # ultimo sueldo
 
-
-        return ultimo_sueldo / (periodo.months if periodo.months > 0 else 1)
+        return ultimo_sueldo
+       # return ultimo_sueldo / (periodo.months if periodo.months > 0 else 1)
 
     # @api.v7
     def get_amount_util(self, code=None, employee_id=None, fecha_desde=None, fecha_hasta=None, is_anticipo=False, config_data=False):
@@ -219,6 +230,7 @@ class hr_payslip(models.Model):
             amount += i.amount
 
         return amount
+
 
 class hr_payslip_run(models.Model):
     _inherit = 'hr.payslip.run'

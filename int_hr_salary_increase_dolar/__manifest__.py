@@ -34,6 +34,7 @@
         "base",
         "hr_payroll",
         "hr_holidays",
+        "intel_res_currency",
     ],
     "data": [
         "wizard/salary_increase_employeer_dolar_view.xml",

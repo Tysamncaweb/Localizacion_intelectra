@@ -100,6 +100,12 @@ class Contract(models.Model):
                 raise ValidationError(_(u'Solo admite hasta 7 Días. Por favor intente de nuevo'))
             return
 
+    @api.onchange('islr_withholding_value')
+    def onchance_islr(self):
+        if (self.islr_withholding_value < 0) or (self.islr_withholding_value > 99):
+            raise exceptions.except_orm(('Advertencia!'),
+                                        ('Ingrese un porcentaje (%) de I.S.L.R valido'))
+
 
     @api.multi
     def write(self, values):

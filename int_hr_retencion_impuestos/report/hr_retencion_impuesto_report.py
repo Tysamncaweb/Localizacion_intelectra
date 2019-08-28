@@ -20,7 +20,7 @@ class hr_retencion_report(models.TransientModel):
     def print_report(self, docids):
         res = dict()
         docs = []
-        update = {'empleado': self.empleado}
+        update = {'empleado': self.empleado.id,'date_from':self.date_from,'date_to':self.date_to}
         docids.update(update)
         return self.env.ref('int_hr_retencion_impuestos.action_hr_report_retencion_reporte').report_action([], data=docids)
 
@@ -30,33 +30,267 @@ class ReportAccountPayment_5(models.AbstractModel):
     @api.model
     def get_report_values(self, docids, data):
         var = data
-        #contract = self.env['hr.contract'].search([('id','=',data['contract_id'])])
+        empleado = self.env['hr.employee'].search([('id','=',data['empleado'])])
         res = dict()
         docs = []
-        empleado = data['empleado']
+        docs2 = []
+        date_from = data['date_from']
+        date_to =  data['date_to']
+        slips = self.env['hr.payslip'].search([('employee_id','=',data['empleado']),('date_from','>=', date_from),('date_to','<=',date_to),('state','=','done')])
+        monto_islr_enero = monto_islr_febrero = monto_islr_marzo = monto_islr_abril = monto_islr_mayo = monto_islr_junio = monto_islr_julio = monto_islr_agosto = monto_islr_septiembre = monto_islr_octubre = monto_islr_noviembre = monto_islr_diciembre = 0.0
+        salario_enero = salario_febrero =  salario_marzo = salario_abril = salario_mayo = salario_junio = salario_julio = salario_agosto = salario_septiembre = salario_octubre = salario_noviembre = salario_diciembre = 0.0
+        porcentaje_enero = porcentaje_febrero = porcentaje_marzo = porcentaje_abril = porcentaje_mayo = porcentaje_junio = porcentaje_julio = porcentaje_agosto = porcentaje_septiembre = porcentaje_octubre = porcentaje_noviembre = porcentaje_diciembre = 0.0
+        impuesto_enero = impuesto_febrero = impuesto_marzo = impuesto_abril = impuesto_mayo = impuesto_junio = impuesto_julio = impuesto_agosto = impuesto_septiembre = impuesto_octubre = impuesto_noviembre = impuesto_diciembre = 0.0
+        remuneracion_enero = remuneracion_febrero = remuneracion_marzo = remuneracion_abril = remuneracion_mayo = remuneracion_junio = remuneracion_julio = remuneracion_agosto = remuneracion_septiembre = remuneracion_octubre = remuneracion_noviembre = remuneracion_diciembre = 0.0
+        lista = []
+        date_from = datetime.strptime(date_from, '%Y-%m-%d')
+        date_from = date_from.strftime('%d/%m/%Y')
+        date_to = datetime.strptime(date_to, '%Y-%m-%d')
+        date_to = date_to.strftime('%d/%m/%Y')
+        beneficiario_direccion = str(empleado.state_id_res.name) + ' ' + str(empleado.city_id_res.name)+ ' ' + str(empleado.e_municipio.name)+ ' ' + str(empleado.e_parroquia.name)+ ' ' + str(empleado.code_postal)+ ' ' + str(empleado.street)+ ' ' + str(empleado.house)+ ' ' + str(empleado.apto)+ ' ' + str(empleado.piso)
+        beneficiario_direccion = beneficiario_direccion.replace("False",'')
+
+        for slip in slips:
+            if str(slip.date_to[5:7]) == '01':
+                mes = 'ENERO'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_enero += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_enero += regla.total
+                porcentaje_enero = (monto_islr_enero*100)/salario_enero
+
+            if str(slip.date_to[5:7]) == '02':
+                mes = 'FEBRERO'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_febrero += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_febrero += regla.total
+                porcentaje_febrero = (monto_islr_febrero*100)/salario_febrero
+
+            if str(slip.date_to[5:7]) == '03':
+                mes = 'MARZO'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_marzo += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_marzo += regla.total
+                porcentaje_marzo = (monto_islr_marzo*100)/salario_marzo
+
+            if str(slip.date_to[5:7]) == '04':
+                mes = 'ABRIL'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_abril += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_abril += regla.total
+                porcentaje_abril = (monto_islr_abril*100)/salario_abril
+
+            if str(slip.date_to[5:7]) == '05':
+                mes = 'MAYO'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_mayo += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_mayo += regla.total
+                porcentaje_mayo = (monto_islr_mayo*100)/salario_mayo
+
+            if str(slip.date_to[5:7]) == '06':
+                mes = 'JUNIO'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_junio += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_junio += regla.total
+                porcentaje_junio = (monto_islr_junio*100)/salario_junio
+
+            if str(slip.date_to[5:7]) == '07':
+                mes = 'JULIO'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_julio += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_julio += regla.total
+                porcentaje_julio = (monto_islr_julio*100)/salario_julio
+
+            if str(slip.date_to[5:7]) == '08':
+                mes = 'AGOSTO'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_agosto += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_agosto += regla.total
+                porcentaje_agosto = (monto_islr_agosto*100)/salario_agosto
+
+            if str(slip.date_to[5:7]) == '09':
+                mes = 'SEPTIEMBRE'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_septiembre += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_septiembre += regla.total
+                porcentaje_septiembre = (monto_islr_septiembre*100)/salario_septiembre
+
+            if str(slip.date_to[5:7]) == '10':
+                mes = 'OCTUBRE'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_octubre += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_octubre += regla.total
+                porcentaje_octubre = (monto_islr_octubre*100)/salario_octubre
+
+            if str(slip.date_to[5:7]) == '11':
+                mes = 'NOVIEMBRE'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_noviembre += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_noviembre += regla.total
+                porcentaje_noviembre = (monto_islr_noviembre*100)/salario_noviembre
+
+            if str(slip.date_to[5:7]) == '12':
+                mes = 'DICIEMBRE'
+                for regla in slip.line_ids:
+                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                        monto_islr_diciembre += regla.total
+                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                        salario_diciembre += regla.total
+                porcentaje_diciembre = (monto_islr_diciembre*100)/salario_diciembre
+
+        impuesto_enero = monto_islr_enero
+        remuneracion_enero = salario_enero
+
+        impuesto_febrero = monto_islr_febrero + monto_islr_enero
+        remuneracion_febrero = salario_febrero + salario_enero
+
+        impuesto_marzo = monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_marzo = salario_marzo + salario_febrero + salario_enero
+
+        impuesto_abril = monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_abril = salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_mayo = monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_mayo = salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_junio = monto_islr_junio + monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_junio = salario_junio + salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_julio = monto_islr_julio + monto_islr_junio + monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_julio = salario_julio + salario_junio + salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_agosto = monto_islr_agosto + monto_islr_julio + monto_islr_junio + monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_agosto = salario_agosto + salario_julio + salario_junio + salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_septiembre = monto_islr_septiembre + monto_islr_agosto + monto_islr_julio + monto_islr_junio + monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_septiembre = salario_septiembre + salario_agosto + salario_julio + salario_junio + salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_octubre = monto_islr_octubre + monto_islr_septiembre + monto_islr_agosto + monto_islr_julio + monto_islr_junio + monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_octubre = salario_octubre + salario_septiembre + salario_agosto + salario_julio + salario_junio + salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_noviembre = monto_islr_noviembre + monto_islr_octubre + monto_islr_septiembre + monto_islr_agosto + monto_islr_julio + monto_islr_junio + monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_noviembre = salario_noviembre + salario_octubre + salario_septiembre + salario_agosto + salario_julio + salario_junio + salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        impuesto_diciembre =  monto_islr_diciembre + monto_islr_noviembre + monto_islr_octubre + monto_islr_septiembre + monto_islr_agosto + monto_islr_julio + monto_islr_junio + monto_islr_mayo + monto_islr_abril + monto_islr_marzo + monto_islr_febrero + monto_islr_enero
+        remuneracion_diciembre = salario_diciembre + salario_noviembre  + salario_octubre + salario_septiembre + salario_agosto + salario_julio + salario_junio + salario_mayo + salario_abril + salario_marzo  + salario_febrero + salario_enero
+
+        porcentaje_enero = round(porcentaje_enero,2)
+        porcentaje_febrero = round(porcentaje_febrero, 2)
+        porcentaje_marzo = round(porcentaje_marzo, 2)
+        porcentaje_abril = round(porcentaje_abril, 2)
+        porcentaje_mayo = round(porcentaje_mayo, 2)
+        porcentaje_junio = round(porcentaje_junio, 2)
+        porcentaje_julio = round(porcentaje_julio, 2)
+        porcentaje_agosto = round(porcentaje_agosto, 2)
+        porcentaje_septiembre = round(porcentaje_septiembre, 2)
+        porcentaje_octubre = round(porcentaje_octubre, 2)
+        porcentaje_noviembre = round(porcentaje_noviembre, 2)
+        porcentaje_diciembre = round(porcentaje_diciembre, 2)
+        docs2.append({
+            'salario_enero' : salario_enero,
+            'porcentaje_enero': porcentaje_enero,
+            'impuesto_enero': monto_islr_enero,
+            'acumulado_enero':impuesto_enero,
+            'remuneracion_enero': remuneracion_enero,
+
+            'salario_febrero': salario_febrero,
+            'porcentaje_febrero': porcentaje_febrero,
+            'impuesto_febrero': monto_islr_febrero,
+            'acumulado_febrero': impuesto_febrero,
+            'remuneracion_febrero': remuneracion_febrero,
+
+            'salario_marzo': salario_marzo,
+            'porcentaje_marzo': porcentaje_marzo,
+            'impuesto_marzo': monto_islr_marzo,
+            'acumulado_marzo': impuesto_marzo,
+            'remuneracion_marzo': remuneracion_marzo,
+
+            'salario_abril': salario_abril,
+            'porcentaje_abril': porcentaje_abril,
+            'impuesto_abril': monto_islr_abril,
+            'acumulado_abril': impuesto_abril,
+            'remuneracion_abril': remuneracion_abril,
+
+            'salario_mayo': salario_mayo,
+            'porcentaje_mayo': porcentaje_mayo,
+            'impuesto_mayo': monto_islr_mayo,
+            'acumulado_mayo': impuesto_mayo,
+            'remuneracion_mayo': remuneracion_mayo,
+
+            'salario_junio': salario_junio,
+            'porcentaje_junio': porcentaje_junio,
+            'impuesto_junio': monto_islr_junio,
+            'acumulado_junio': impuesto_junio,
+            'remuneracion_junio': remuneracion_junio,
+
+            'salario_julio': salario_julio,
+            'porcentaje_julio': porcentaje_julio,
+            'impuesto_julio': monto_islr_julio,
+            'acumulado_julio': impuesto_julio,
+            'remuneracion_julio': remuneracion_julio,
+
+            'salario_agosto': salario_agosto,
+            'porcentaje_agosto': porcentaje_agosto,
+            'impuesto_agosto': monto_islr_agosto,
+            'acumulado_agosto': impuesto_agosto,
+            'remuneracion_agosto': remuneracion_agosto,
+
+            'salario_septiembre': salario_septiembre,
+            'porcentaje_septiembre': porcentaje_septiembre,
+            'impuesto_septiembre': monto_islr_septiembre,
+            'acumulado_septiembre': impuesto_septiembre,
+            'remuneracion_septiembre': remuneracion_septiembre,
+
+            'salario_octubre': salario_octubre,
+            'porcentaje_octubre': porcentaje_octubre,
+            'impuesto_octubre': monto_islr_octubre,
+            'acumulado_octubre': impuesto_octubre,
+            'remuneracion_octubre': remuneracion_octubre,
+
+            'salario_noviembre': salario_noviembre,
+            'porcentaje_noviembre': porcentaje_noviembre,
+            'impuesto_noviembre': monto_islr_noviembre,
+            'acumulado_noviembre': impuesto_noviembre,
+            'remuneracion_noviembre': remuneracion_noviembre,
+
+            'salario_diciembre': salario_diciembre,
+            'porcentaje_diciembre': porcentaje_diciembre,
+            'impuesto_diciembre': monto_islr_diciembre,
+            'acumulado_diciembre': impuesto_diciembre,
+            'remuneracion_diciembre': remuneracion_diciembre,
+        })
 
         docs.append({
-            'date_from': 'xxxxxx',
-            'date_to':'xxxxx',
-            'agente_razon': 'xxxxx',
-            'agente_rif': 'xxxx',
-            'agente_direccion': 'xxxxx',
-            'beneficiario_nombre':'xxxxx',
-            'beneficiario_rif':'xxxx',
-            'beneficiario_cedula':'xxxx',
-            'beneficiario_direccion':'xxxx',
-            'enero':'xxx',
-            'febrero': 'xxx',
-            'marzo': 'xxx',
-            'abril': 'xxx',
-            'mayo': 'xxx',
-            'junio': 'xxx',
-            'julio': 'xxx',
-            'agosto': 'xxx',
-            'septiembre': 'xxx',
-            'octubre': 'xxx',
-            'noviembre': 'xxx',
-            'diciembre': 'xxx',
+            'date_from': date_from,
+            'date_to': date_to,
+            'agente_razon': 'SOLUCIONES INTELECTRA, C.A.',
+            'agente_rif': 'J-29472987-8',
+            'agente_direccion': 'CALLE PROVIDENCIA, ENTRE AV. SAN SEBASTIAN Y CALLE BOLÍVAR, LOCAL GALPON NRO 34, URB LA TRINIDAD, CARACAS, MIRANDA, ZONA POSTAL 1080',
+            'beneficiario_nombre': empleado.name,
+            'beneficiario_rif': empleado.rif,
+            'beneficiario_cedula': empleado.identification_id_2,
+            'beneficiario_direccion': beneficiario_direccion,
 
         })
 
@@ -65,7 +299,7 @@ class ReportAccountPayment_5(models.AbstractModel):
             'lines': res,  # self.get_lines(data.get('form')),
             # date.partner_id
             'docs': docs,
-
+            'docs2':docs2,
 
         }
 

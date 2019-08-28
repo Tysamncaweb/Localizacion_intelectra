@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
 
-                                <label for= "islr_withholding_check" string="Retenciones I.S.L.R."/>
+                                <label for= "islr_withholding_check" string="Retenciones I.S.L.R. (%)"/>
                                 <div>
                                     <div class="address_format">
                                         <field name="islr_withholding_check" style="width: 15%%"/>
