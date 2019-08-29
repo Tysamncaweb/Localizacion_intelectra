@@ -16,10 +16,16 @@
                                   <div>
                                       <div class="address_format">
                                         <field name="reposo_33_check" style="width: 15%%"/>
-                                        <!--field name="reposo_33_value" class="oe_no_button" style="width: 65%%" attrs="{'invisible': [('reposo_33_check', '!=', True)]}"/-->
+
                                       </div>
                                   </div>
-
+                               <label for= "salary_retroactive_check" string="Otras Asignaciones"/>
+                                    <div>
+                                        <div class="address_format">
+                                            <field name="salary_retroactive_check" style="width: 15%%"/>
+                                            <field name="salary_retroactive_value" class="oe_no_button" style="width: 65%%" attrs="{'invisible': [('salary_retroactive_check', '!=', True)]}"/>
+                                        </div>
+                                    </div>
                             </group>
                             <!---################DEDUCCIONES###########################-->
                             <group name="deducciones" string="Deducciones">

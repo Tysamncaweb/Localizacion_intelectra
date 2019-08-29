@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="hr_vacation_calcule_view_inherit" model="ir.ui.view">
+            <field name="name">hr.vacation.calcule.view.inherit</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='holiday_status_id']" position="after">
+                           <field name="vacation" string="¿Ausencia Vacaciones?"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_vacation_calcule_contract_view_inherit" model="ir.ui.view">
+            <field name="name">hr.dvacation.calcule.contract.view.inherit</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract_add_fields.hr_contract_view_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='asignaciones_deducciones']" position="after">
+                    <page string="Control Días de Vacaciones">
+                        <group>
+                            <group string="Control Días de Vacaciones">
+                               <label for= "control_vacaciones_check" string="Días correspondientes por tiempo de servicio"/>
+                                      <div class="address_format">
+                                        <field name="acumulado" style="width: 15%%" readonly="1"/>
+                                      </div>
+                               <label for= "control_vacaciones_check" string="Días Totales disfrutados"/>
+                                      <div class="address_format">
+                                        <field name="solicitado" style="width: 15%%" readonly="1"/>
+                                      </div>
+                               <label for= "control_vacaciones_check" string="Días restantes disponibles a disfrutar"/>
+                                      <div class="address_format">
+                                        <field name="dias_totales" style="width: 15%%" readonly="1"/>
+                                      </div>
+                               <button name="calculo_dias_vacaciones" string="Calcular" type="object" class="oe_highlight" />
+
+                            </group>
+                       </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

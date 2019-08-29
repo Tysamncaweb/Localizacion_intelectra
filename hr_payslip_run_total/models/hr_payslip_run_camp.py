@@ -19,11 +19,11 @@ class hr_payslip_run_total(models.Model):
         busqueda = self.env['hr.salary.rule.category'].search([('id', '!=', 0)])
         if busqueda:
             for a in busqueda:
-                if a.name == 'Basic':
+                if a.code == 'BASIC':
                     tasig = a.id
-                if a.name == 'Gross':
+                if a.code == 'GROSS':
                     tdeduc = a.id
-                if a.name == 'Net':
+                if a.code == 'NET':
                     ttotal = a.id
         else:
             tasig = tdeduc = ttotal = 0

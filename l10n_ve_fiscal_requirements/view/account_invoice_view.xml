@@ -34,8 +34,6 @@
                         <field name="z_report" attrs="{'invisible':[('loc_req','=',True)]}"/>
                         <!--Se cambia el campo de numero de control para que no sea requerido-->
                         <field name="nro_ctrl" required="0" attrs="{'invisible': [('state','=','draft')],'readonly': [('state', 'in', ('draft', 'paid','open'))]}"/>
-                       <field name="nro_ctrl" required="0" attrs="{'invisible': [('state','=','draft')],'readonly': [('state','=','paid')]}"/>
-
                         <button name="%(action_wiz_nroctrl)d" type="action" string="Change control number" colspan="6" attrs="{'invisible': [('state','=','draft')]}"/>
                     </group>
                 </xpath>

@@ -195,6 +195,10 @@ class Contract(models.Model):
             #ASIGNACIONES
             c_id = contract.id
 
+            ###########################3#ASIGNACIONES########################################33
+
+            if contract.salary_retroactive_check:
+                contract_fields.update({'salary_retroactive_check': False, 'salary_retroactive_value': 0.0})
             ###########################3#DEDUCCIONES########################################33
             if contract.salary_deduction_check:
                 contract_fields.update({'deduccion_salarial_check': False, 'salary_deduction_value': '0'})
@@ -206,6 +210,7 @@ class Contract(models.Model):
                 contract_fields.update({'cuenta_seguro_medico_check': False, 'cuenta_seguro_medico_value': 0.0})
             if contract.anticipo_extra_check:
                 contract_fields.update({'anticipo_extra_check': False, 'anticipo_extra_value': 0.0})
+
 
         if contract_fields:
             sql_update_clause = 'update hr_contract set '

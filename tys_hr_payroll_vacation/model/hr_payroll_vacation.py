@@ -16,6 +16,7 @@ class hr_payslip(models.Model):
     dias_porcion =fields.Float('Dias Porcion',digits=(10,2))
     # 'dias_adicional':fields.integer('Dias adicionales'),
     dias_festivos = fields.Integer('Dias festivos')
+    dias_a_disfrutar = fields.Integer('Dias a Disfrutar')
 
 
     @api.multi
@@ -52,6 +53,10 @@ class hr_payslip(models.Model):
                     tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
                     vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
                     sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_from, 1, 'vacaciones')
+
+                    if payslip.date_from < payslip.date_to:
+                        diferencia = int(payslip.date_to[8:10]) - int(payslip.date_from[8:10])
+                #,('date_from', '<=',payslip.date_from),('date_to','>=',payslip.date_to)
                 payslip_values.update({
                     'salario_mensual_va':  sueldo_promedio,
                     'domingos': dias_x_periodo.get('domingos',False),
@@ -59,13 +64,18 @@ class hr_payslip(models.Model):
                     'dias_porcion': vacaciones.get('asignacion',False),
                     'dias_a_pagar_va':vacaciones.get('asignacion',False),
                     'tiempo_servicio_va':tiempo_servicio.get('anios',False),
+                    'dias_a_disfrutar' : diferencia,
                 })
                 self.write(payslip_values)
         res = super(hr_payslip, self).compute_sheet()
         return res
 
 
-#
+
+
+
+
+
 # class hr_contract(osv.osv):
 #     _inherit = 'hr.contract'
 #     _columns = {
