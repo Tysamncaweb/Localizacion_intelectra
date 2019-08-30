@@ -8,7 +8,6 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 class hr_payslip(models.Model):
     _inherit ='hr.payslip'
 
-
     dias_a_pagar_va = fields.Integer('Dias a pagar vacaciones')
     tiempo_servicio_va = fields.Integer('Tiempo de servicio vacaciones')
     salario_mensual_va = fields.Float('Salario mensual vacaciones',digits=(10,2))

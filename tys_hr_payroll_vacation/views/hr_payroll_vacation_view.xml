@@ -8,7 +8,6 @@
             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/notebook[@name='identification_employee']" position="before">
-
                     <h3><a><b>Vacaciones</b></a></h3>
                     <newline/>
                     <group col="4" >

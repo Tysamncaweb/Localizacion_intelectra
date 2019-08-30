@@ -42,6 +42,7 @@ class hr_payslip_run_total(models.Model):
         self.total = sumatotal
         return
 
+
 class hr__days_period(models.Model):
     _inherit = 'hr.payslip'
 

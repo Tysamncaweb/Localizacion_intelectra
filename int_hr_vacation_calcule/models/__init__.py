@@ -3,3 +3,4 @@
 
 from . import int_hr_vacation_calcule
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+

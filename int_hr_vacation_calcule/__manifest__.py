@@ -5,6 +5,7 @@
     'version': '1.0',
     'summary': 'Calculo de vacaciones del empleado',
 
+
     'description': """
     """,
     'author': 'Tysamnca',

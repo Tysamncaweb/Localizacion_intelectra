@@ -37,7 +37,6 @@ class Contract(models.Model):
     hours_not_worked_check = fields.Boolean(string='Hours not Worked')
     hours_not_worked_value = fields.Char(string='Hours not Worked Value', size=5, help="Accepts values between 00:00 and 23:59")
     hours_not_worked = fields.Float('Hours not Worked', digits=(10, 2))
-
     unexcused_absences_check = fields.Boolean(string='Unexcused Absences')
     #unexcused_absences_value = fields.Char(string='Unexcused Absences Value', size=5, help="Accepts values between 00:00 and 23:59")
     unexcused_absences_value = fields.Integer(string='Unexcused Absences', size=2)
