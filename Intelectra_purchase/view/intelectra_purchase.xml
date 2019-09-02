@@ -19,15 +19,15 @@
                  <xpath expr="//form/sheet/group/group/field[@name='partner_ref']" position="after" >
                      <field name="observations"/>
                  </xpath>
-                 <xpath expr="//form/sheet/group/group/field[@name='company_id']" position="after" ><br/><br/>
-                     <strong>CONFIGURACIONES GENERALES</strong><br/><br/>
-                                         <field name="Payment_Methods" />
-                                         <field name="date_created"  />
-                                         <field name="name_id"  />
-                                         <field name="email" widget="email" context="{'gravatar_image': True}" />
-                                         <field name="phone" widget="phone" />
-                                         <field name="delivery_time" />
-                                         <field name="place_of_delivery" />
+                 <xpath expr="//form/sheet/group/group/field[@name='company_id']" position="after"  ><br/><br/>
+                     <strong attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}">CONFIGURACIONES GENERALES</strong><br/><br/>
+                                         <field name="Payment_Methods" attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}"/>
+                                         <field name="date_created"  attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}" />
+                                         <field name="name_id"  attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}"/>
+                                         <field name="email" widget="email" context="{'gravatar_image': True}" attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}"/>
+                                         <field name="phone" widget="phone" attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}"/>
+                                         <field name="delivery_time" attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}"/>
+                                         <field name="place_of_delivery"  attrs="{'invisible':[('state', 'not in', ('purchase','sent','to approve'))]}"/>
                  </xpath>
 
 

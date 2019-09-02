@@ -43,9 +43,9 @@ class PurchaseOrder(models.Model):
         else:
             return None
 
-    name_id = fields.Many2one('hr.employee', 'Usuario', default=_get_user)
-    phone = fields.Char(size=12, related='name_id.telf_Contacto')
-    email = fields.Char(size=100, related='name_id.personal_email')
+    name_id = fields.Many2one('hr.employee', 'Usuario',  default=_get_user )
+    phone = fields.Char(size=12,  related='name_id.telf_Contacto' )
+    email = fields.Char(size=100,  related='name_id.personal_email' )
 
     @api.model
     def _default_note(self):
@@ -192,7 +192,12 @@ class Partner(models.Model):
     _description = 'Contact'
     _inherit ="res.partner"
 
-    country_id = fields.Many2one('res.country', string='Country', ondelete='restrict')
+
+    def _get_country(self):
+        user_id = self.env['res.partner'].search(['country_id'])
+
+
+    country_id = fields.Many2one('res.country', string='Country', default='_get_country')
     vat = fields.Char(string='Rif', help="Tax Identification Number. "
                                          "Fill it if the company is subjected to taxes. "
                                          "Used by the some of the legal statements.")

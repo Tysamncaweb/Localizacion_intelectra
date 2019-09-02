@@ -83,7 +83,7 @@
 
             <table width="100%">
                 <tr>
-                    <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
+                    <td class="text-left"><strong><span t-field="o.name_id"/></strong></td>
                 </tr>
                 <tr>
                     <td class="text-left"><span t-field="o.email"/></td>
@@ -202,7 +202,7 @@
 
                     <table width="100%">
                         <tr>
-                            <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
+                            <td class="text-left"><strong><span t-field="o.name_id"/></strong></td>
                         </tr>
                         <tr>
                             <td class="text-left"><span t-field="o.email"/></td>
@@ -321,7 +321,7 @@
 
             <table width="100%">
                 <tr>
-                    <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
+                    <td class="text-left"><strong><span t-field="o.name_id"/></strong></td>
                 </tr>
                 <tr>
                     <td class="text-left"><span t-field="o.email"/></td>
@@ -516,7 +516,7 @@
 
             <table width="100%">
                 <tr>
-                    <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
+                    <td class="text-left"><strong><span t-field="o.name_id"/></strong></td>
                 </tr>
                 <tr>
                     <td class="text-left"><span t-field="o.email"/></td>
@@ -663,7 +663,7 @@
 
             <table width="100%">
                 <tr>
-                    <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
+                    <td class="text-left"><strong><span t-field="o.name_id"/></strong></td>
                 </tr>
                 <tr>
                     <td class="text-left"><span t-field="o.email"/></td>
@@ -822,7 +822,7 @@
 
             <table width="100%">
                 <tr>
-                    <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
+                    <td class="text-left"><strong><span t-field="o.name_id"/></strong></td>
                 </tr>
                 <tr>
                     <td class="text-left"><span t-field="o.email"/></td>
