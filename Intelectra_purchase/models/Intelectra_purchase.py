@@ -36,16 +36,16 @@ from ast import literal_eval
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
-    def _get_user_id(self):
+    def _get_user(self):
         user_id = self.env['hr.employee'].search([('user_id', '=', self._uid)])
         if user_id:
             return user_id
         else:
             return None
 
-    user_id = fields.Many2one('hr.employee', 'Usuario', default=_get_user_id)
-    phone = fields.Char(size=12, related='user_id.telf_Contacto')
-    email = fields.Char(size=100, related='user_id.personal_email')
+    name_id = fields.Many2one('hr.employee', 'Usuario', default=_get_user)
+    phone = fields.Char(size=12, related='name_id.telf_Contacto')
+    email = fields.Char(size=100, related='name_id.personal_email')
 
     @api.model
     def _default_note(self):

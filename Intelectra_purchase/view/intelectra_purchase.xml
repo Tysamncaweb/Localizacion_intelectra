@@ -23,7 +23,7 @@
                      <strong>CONFIGURACIONES GENERALES</strong><br/><br/>
                                          <field name="Payment_Methods" />
                                          <field name="date_created"  />
-                                         <field name="user_id"  />
+                                         <field name="name_id"  />
                                          <field name="email" widget="email" context="{'gravatar_image': True}" />
                                          <field name="phone" widget="phone" />
                                          <field name="delivery_time" />
