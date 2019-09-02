@@ -12,8 +12,8 @@
                             <group name="liq_fields_1">
                                 <field name="dias_acum_fideicomiso" string="Días acumilados prestaciones sociales"/>
                                 <field name="dias_adic_fideicomiso" string="Días adicionales prestaciones sociales"/>
-                                <field name="total_acum_ps" string="Total acumulado prestaciones sociales"/>
-                                <field name="total_acum_anticipo_ps" string="Total anticipos prestaciones sociales"/>
+                                <!--field name="total_acum_ps" string="Total acumulado prestaciones sociales"/-->
+                                <!--field name="total_acum_anticipo_ps" string="Total anticipos prestaciones sociales"/-->
                                 <label for= "vacaciones_vencidas" string="Vacaciones vencidas"/>
                                 <div>
                                     <div class="address_format">

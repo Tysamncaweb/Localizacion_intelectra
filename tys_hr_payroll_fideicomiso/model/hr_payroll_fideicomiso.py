@@ -52,7 +52,7 @@ class hr_payslip(models.Model):
                         dias_str = config_obj._hr_get_parameter('hr.dias.bono.vacacional')
                         tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
                         vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
-                        sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_to, 0,
+                        sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_from, 0,
                                                                        'fideicomiso')
                         if not payslip.contract_id:
                             raise Warning((
@@ -82,7 +82,7 @@ class hr_payslip(models.Model):
                             'dias_adicionales': dias_adic,
                             'dias_acumulados': factor_x_dias_x_mes,
                         })
-                        self.write(payslip_values)
+                        payslip.write(payslip_values)
         res = super(hr_payslip, self).compute_sheet()
         return res
 
@@ -95,7 +95,7 @@ class hr_payslip(models.Model):
         alic_util = 0.0
         factor_x_dias_x_mes = 0
         config_obj = self.env['hr.config.parameter']
-        # Total de dias por mes (para calculo del salario diario)
+        # Total de dias por mes (para calculo del salario d9iario)
         dias_str = config_obj._hr_get_parameter('hr.dias.x.mes')
 
         # total meses a pagar de fideicomiso
@@ -146,7 +146,7 @@ class hr_payslip(models.Model):
         # Maximo dias a pagar
         maximo_str = config_obj._hr_get_parameter('hr.dias.x.mes')
 
-        if datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT) < datetime.strptime(ult_liqu_colectiva_str, DEFAULT_SERVER_DATE_FORMAT):
+        if not datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT):
             fecha = ult_liqu_colectiva_str
         else:
             fecha = date_start
@@ -156,7 +156,7 @@ class hr_payslip(models.Model):
         diferencia = datetime.strptime(fecha_hasta, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT)
         diferencia2 = datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT)
 
-        if int(fecha_desde.split('-')[1]) <= int(date_start.split('-')[1]) <= int(fecha_hasta.split('-')[1]):
+        if int(date_start.split('-')[1]) <= int(fecha_desde.split('-')[1]) <= int(fecha_hasta.split('-')[1]):
             factor_str = config_obj._hr_get_parameter('hr.fi.factor.dias.adicionales')
             if anios == int(anios_ley_str):
                 anios = 1

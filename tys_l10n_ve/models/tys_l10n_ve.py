@@ -28,21 +28,29 @@ import time
 import os
 import re
 
+class ResCountryStates(models.Model):
+    _inherit = "res.country.state"
+
+    res_state_ve_id = fields.Char("Id uníco estados de Venezuela")
+
+
+class res_country_city(models.Model):
+    _name = "res.country.city"
+
+    res_country_state_id = fields.Char("Estate")
+    name = fields.Char("City")
+    is_capital = fields.Boolean("Is capital")
+
 class res_state_municipal(models.Model):
     _name = "res.state.municipal"
 
-    res_country_state_id = fields.Many2one("res.country.state", "Estate")
+    ids_comp = fields.Char("id")
+    res_country_state_id = fields.Char("Estate")
     name = fields.Char("Municipal")
 
 class res_municipal_parish(models.Model):
     _name = "res.municipal.parish"
 
-    res_state_municipal_id = fields.Many2one("res.state.municipal", "Municipio")
+    res_state_municipal_id = fields.Char("Municipio")
     name = fields.Char("Parish")
 
-class res_country_city(models.Model):
-    _name = "res.country.city"
-
-    res_country_state_id = fields.Many2one("res.country.state", "Estate")
-    name = fields.Char("City")
-    is_capital = fields.Boolean("Is capital")

@@ -49,16 +49,13 @@
                              <tr>
                                 <td><strong>TELÉFONOS: </strong> <span t-field="o.partner_id.phone"/></td>
                              </tr>
-                              <tr>
-                                <td><strong>FAX: </strong><span t-field="o.partner_id.fax"/></td>
-                             </tr>
                              <tr>
                                 <td><strong>EMAIL: </strong> <span t-field="o.partner_id.email"/></td>
                              </tr>
                          </tr>
                   </td>
                              <tr>
-                                 <td><strong>OFERTA: </strong> <span t-field="o.date_offer"/></td><br/>
+                                 <td><strong>OFERTA: </strong> <span t-field="o.partner_ref"/></td><br/>
                               <td class="text-right">
                                 <strong>Fecha de Emisión: </strong><span t-field="o.date_order"/>
                               </td>
@@ -69,80 +66,20 @@
 
             <table class="table table-condensed">
                     <tr class="border-black">
-                            <th><strong>ITEM / COD</strong></th>
-                            <th class="text-center"><strong>DESCRIPCIÓN</strong></th>
+                            <th><strong>Codigo de producto - Descripción</strong></th>
                             <th class="text-right"><strong>CANT.</strong></th>
                             <th class="text-right"><strong>UNID.</strong></th>
-                            <th class="text-right"><strong>PRECIO UNIT.</strong></th>
-                            <th class="text-right"><strong>PRECIO TOTAL</strong></th>
                     </tr>
                  <tbody>
                     <tr t-foreach="o.order_line" t-as="order_line">
                         <td><span t-field="order_line.product_id"/></td>
-                        <td><span t-field="order_line.name"/></td>
                         <td class="text-center"><span t-field="order_line.product_qty"/></td>
                         <td class="text-center"><span t-field="order_line.product_uom"/></td>
-                        <td class="text-right"> <span t-field="order_line.price_unit"/> </td>
-                        <td class="text-right"><span t-field="order_line.price_subtotal" groups="product.group_uom"/> </td>
                     </tr>
                 </tbody>
             </table><br/><br/>
 
 
-
-               <div class="clearfix">
-                    <div class="row" name="total">
-                         <div class="col-xs-5 pull-right">
-                            <table class="table table-condensed" style="min-width: 200px;max-width: 350px;">
-                                <tr class="border-black" style="border-bottom:1px solid #dddddd;">
-                                    <tr>
-                                        <td><strong>SUBTOTAL (Bs.S) </strong></td>
-                                             <td class="text-right">
-                                             <span t-field="o.amount_untaxed"/>
-                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>I.V.A (16%) </strong></td>
-                                             <td class="text-right">
-                                             <span t-field="o.amount_tax"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                         <td><strong>PRECIO TOTAL (Bs.S) </strong></td>
-                                             <td class="text-right">
-                                             <span t-field="o.amount_total"/>
-                                         </td>
-                                    </tr>
-                                </tr>
-                            </table>
-                         </div>
-                    </div>
-               </div><br/><br/>
-
-
-
-
-            <table width="100%">
-                 <strong>CONDICIONES GENERALES</strong>
-                <tr>
-                    <td class="text-left"><strong>Forma de Pago: </strong></td>
-                </tr>
-                <tr>
-                <td class="text-left"><span t-field="o.Payment_Methods"/></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><strong>Tiempo de Entrega: </strong></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.delivery_time"/></td>
-                </tr>
-                <tr>
-                  <td class="text-left"><strong>Lugar de Entrega: </strong></td><br></br>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.place_of_delivery"/></td><br></br>
-                </tr>
-            </table><br/><br/>
 
             <table width="100%">
                 <tr>
@@ -157,9 +94,9 @@
             </table><br/><br/>
 
 
-            <p t-field="o.notes"/>
+            <strong>En su cotización por favor indicar:  Tiempo de entrega,  forma de entrega y Lugar de entrega.</strong><br/><br/><br/><br/>
+            <td class="text-left"><strong>Observaciones: </strong> <span t-field="o.observations"/></td><br></br><br></br><br></br>
 
-            <div class="oe_structure"/>
          </div>
       </t>
     </t>
@@ -213,16 +150,13 @@
                              <tr>
                                 <td><strong>TELÉFONOS: </strong> <span t-field="o.partner_id.phone"/></td>
                              </tr>
-                              <tr>
-                                <td><strong>FAX: </strong><span t-field="o.partner_id.fax"/></td>
-                             </tr>
                              <tr>
                                 <td><strong>EMAIL: </strong> <span t-field="o.partner_id.email"/></td>
                              </tr>
                          </tr>
                   </td>
                              <tr>
-                                 <td><strong>OFERTA: </strong> <span t-field="o.date_offer"/></td><br/>
+                                 <td><strong>OFERTA: </strong> <span t-field="o.partner_ref"/></td><br/>
                               <td class="text-right">
                                 <strong>Fecha de Emisión: </strong><span t-field="o.date_order"/>
                               </td>
@@ -233,29 +167,22 @@
 
             <table class="table table-condensed">
                     <tr class="border-black">
-                            <th><strong>ITEM / COD</strong></th>
-                            <th class="text-center"><strong>DESCRIPCIÓN</strong></th>
+                            <th><strong>Codigo de producto - Descripción</strong></th>
                             <th class="text-right"><strong>CANT.</strong></th>
                             <th class="text-right"><strong>UNID.</strong></th>
-                            <th class="text-right"><strong>PRECIO UNIT.</strong></th>
-                            <th class="text-right"><strong>PRECIO TOTAL</strong></th>
                     </tr>
                  <tbody>
                     <tr t-foreach="o.order_line" t-as="order_line">
                         <td><span t-field="order_line.product_id"/></td>
-                        <td><span t-field="order_line.name"/></td>
                         <td class="text-center"><span t-field="order_line.product_qty"/></td>
                         <td class="text-center"><span t-field="order_line.product_uom"/></td>
-                        <td class="text-right"> <span t-field="order_line.price_unit"/> </td>
-                        <td class="text-right"><span t-field="order_line.price_subtotal" groups="product.group_uom"/> </td>
-
                     </tr>
                 </tbody>
             </table><br/><br/>
 
 
 
-               <div class="clearfix">
+               <!--div class="clearfix">
                     <div class="row" name="total">
                          <div class="col-xs-5 pull-right">
                             <table class="table table-condensed" style="min-width: 200px;max-width: 350px;">
@@ -270,63 +197,24 @@
                             </table>
                          </div>
                     </div>
-               </div><br/>
+               </div><br/-->
 
 
+                    <table width="100%">
+                        <tr>
+                            <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left"><span t-field="o.email"/></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left"><span t-field="o.phone"/></td>
+                        </tr>
+                    </table><br/><br/>
 
+           <strong>En su cotización por favor indicar:  Tiempo de entrega,  forma de entrega y Lugar de entrega.</strong><br/><br/><br/><br/>
+            <td class="text-left"><strong>Observaciones: </strong> <span t-field="o.observations"/></td><br></br><br></br><br></br>
 
-
-            <table width="100%">
-                 <strong>CONDICIONES GENERALES</strong>
-                <tr>
-                    <td class="text-left"><strong>Forma de Pago: </strong></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.Payment_Methods"/></td><br></br>
-                </tr>
-                 <tr>
-                    <td class="text-left"><strong>Tiempo de Entrega: </strong></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.delivery_time"/></td>
-                </tr>
-                <tr>
-                  <td class="text-left"><strong>Lugar de Entrega: </strong></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.place_of_delivery"/></td><br></br>
-                </tr>
-            </table><br/>
-
-
-            <table width="100%">
-                <tr>
-                    <td class="text-left"><strong><span t-field="o.user_id"/></strong></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.email"/></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.phone"/></td>
-                </tr>
-            </table><br/><br></br>
-
-            <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td><br></br><br></br><br></br>
-
-            <table width="100%"><br></br>
-                 <strong>INSTRUCCIONES DE DESPACHO</strong>
-                <tr><td><strong>1. Consignee:</strong>SOLUCIONES INTELECTRA, C.A. / Calle Providencia, Galpon No, 34, Zona Industrial La Trinidad, Caracas 1080. Venezuela / Phone: +58 (212) 944.52.86 / Fax: +58 (212) 945.05.62</td></tr>
-                <tr><td><strong>2. Notify:</strong>SOLUCIONES INTELECTRA, C.A. / Calle Providencia, Galpon No, 34, Zona Industrial La Trinidad, Caracas 1080. Venezuela / Phone: +58 (212) 944.52.86 / Fax: +58 (212) 945.05.62</td></tr>
-                <tr><td><strong>3.</strong>(Very Important) Do not declare value (N.V.D) in the Bill of Lading</td></tr>
-                <tr><td><strong>4. Shipping Marks: </strong><p t-field="o.project_id"/></td></tr>
-                <tr><td><strong>5.</strong> Once cleared send original invoice, origin certificate, quality certificate and original bill of lading by DHL or similar
-                        courier to SOLUCIONES INTELECTRA, C.A. / Calle Providencia, Galpon No. 34, Zona Industrial La Trinidad, Caracas 1080.
-                        Venezuela / Phone: +58 (212) 944.52.86 / Fax: +58 (212) 945.05.62
-                        Please send all documents prior to shipping by e-mail address for approval: compras@intelectra.com
-                </td></tr>
-            </table>
-
-            <div class="oe_structure"/>
          </div>
       </t>
     </t>
@@ -381,16 +269,13 @@
                              <tr>
                                 <td><strong>TELÉFONOS: </strong> <span t-field="o.partner_id.phone"/></td>
                              </tr>
-                              <tr>
-                                <td><strong>FAX: </strong><span t-field="o.partner_id.fax"/></td>
-                             </tr>
                              <tr>
                                 <td><strong>EMAIL: </strong> <span t-field="o.partner_id.email"/></td>
                              </tr>
                          </tr>
                   </td>
                              <tr>
-                                 <td><strong>OFERTA: </strong> <span t-field="o.date_offer"/></td><br/>
+                                 <td><strong>OFERTA: </strong> <span t-field="o.partner_ref"/></td><br/>
                               <td class="text-right">
                                 <strong>Fecha de Emisión: </strong><span t-field="o.date_order"/>
                               </td>
@@ -401,29 +286,22 @@
 
             <table class="table table-condensed">
                     <tr class="border-black">
-                            <th><strong>ITEM / COD</strong></th>
-                            <th class="text-center"><strong>DESCRIPCIÓN</strong></th>
+                            <th><strong>Codigo de producto - Descripción</strong></th>
                             <th class="text-right"><strong>CANT.</strong></th>
                             <th class="text-right"><strong>UNID.</strong></th>
-                            <th class="text-right"><strong>PRECIO UNIT.</strong></th>
-                            <th class="text-right"><strong>PRECIO TOTAL</strong></th>
                     </tr>
                  <tbody>
                     <tr t-foreach="o.order_line" t-as="order_line">
                         <td><span t-field="order_line.product_id"/></td>
-                        <td><span t-field="order_line.name"/></td>
                         <td class="text-center"><span t-field="order_line.product_qty"/></td>
                         <td class="text-center"><span t-field="order_line.product_uom"/></td>
-                        <td class="text-right"> <span t-field="order_line.price_unit"/> </td>
-                        <td class="text-right"><span t-field="order_line.price_subtotal" groups="product.group_uom"/> </td>
-
                     </tr>
                 </tbody>
             </table><br/><br/>
 
 
 
-               <div class="clearfix">
+               <!--div class="clearfix">
                     <div class="row" name="total">
                          <div class="col-xs-5 pull-right">
                             <table class="table table-condensed" style="min-width: 200px;max-width: 350px;">
@@ -438,31 +316,8 @@
                             </table>
                          </div>
                     </div>
-               </div><br/><br/>
+               </div><br/><br/-->
 
-
-
-            <table width="100%">
-                 <strong>CONDICIONES GENERALES</strong>
-                <tr>
-                    <td class="text-left"><strong>Forma de Pago: </strong></td>
-                </tr>
-                <tr>
-                <td class="text-left"><span t-field="o.Payment_Methods"/></td>
-                </tr>
-                <tr>
-                    <td class="text-left"><strong>Tiempo de Entrega: </strong></td>
-                </tr>
-                 <tr>
-                    <td class="text-left"><span t-field="o.delivery_time"/></td>
-                </tr>
-                <tr>
-                  <td class="text-left"><strong>Lugar de Entrega: </strong></td><br></br>
-                </tr>
-                <tr>
-                    <td class="text-left"><span t-field="o.place_of_delivery"/></td><br></br>
-                </tr>
-            </table><br/>
 
             <table width="100%">
                 <tr>
@@ -476,10 +331,10 @@
                 </tr>
             </table><br/><br/>
 
+            <strong>En su cotización por favor indicar:  Tiempo de entrega,  forma de entrega y Lugar de entrega.</strong><br/><br/><br/><br/>
+            <td class="text-left"><strong>Observaciones: </strong> <span t-field="o.observations"/></td><br></br><br></br><br></br>
 
-            <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td>
 
-            <div class="oe_structure"/>
          </div>
       </t>
     </t>
@@ -569,16 +424,13 @@
                              <tr>
                                 <td><strong>TELÉFONOS: </strong> <span t-field="o.partner_id.phone"/></td>
                              </tr>
-                              <tr>
-                                <td><strong>FAX: </strong><span t-field="o.partner_id.fax"/></td>
-                             </tr>
                              <tr>
                                 <td><strong>EMAIL: </strong> <span t-field="o.partner_id.email"/></td>
                              </tr>
                          </tr>
                   </td>
                              <tr>
-                                 <td><strong>OFERTA: </strong> <span t-field="o.date_offer"/></td><br/>
+                                 <td><strong>OFERTA: </strong> <span t-field="o.partner_ref"/></td><br/>
                               <td class="text-right">
                                 <strong>Fecha de Emisión: </strong><span t-field="o.date_order"/>
                               </td>
@@ -589,8 +441,7 @@
 
             <table class="table table-condensed">
                     <tr class="border-black">
-                            <th><strong>ITEM / COD</strong></th>
-                            <th class="text-center"><strong>DESCRIPCIÓN</strong></th>
+                            <th><strong>Codigo de producto - Descripción</strong></th>
                             <th class="text-right"><strong>CANT.</strong></th>
                             <th class="text-right"><strong>UNID.</strong></th>
                             <th class="text-right"><strong>PRECIO UNIT.</strong></th>
@@ -599,7 +450,6 @@
                  <tbody>
                     <tr t-foreach="o.order_line" t-as="order_line">
                         <td><span t-field="order_line.product_id"/></td>
-                        <td><span t-field="order_line.name"/></td>
                         <td class="text-center"><span t-field="order_line.product_qty"/></td>
                         <td class="text-center"><span t-field="order_line.product_uom"/></td>
                         <td class="text-right"> <span t-field="order_line.price_unit"/> </td>
@@ -637,7 +487,7 @@
                             </table>
                          </div>
                     </div>
-               </div><br/><br/>
+               </div><br/>
 
 
 
@@ -674,12 +524,12 @@
                 <tr>
                     <td class="text-left"><span t-field="o.phone"/></td>
                 </tr>
-            </table><br/><br/>
+            </table><br></br><br></br>
 
 
-            <p t-field="o.notes"/>
+            <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td>
 
-            <div class="oe_structure"/>
+
          </div>
       </t>
     </t>
@@ -733,16 +583,13 @@
                              <tr>
                                 <td><strong>TELÉFONOS: </strong> <span t-field="o.partner_id.phone"/></td>
                              </tr>
-                              <tr>
-                                <td><strong>FAX: </strong><span t-field="o.partner_id.fax"/></td>
-                             </tr>
                              <tr>
                                 <td><strong>EMAIL: </strong> <span t-field="o.partner_id.email"/></td>
                              </tr>
                          </tr>
                   </td>
                              <tr>
-                                 <td><strong>OFERTA: </strong> <span t-field="o.date_offer"/></td><br/>
+                                 <td><strong>OFERTA: </strong> <span t-field="o.partner_ref"/></td><br/>
                               <td class="text-right">
                                 <strong>Fecha de Emisión: </strong><span t-field="o.date_order"/>
                               </td>
@@ -753,8 +600,7 @@
 
             <table class="table table-condensed">
                     <tr class="border-black">
-                            <th><strong>ITEM / COD</strong></th>
-                            <th class="text-center"><strong>DESCRIPCIÓN</strong></th>
+                            <th><strong>Codigo de producto - Descripción</strong></th>
                             <th class="text-right"><strong>CANT.</strong></th>
                             <th class="text-right"><strong>UNID.</strong></th>
                             <th class="text-right"><strong>PRECIO UNIT.</strong></th>
@@ -763,7 +609,6 @@
                  <tbody>
                     <tr t-foreach="o.order_line" t-as="order_line">
                         <td><span t-field="order_line.product_id"/></td>
-                        <td><span t-field="order_line.name"/></td>
                         <td class="text-center"><span t-field="order_line.product_qty"/></td>
                         <td class="text-center"><span t-field="order_line.product_uom"/></td>
                         <td class="text-right"> <span t-field="order_line.price_unit"/> </td>
@@ -828,7 +673,7 @@
                 </tr>
             </table><br/><br></br>
 
-            <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td><br/><br></br><br></br><br></br>
+            <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td><br></br>
 
             <table width="100%"><br></br>
                  <strong>INSTRUCCIONES DE DESPACHO</strong>
@@ -898,16 +743,13 @@
                              <tr>
                                 <td><strong>TELÉFONOS: </strong> <span t-field="o.partner_id.phone"/></td>
                              </tr>
-                              <tr>
-                                <td><strong>FAX: </strong><span t-field="o.partner_id.fax"/></td>
-                             </tr>
                              <tr>
                                 <td><strong>EMAIL: </strong> <span t-field="o.partner_id.email"/></td>
                              </tr>
                          </tr>
                   </td>
                              <tr>
-                                 <td><strong>OFERTA: </strong> <span t-field="o.date_offer"/></td><br/>
+                                 <td><strong>OFERTA: </strong> <span t-field="o.partner_ref"/></td><br/>
                               <td class="text-right">
                                 <strong>Fecha de Emisión: </strong><span t-field="o.date_order"/>
                               </td>
@@ -918,8 +760,7 @@
 
             <table class="table table-condensed">
                     <tr class="border-black">
-                            <th><strong>ITEM / COD</strong></th>
-                            <th class="text-center"><strong>DESCRIPCIÓN</strong></th>
+                            <th><strong>Codigo de producto - Descripción</strong></th>
                             <th class="text-right"><strong>CANT.</strong></th>
                             <th class="text-right"><strong>UNID.</strong></th>
                             <th class="text-right"><strong>PRECIO UNIT.</strong></th>
@@ -928,7 +769,6 @@
                  <tbody>
                     <tr t-foreach="o.order_line" t-as="order_line">
                         <td><span t-field="order_line.product_id"/></td>
-                        <td><span t-field="order_line.name"/></td>
                         <td class="text-center"><span t-field="order_line.product_qty"/></td>
                         <td class="text-center"><span t-field="order_line.product_uom"/></td>
                         <td class="text-right"> <span t-field="order_line.price_unit"/> </td>
@@ -990,7 +830,7 @@
                 <tr>
                     <td class="text-left"><span t-field="o.phone"/></td>
                 </tr>
-            </table><br/><br/><br></br><br></br>
+            </table><br></br><br></br>
 
             <td class="text-left"><strong>OBSERVACIONES: </strong> <span t-field="o.observations"/></td>
 

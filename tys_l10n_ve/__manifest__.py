@@ -43,10 +43,15 @@ but you will need set manually account defaults for taxes.
     'depends': ['account',
     ],
     'data': [
+            'view/res_country_view.xml',
              #'data/l10n_ve_chart_data.xml',
              #'data/account_data.xml',
              #'data/account_tax_data.xml',
              'data/country_states.xml',
+             'data/res_country_city.xml',
+             'data/res_state_municipal.xml',
+             'data/res_municipal_parish.xml',
              #'data/account_chart_template_data.yml'
+
     ],
 }

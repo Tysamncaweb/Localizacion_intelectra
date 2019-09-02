@@ -27,6 +27,7 @@
 from odoo import fields, models, api, exceptions,_
 from email.utils import formataddr
 from odoo.addons import decimal_precision as dp
+from odoo.exceptions import Warning
 import re
 from ast import literal_eval
 
@@ -35,7 +36,16 @@ from ast import literal_eval
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
+    def _get_user_id(self):
+        user_id = self.env['hr.employee'].search([('user_id', '=', self._uid)])
+        if user_id:
+            return user_id
+        else:
+            return None
 
+    user_id = fields.Many2one('hr.employee', 'Usuario', default=_get_user_id)
+    phone = fields.Char(size=12, related='user_id.telf_Contacto')
+    email = fields.Char(size=100, related='user_id.personal_email')
 
     @api.model
     def _default_note(self):
@@ -59,9 +69,6 @@ class PurchaseOrder(models.Model):
     observations = fields.Char(string="Observaciones", size=50)
     date_created= fields.Datetime('Creado en', index=True, copy=False,
                                  default=fields.Datetime.now)
-    user_id = fields.Many2one('res.users', 'Usuario')
-    phone = fields.Char(size=12)
-    email = fields.Char(size=100)
     email_formatted = fields.Char(
         'Formatted Email', compute='_compute_email_formatted',
         help='Format email address "Name <email@domain>"')
@@ -82,6 +89,8 @@ class PurchaseOrder(models.Model):
 
     notes = fields.Text('Terms and Conditions', default=_default_note)
 
+    currency_order_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id)
+
     @api.model
     def _default_note(self):
         return self.env['ir.config_parameter'].sudo().get_param('purchase.notes')
@@ -93,11 +102,10 @@ class PurchaseOrder(models.Model):
 
 
 
-
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
-    name = fields.Text(string='Description', required=True)
+    name = fields.Text(string='Description')
     sequence = fields.Integer(string='Sequence', default=10)
     product_qty = fields.Float(string='Quantity', digits=dp.get_precision('Product Unit of Measure'), required=True)
     taxes_id = fields.Many2many('account.tax', string='Taxes',
@@ -178,6 +186,19 @@ class generalsettingsintelectraplace(models.Model):
     _rec_name = 'place_of_delivery'
 
     place_of_delivery = fields.Char(string='Lugar de Entrega')
+
+
+class Partner(models.Model):
+    _description = 'Contact'
+    _inherit ="res.partner"
+
+    country_id = fields.Many2one('res.country', string='Country', ondelete='restrict')
+    vat = fields.Char(string='Rif', help="Tax Identification Number. "
+                                         "Fill it if the company is subjected to taxes. "
+                                         "Used by the some of the legal statements.")
+
+
+
 
 
 

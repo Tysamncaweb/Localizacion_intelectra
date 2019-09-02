@@ -49,54 +49,54 @@ class hr_payslip_run(models.Model):
     _name = 'hr.payslip.run'
     _inherit = 'hr.payslip.run'
 
-    @api.v7
-    def close_payslip_run(self,context=None):
-        config_obj = self.pool.get('hr.config.parameter')
-        if context is None: context = {}
-        if not hasattr(ids, '__iter__'): ids = [ids]
-        for pro in self.browse(ids, context):
+    @api.multi
+    def close_payslip_run(self):
+        config_obj = self.env['hr.config.parameter']
+        if self._context is None: context = {}
+        if not hasattr(self._ids, '__iter__'): ids = [self._ids]
+        for pro in self.browse(self._ids):
             if pro.check_special_struct and config_obj._hr_get_parameter('hr.payroll.codigos.nomina.prestaciones',True) in pro.struct_id.code:
                 self.actualiza_dias_acum_fi(pro.slip_ids)
-        res = super(hr_payslip_run, self).close_payslip_run(ids, context)
+        res = super(hr_payslip_run, self).close_payslip_run(self._ids)
         return res
 
-    @api.v7
-    def actualiza_dias_acum_fi(self,ids, context=None):
-        payslip_obj = self.pool.get('hr.payslip')
-        contract_obj = self.pool.get('hr.contract')
+    @api.multi
+    def actualiza_dias_acum_fi(self,ids):
+        payslip_obj = self.env['hr.payslip']
+        contract_obj = self.env['hr.contract']
         payslip_ids = payslip_obj.search([('id', '=', [s.id for s in ids])])
-        payslips = payslip_obj.browse(payslip_ids, context)
+        payslips = payslip_obj.browse(payslip_ids)
         for p in payslips:
             acumulado = p.contract_id.dias_acum_fideicomiso + p.dias_acumulados
             adicionales = p.contract_id.dias_adic_fideicomiso + p.dias_adicionales
-            contract_obj.write([p.contract_id.id], {
+            contract_obj.write({
                     'dias_acum_fideicomiso': acumulado,
-                    'dias_adic_fideicomiso': adicionales}, context=None)
+                    'dias_adic_fideicomiso': adicionales})
 
-    @api.v7
-    def close_payslip_run(self,ids, context=None):
-        res = super(hr_payslip_run, self).close_payslip_run(ids, context=context)
-        payslip_obj = self.pool.get('hr.payslip')
-        contract_obj = self.pool.get('hr.contract')
-        fi_hist_obj = self.pool.get('hr.historico.fideicomiso')
-        config_obj = self.pool.get('hr.config.parameter')
-        line_obj = self.pool.get('hr.payslip.line')
+    @api.multi
+    def close_payslip_run(self):
+        res = super(hr_payslip_run, self).close_payslip_run(self)
+        payslip_obj = self.env['hr.payslip']
+        contract_obj = self.env['hr.contract']
+        fi_hist_obj = self.env['hr.historico.fideicomiso']
+        config_obj = self.env['hr.config.parameter']
+        line_obj = self.env['hr.payslip.line']
         history = None
         contract_values = {}
-        tipo_nomina = config_obj._hr_get_parameter(cr, uid, 'hr.payroll.codigos.nomina.prestaciones', True)
-        psr = self.browse(ids[0], context=context)
-        payslip_ids = payslip_obj.search([('payslip_run_id', '=', ids[0])], context=context)
-        payslips = payslip_obj.browse(payslip_ids, context=context)
+        tipo_nomina = config_obj._hr_get_parameter('hr.payroll.codigos.nomina.prestaciones', True)
+        psr = self.browse(self._ids[0])
+        payslip_ids = payslip_obj.search([('payslip_run_id', '=', self._ids[0])])
+        payslips = payslip_obj.browse(payslip_ids)
         if psr.check_special_struct and tipo_nomina in psr.struct_id.code:
             for p in payslips:
                 contract_id = p.contract_id
                 # REGISTRO DEL HISTORICO DE PRESTACIONES SOCIALES
-                history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None, context=context)
+                history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None)
                 contract_values.update({'total_acum_ps': history.monto_acumulado,
                                         'total_acum_anticipo_ps': history.total_anticipos,
                                         'dias_acum_fideicomiso': history.dias_acumuluados,
                                         'dias_adic_fideicomiso': history.dias_adicionales})
-                contract_obj.write(contract_id.id, contract_values, context=context)
+                contract_obj.write(contract_values)
         else:
             # ANTICIPOS
             for p in payslips:
@@ -104,12 +104,12 @@ class hr_payslip_run(models.Model):
                 code_anticipo = config_obj._hr_get_parameter('hr.payroll.anticipo.prestaciones', False)
                 line_id = line_obj.search([('slip_id', '=', p.id), ('code', '=', code_anticipo)])
                 if line_id:
-                    history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None, context=context)
+                    history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None)
                     contract_values.update({'total_acum_ps': history.monto_acumulado,
                                             'total_acum_anticipo_ps': history.total_anticipos,
                                             'dias_acum_fideicomiso': history.dias_acumuluados,
                                             'dias_adic_fideicomiso': history.dias_adicionales})
-                    contract_obj.write(p.contract_id.id, contract_values, context=context)
+                    contract_obj.write( contract_values)
         return res
 
 hr_payslip_run()

@@ -27,7 +27,7 @@ class hr_contract(models.Model):
        # if context is None: context = {}
         if not hasattr(self._ids, '__iter__'): ids = [self._ids]
         if values.get('anticipo_value', False):
-            acumulado = self.search(['monto_acumulado'])[0]['monto_acumulado']
+            acumulado = self.monto_acumulado
             monto_75 = acumulado * 0.75
             if monto_75 < values.get('anticipo_value',0.0) and values.get('come_from',False) and values.get('come_from',False)=='':
                 raise Warning (("El monto del anticipo no puede ser mayor al 75% del monto acumulado"))

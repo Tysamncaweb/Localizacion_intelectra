@@ -35,7 +35,7 @@ class hr_payroll_fideicomiso_intereses(models.Model):
         tasa = 0.0
         fecha = datetime.strptime(fecha,DEFAULT_SERVER_DATE_FORMAT)
         interes_id = self.search([('anio','=',fecha.year),('mes','=',str(fecha.month))])
-        for i in self.browse(interes_id):
+        for i in self.browse(interes_id.id):
             tasa = i.activa_pasiva
 
         return tasa

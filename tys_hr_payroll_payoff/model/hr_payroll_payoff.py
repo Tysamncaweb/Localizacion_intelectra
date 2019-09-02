@@ -50,7 +50,10 @@ class hr_payslip(models.Model):
     salario_prom_diairo = fields.Float('Salario promedio diario', digits=(10, 2))
     alic_bono_vac_liq = fields.Float('Alicuota bono vacacional liquidacion', digits=(10, 2))
     alic_util_liq = fields.Float('Alicuota utilidades liquidacion', digits=(10, 2))
-
+    journal_id = fields.Many2one('account.journal', 'Salary Journal', readonly=True, required=True,
+                                 states={'draft': [('readonly', False)]},
+                                 default=lambda self: self.env['account.journal'].search([('type', '=', 'general')],
+                                                                                         limit=1))
     @api.onchange('employee_id')
     def onchange_employee_dos(self):
         if self._context.get('is_payoff'):
@@ -135,7 +138,7 @@ class hr_payslip(models.Model):
                     }
                     }
 
-    @api.v7
+
     def get_years_service(self, fecha_inicio, fecha_fin=None):
         dias = 0
         meses = 0
@@ -151,7 +154,7 @@ class hr_payslip(models.Model):
             }
         return res
 
-    @api.v7
+
     def get_year_worked_time(self, date_start, date_end=None):
         year_worked_time = ''
         if not date_end:
@@ -250,9 +253,9 @@ class hr_payslip(models.Model):
                                       'payoff_date': datetime.now().strftime('%Y-%m-%d')})
             slip.action_payslip_done()
 
-            if slip.move_id:
-                slip.move_id.write(
-                    {'name': '%s de %s' % (slip.struct_id.name, slip.employee_id.name)})
+     #       if slip.move_id:
+      #          slip.move_id.write(
+      #              {'name': '%s de %s' % (slip.struct_id.name, slip.employee_id.name)})
             self.employee_id.write({'active': False})
         return self.write({'state': 'done'})
 

@@ -78,7 +78,7 @@ class hr_historico_fideicomiso(models.Model):
                            u' Por favor consulte con su supervisor inmediato!'))
 
     @api.multi
-    def get_last_history_fi(self, employee_id, id=None):
+    def get_last_history_fi(self, employee_id, id =None):
         dominio = [('employee_id', '=', employee_id)]
         fecha = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
         dominio.append(('write_date', '<=', fecha))
@@ -88,13 +88,13 @@ class hr_historico_fideicomiso(models.Model):
         #     dominio.append(('monto_acumulado', '!=', None), ('total_anticipos', '!=', None))
         # elif record_type == 'intereses':
         #     dominio.append(('monto_acumulado', '!=', None), ('monto_acum_tri', '!=', None))
-        fi_hist_obj = self.env['hr.historico.fideicomiso']
+        fi_hist_obj = self.env['hr.historico.fideicomiso'].search([('id','!=', 0)])
         if id:
-            history_obj = fi_hist_obj.browse(id)
+            history_obj = fi_hist_obj
         else:
             history_id = fi_hist_obj.search(dominio,
                                         order='write_date desc', limit=1)
-            history_obj = fi_hist_obj.browse(history_id)
+            history_obj = self.browse(history_id.id)
         return history_obj
 
     @api.multi
@@ -167,7 +167,7 @@ class hr_historico_fideicomiso(models.Model):
                                 'fecha_anticipo_intereses': history.fecha_anticipo_intereses,
                                        })
                 contract_values.update({'anticipo_check':False,'anticipo_value':acumulado*0.75,'monto_acumulado':acumulado})
-                contract_obj.write(contract_id, contract_values)
+                contract_obj.write(contract_values)
             elif line.code == values.get('code_intereses',False):
                 history_values.update({'employee_id': employee_id,
                                        'cedula_identidad': cedula,
@@ -190,11 +190,11 @@ class hr_historico_fideicomiso(models.Model):
                                        'total_anticipos': history.total_anticipos,
                                        })
                 contract_values.update({'interes_acumulado_check': False, 'interes_acumulado_value': 0.0,})
-                contract_obj.write(contract_id, contract_values)
+                contract_obj.write(contract_values)
         if history_values:
             self.create(history_values)
 
-    @api.v7
+
     def calcula_intereses(self, employee_id, fecha_inicio, fecha_fin, historico=None, sal_diario=0.0):
         offset = 0
         history_new_values = {}
@@ -223,7 +223,7 @@ class hr_historico_fideicomiso(models.Model):
         monto = acumulado*tasa/100
         #REGISTRO DE LOS INTERESES CALCULADOS EN EL HISTORICO PARA EL MES EN CURSO
         contract_id = contract_obj.search([('employee_id','=',employee_id)])
-        contract = contract_obj.browse(contract_id)
+        contract = contract_obj.browse(contract_id.id)
         history_new_values.update({'monto_intereses':monto,
                                    'monto_total_intereses':historico.monto_total_intereses + monto,
                                    'mes_intereses': str(mes_hoy),
@@ -255,12 +255,13 @@ class hr_payslip_run(models.Model):
         values = {}
         sal_int_diario = 0.0
         tipo_nomina = config_obj._hr_get_parameter('hr.payroll.codigos.nomina.prestaciones',True)
+        tipo_anticipo = config_obj._hr_get_parameter('hr.payroll.anticipo.prestacines.code', True)
         dias_str = config_obj._hr_get_parameter('hr.dias.x.mes')
         psr = self.browse(self._ids[0])
         payslip_ids = payslip_obj.search([('payslip_run_id', '=', self._ids[0])])
-        payslips = payslip_obj.browse(payslip_ids)
+        payslips = payslip_obj.browse(self._ids[0])
         if psr.check_special_struct and tipo_nomina in psr.struct_id.code:
-            for p in payslips:
+            for p in payslip_ids:
                 contract_id = p.contract_id
                 sal_int_diario = p.salario_integral_fi
                 # REGISTRO DEL HISTORICO DE PRESTACIONES SOCIALES
@@ -289,7 +290,7 @@ class hr_payslip_run(models.Model):
                 history_new_values.update(fi_hist_obj.calcula_intereses(p.employee_id.id, p.date_from, p.date_to, history, sal_int_diario
                                                                 ))
                 history_id = fi_hist_obj.create(history_new_values)
-                fi_hist_obj.write(history_id,{'history_id':history_id,})
+                fi_hist_obj.write({'history_id':history_id})
                 #CTUALIZA LOS VALORES DE LAS PRESTACIONES SOCIALES EN EL CONTRATO DEL EMPLEADO
 
 
@@ -298,10 +299,10 @@ class hr_payslip_run(models.Model):
                                         'anticipo_value': history_new_values['monto_acumulado'] * 0.75,
                                         'intereses_value': history_new_values['monto_total_intereses'],
                                         'come_from': 'nomina'})
-                contract_obj.write(contract_id.id, contract_values)
-        else:
+                contract_obj.write(contract_values)
+        elif psr.check_special_struct and tipo_anticipo in psr.struct_id.code:
             # ANTICIPOS
-            for p in payslips:
+            for p in psr:
                 # ANTICIPO DE PRESTACIONES SOCIALES
                 code_anticipo = config_obj._hr_get_parameter('hr.payroll.anticipo.prestaciones', False)
                 # ANTICIPO DE INTERESES SOBRE PRESTACIONES SOCIALES

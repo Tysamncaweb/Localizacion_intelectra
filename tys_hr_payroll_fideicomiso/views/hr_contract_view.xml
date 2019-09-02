@@ -5,7 +5,7 @@
         <record id="hr_payroll_fideicomiso_contract__view_form_inherit" model="ir.ui.view">
             <field name="name">hr.peyroll.fideicomiso.contract.view.form.inherit</field>
             <field name="model">hr.contract</field>
-            <field name="inherit_id" ref="hr_payroll_account.hr_contract_form_inherit"/>
+            <field name="inherit_id" ref="hr_contract_add_fields.hr_contract_view_inherit"/>
             <field name="arch" type="xml">
                  <xpath expr="//notebook/page[@name='asignaciones_deducciones']" position="after">
                     <page string="Prestaciones Sociales" name="prestaciones_sociales">
