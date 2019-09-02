@@ -20,7 +20,7 @@ class hr_payslip_run(models.Model):
         return self.write({'paid': True, 'state': 'done'})
 
 
-
+'''
 class hr_sal_men_int(models.Model):
     _inherit = 'hr.payslip'
 
@@ -40,3 +40,4 @@ class hr_sal_men_int(models.Model):
         sueldo_men_integral = float(((salario_mensual/30) + cal_alicuota_bv + cal_alicuota_util)*30)
         self.write({'sueldo_men_integral' : sueldo_men_integral})
         return res
+'''
