@@ -96,20 +96,7 @@ class HrEmployee(models.Model):
     var_state = fields.Char()
     var_municipe = fields.Char()
 
-    @api.onchange('state_id_res', 'city_id_res', 'e_municipio', 'e_parroquia')
-    def _onchange_prueba(self):
-        if self.state_id_res:
-            self.city_id_res = False
-            self.e_municipio = False
-            self.e_parroquia = False
-            self.var_state = self.state_id_res.res_state_ve_id
-        if self.city_id_res:
-            self.e_municipio = False
-            self.e_parroquia = False
-        if self.e_municipio:
-            self.e_parroquia = False
-        if self.e_municipio:
-            self.var_municipe = self.e_municipio.ids_comp
+
 
     def onchange_email_addr(self, email, field):
         res = {}
