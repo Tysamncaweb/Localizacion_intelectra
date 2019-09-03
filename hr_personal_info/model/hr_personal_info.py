@@ -66,7 +66,7 @@ class HrEmployee(models.Model):
 
     identification_id_2 = fields.Char('Cedula de Identidad', size=8)
     nationality = fields.Selection(NACIONALIDAD, string="Tipo Documento", required=True)
-    rif = fields.Char('Rif', size=15, required=True)
+    rif = fields.Char('Rif', size=12, required=True)
     personal_email = fields.Char('Correo Electronico Personal', size=240, required=True)
     education = fields.Selection(NVEL_EDUCATIVO,'Nivel Educativo')
     profesion_id = fields.Many2one('hr.profesion','Profesion')
@@ -96,7 +96,25 @@ class HrEmployee(models.Model):
     var_state = fields.Char()
     var_municipe = fields.Char()
 
+    @api.onchange('state_id_res')
+    def _onchange_state(self):
+        self.city_id_res = False
+        self.e_municipio = False
+        self.e_parroquia = False
+        if self.state_id_res:
+            self.var_state = self.state_id_res.res_state_ve_id
 
+    @api.onchange('city_id_res')
+    def _onchange_city(self):
+        self.e_municipio = False
+        self.e_parroquia = False
+        self.var_municipe = False
+
+    @api.onchange('e_municipio')
+    def _onchange_municipio(self):
+        self.e_parroquia = False
+        if self.e_municipio:
+            self.var_municipe = self.e_municipio.ids_comp
 
     def onchange_email_addr(self, email, field):
         res = {}

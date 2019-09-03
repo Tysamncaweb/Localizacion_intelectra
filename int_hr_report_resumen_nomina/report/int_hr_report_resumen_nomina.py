@@ -17,11 +17,12 @@ class ReportAccountPayment(models.AbstractModel):
         payslip = self.env['hr.payslip']
         payslip_run = payslip.search([('payslip_run_id', '=', docids)])
         total_monto = 0
+        final_total = 0
         if not payslip_run:
             raise UserError(_("Por favor verifique si tiene Nóminas Individuales"))
         for slip in payslip_run:
             for a in slip.line_ids:
-                if a.category_id.name == 'Net':
+                if a.category_id.code == 'NET':
                     totalD_net = a.total
                     net_conv = '{0:,.2f}'.format(totalD_net).replace(',', 'X').replace('.', ',').replace('X', '.')
 

@@ -52,6 +52,5 @@ but you will need set manually account defaults for taxes.
              'data/res_state_municipal.xml',
              'data/res_municipal_parish.xml',
              #'data/account_chart_template_data.yml'
-
     ],
 }

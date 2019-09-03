@@ -42,11 +42,11 @@
                          </tr>
                          <tr>
                              <td class="text-left" scope="col" style="border: 1px solid #000000;">RIF:</td>
-                             <td class="text-left" scope="col" colspan="3" style="border: 1px solid #000000;"> <span t-esc="doc['rif']"/></td>
+                             <td class="text-left" scope="col" colspan="3" style="border: 1px solid #000000;"> V-<span t-esc="doc['rif']"/>-<span t-esc="doc['rif2']"/></td>
                          </tr>
                          <tr>
                              <td class="text-left" scope="col" style="border: 1px solid #000000;">Cédula de Identidad:</td>
-                             <td class="text-left" scope="col" colspan="3" style="border: 1px solid #000000;"> <span t-esc="doc['cedula']"/></td>
+                             <td class="text-left" scope="col" colspan="3" style="border: 1px solid #000000;"> <span t-esc="doc['cedula_letra']"/>-<span t-esc="doc['cedula']"/></td>
                          </tr>
                          <tr>
                              <td class="text-left" scope="col" style="border: 1px solid #000000;">Cargo: </td>

@@ -45,4 +45,5 @@ Agrega los siguientes campos a la ficha del empleado:\n
         ],
     'depends': ['hr'],
     'installable': True,
+
 }

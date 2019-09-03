@@ -50,11 +50,11 @@
                                         </tr>
                                          <tr style=" height: 6mm;">
                                               <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;RIF:</td>
-                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['rif']"/></td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;">V-<span t-esc="doc['rif']"/>-<span t-esc="doc['rif2']"/></td>
                                         </tr>
                                          <tr style=" height: 6mm;">
                                               <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Cédula de Identidad:</td>
-                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['cedula']"/></td>
+                                              <td class="text-center" scope="col" colspan="3" style="border: 1px solid #000000; width:50%;"><span t-esc="doc['letra_cedula']"/>-<span t-esc="doc['cedula']"/></td>
                                         </tr>
                                          <tr style=" height: 6mm;">
                                               <td class="text-left" scope="col" style="border: 1px solid #000000; width:50%;">&amp;nbsp;&amp;nbsp;Cargo:</td>
@@ -182,7 +182,7 @@
                                 </tr>
                                 <tr >
                                     <td class="text-right" scope="col"  style="width:50%;border: 1px solid #000000;">Número de Documento de Identidad:</td>
-                                    <td class="text-center" scope="col"  style="width:50%;border: 1px solid #000000;"><span t-esc="doc['cedula']"/></td>
+                                    <td class="text-center" scope="col"  style="width:50%;border: 1px solid #000000;"><span t-esc="doc['letra_cedula2']"/>-<span t-esc="doc['cedula']"/></td>
                                 </tr>
                             </table>
                          </t>

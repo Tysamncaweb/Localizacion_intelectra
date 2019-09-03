@@ -1,4 +1,4 @@
-from odoo import models, api, _
+from odoo import models, api, _, exceptions
 from odoo.exceptions import UserError, Warning
 from datetime import datetime, date, timedelta
 
@@ -25,7 +25,10 @@ class ReportAccountPayment(models.AbstractModel):
             empleador = slip.employee_id.coach_id.display_name
             cedula_res= slip.employee_id.coach_id.identification_id_2
             cedula = slip.employee_id.identification_id_2
-            rif = slip.employee_id.rif
+            letra_cedula = slip.employee_id.nationality
+            letra_cedula2 = slip.employee_id.coach_id.nationality
+            rif = slip.employee_id.rif[3:11]
+            rif2 = slip.employee_id.rif[-1]
             cargo = slip.employee_id.job_id.display_name
             date_desde = slip.date_from
             date_from = date_desde[8:10] + "/" + date_desde[5:7] + "/" + date_desde[0:4]
@@ -36,6 +39,8 @@ class ReportAccountPayment(models.AbstractModel):
             cont = 0
             total_monto = 0
             cont2 = 0
+            if not slip.line_ids:
+                raise exceptions.except_orm(_('Advertencia!'),("Por favor verifique si tiene cargado los conceptos de la Estructura Salarial "))
             for a in slip.line_ids:
                 if a.category_id.code == 'ALW':
                     cont += 1
@@ -92,7 +97,10 @@ class ReportAccountPayment(models.AbstractModel):
                 'date_from': date_from,
                 'date_to': date_to,
                 'rif': rif,
+                'rif2': rif2,
                 'cedula': cedula,
+                'letra_cedula':letra_cedula,
+                'letra_cedula2':letra_cedula2,
                 'cargo': cargo,
                 'monto': 'xxxx',
                 'n_dias': 'xxx',
