@@ -276,10 +276,15 @@ class AccountInvoice(models.Model):
     def _withholdable_tax(self):
         """ Verify that existing withholding in invoice
         """
-        for inv in self:
-            if inv.tax_line_ids.tax_id.type_tax == 'iva':
-                return True
-        return False
+        is_withholdable = False
+        for inv in self.tax_line_ids:
+            if inv.tax_id.type_tax == 'iva':
+                is_withholdable = True
+        return is_withholdable
+        #for inv in self:
+        #    if inv.tax_line_ids.tax_id.type_tax == 'iva':
+        #        return True
+        #return False
 
     @api.multi
     def check_withholdable(self):

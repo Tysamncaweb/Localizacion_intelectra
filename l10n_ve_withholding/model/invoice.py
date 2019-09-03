@@ -123,7 +123,7 @@ class AccountInvoice(models.Model):
                 'line_ids': lines,
                 'journal_id': pay_journal_id,
                 'date': date,
-                'state': 'posted'
+                'state': 'draft'
                 }
 
         move_obj = self.env['account.move']

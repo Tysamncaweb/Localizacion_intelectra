@@ -69,14 +69,17 @@ class IslrWhDoc(models.Model):
         return res'''
 
     @api.model
-    def _get_journal(self,partner_id):
+    def _get_journal(self,partner_id=None):
         #Return a islr journal depending on the type of bill
         
-        if self._context is None:
-            self.context = {}
+        #if self._context is None:
+        #    self.context = {}
         #journal_obj = self.env['account.journal']
         #user_obj = self.env['res.users']
         #company_id = user_obj.browse(self._uid).company_id.id
+        if not partner_id:
+            partner_id = self.env['res.partner'].search([('id', '=', self._context.get('uid'))])
+
         if self._context.get('type') in ('out_invoice', 'out_refund'):
             res = partner_id.sale_islr_journal_id
                 #journal_obj.search([('type', '=', 'islr_sale'),
@@ -737,21 +740,16 @@ class IslrWhDoc(models.Model):
                     line.invoice_id.company_id.currency_id.id,
                     line.invoice_id.currency_id.id,
                     line.islr_wh_doc_id.date_uid)
-                move_obj = self.env['account.move']
+                #move_obj = self.env['account.move']
                 move_line_obj = self.env['account.move.line']
-                move_brw = move_obj.browse(ret_move['move_id'])
-                for ml in move_brw.line_id:
-                    move_line_obj.write({
-                        'currency_id': line.invoice_id.currency_id.id})
-
+                line_ids = move_line_obj.search([('move_id','=',ret_move.id)])
+                for ml in line_ids:
+                    ml.write({'currency_id': line.invoice_id.currency_id.id})
                     if ml.credit:
-                        move_line_obj.write({
-                            'amount_currency': f_xc(ml.credit) * -1})
-
+                        ml.write({'amount_currency': f_xc(ml.credit) * -1})
                     elif ml.debit:
-                        move_line_obj.write({
-                            'amount_currency': f_xc(ml.debit)})
-
+                        ml.write({'amount_currency': f_xc(ml.debit)})
+            ret_move.post()
             #make the withholding line point to that move
             #rl = {
             #    'move_id': ret_move['move_id'],
@@ -1171,8 +1169,8 @@ class IslrWhDocInvoices(models.Model):
         apply_income = not vendor.islr_exempt
         residence = self._get_residence(vendor, buyer)
         #TODO revisar donde se configura este parametro
-        #nature = self._get_nature(vendor)
-        nature = False
+        nature = self._get_nature(vendor)
+        #nature = False
 
         concept_id = iwdl_id.concept_id.id
         # rate_base,rate_minimum,rate_wh_perc,rate_subtract,rate_code,rate_id,
@@ -1496,10 +1494,10 @@ class IslrWhDocInvoices(models.Model):
 
                 [('partner_id', '=', inv_brw.partner_id.id),
                  ('concept_id', '=', concept_id),
-                 ('invoice_id', '!=', inv_brw.id),  # need to exclude this
+                 ('invoice_id', '!=', inv_brw.id)]) # need to exclude this
                                                     # invoice from computation
-                 ('fiscalyear_id', '=',
-                  inv_brw.islr_wh_doc_id.fiscalyear_id.id)])
+                 #('fiscalyear_id', '=',inv_brw.islr_wh_doc_id.fiscalyear_id.id)]
+
             # Previous amount Tax Unit for this partner in this fiscalyear with
             # this concept
             for iwdl_brw in iwdl_obj.browse(iwdl_ids):

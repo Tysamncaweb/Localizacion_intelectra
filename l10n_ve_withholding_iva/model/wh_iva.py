@@ -559,8 +559,8 @@ class AccountWhIva(models.Model):
                     else:
                         name = ('COMP. RET. IVA ' + (ret.number if ret.number else str()) + ' Doc. ' + (line.invoice_id.number if line.invoice_id.number else str()))
 
-                    invoice = self.env['account.invoice'].with_context(ctx).browse(line.invoice_id.id)
-
+                    #invoice = self.env['account.invoice'].with_context(ctx).browse(line.invoice_id.id)
+                    invoice = line.invoice_id
                     amount = line.amount_tax_ret
                     #amount = self.total_tax_ret
                     account_id = line.invoice_id.account_id.id
@@ -570,9 +570,9 @@ class AccountWhIva(models.Model):
                     date = ret.date_ret
                     name = name
                     line_tax_line = line.tax_line
-                    print('line_id', line.id)
+                    #print('line_id', line.id)
                     wh_iva_tax_line = self.env['account.wh.iva.line.tax'].search([('wh_vat_line_id','=',line.id)])
-                    print("wh_iva_tax_line", wh_iva_tax_line )
+                    #print("wh_iva_tax_line", wh_iva_tax_line )
                     ret_move = invoice.ret_and_reconcile(
                         abs(amount), account_id, journal_id,
                         writeoff_account_id,writeoff_journal_id,
@@ -584,7 +584,7 @@ class AccountWhIva(models.Model):
                             line.invoice_id.currency_id.id,
                             line.invoice_id.company_id.currency_id.id,
                             line.retention_id.date)
-                        for ml in self.env['account.move'].browse(ret_move.id).line_id:
+                        for ml in self.env['account.move.line'].search([('move_id','=',ret_move.id )]):
                             ml.write({
                                 'currency_id': line.invoice_id.currency_id.id})
 
@@ -595,7 +595,7 @@ class AccountWhIva(models.Model):
                             elif ml.debit:
                                 ml.write({
                                     'amount_currency': f_xc(ml.debit)})
-
+                    ret_move.post()
                     # make the withholding line point to that move
 
                     rl = {'move_id': ret_move.id}

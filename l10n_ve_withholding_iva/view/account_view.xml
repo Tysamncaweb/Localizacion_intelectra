@@ -32,7 +32,7 @@
             <field name="inherit_id" ref="account.view_tax_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="after">
-                    <field name="type_tax" widget = "selection"/>
+                    <field name="type_tax" widget = "selection" string="Tipo de Impuesto"/>
                 </xpath>
             </field>
         </record>
