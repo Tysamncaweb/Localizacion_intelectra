@@ -42,30 +42,31 @@ class hr_payslip(models.Model):
         if active_id:
             psr = run_obj.browse(active_id)
         if is_special and structure_ids:
-            for payslip_id in self.ids:
-                payslip = self.search([('id', '=', payslip_id)])
-                special_obj = special_struct_obj.browse(structure_ids)
-                if 'code' in special_obj:
-#                if  special_obj.code in tipo_nomina:
-                    dias_x_periodo = self.calcula_dias_x_periodo(payslip.date_from, payslip.date_to)
-                    feriados = self.get_feriados_2(payslip.date_from, payslip.date_to)
-                    tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
-                    vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
-                    sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_from, 1, 'vacaciones')
+            if tipo_nomina in psr.struct_id.code:
+                for payslip_id in self.ids:
+                    payslip = self.search([('id', '=', payslip_id)])
+                    special_obj = special_struct_obj.browse(structure_ids)
+                    if 'code' in special_obj:
+    #                if  special_obj.code in tipo_nomina:
+                        dias_x_periodo = self.calcula_dias_x_periodo(payslip.date_from, payslip.date_to)
+                        feriados = self.get_feriados_2(payslip.date_from, payslip.date_to)
+                        tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
+                        vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
+                        sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_from, 1, 'vacaciones')
 
-                    if payslip.date_from < payslip.date_to:
-                        diferencia = int(payslip.date_to[8:10]) - int(payslip.date_from[8:10])
-                #,('date_from', '<=',payslip.date_from),('date_to','>=',payslip.date_to)
-                payslip_values.update({
-                    'salario_mensual_va':  sueldo_promedio,
-                    'domingos': dias_x_periodo.get('domingos',False),
-                    'dias_festivos': feriados,
-                    'dias_porcion': vacaciones.get('asignacion',False),
-                    'dias_a_pagar_va':vacaciones.get('asignacion',False),
-                    'tiempo_servicio_va':tiempo_servicio.get('anios',False),
-                    'dias_a_disfrutar' : diferencia,
-                })
-                self.write(payslip_values)
+                        if payslip.date_from < payslip.date_to:
+                            diferencia = int(payslip.date_to[8:10]) - int(payslip.date_from[8:10])
+                    #,('date_from', '<=',payslip.date_from),('date_to','>=',payslip.date_to)
+                    payslip_values.update({
+                        'salario_mensual_va':  sueldo_promedio,
+                        'domingos': dias_x_periodo.get('domingos',False),
+                        'dias_festivos': feriados,
+                        'dias_porcion': vacaciones.get('asignacion',False),
+                        'dias_a_pagar_va':vacaciones.get('asignacion',False),
+                        'tiempo_servicio_va':tiempo_servicio.get('anios',False),
+                        'dias_a_disfrutar' : diferencia,
+                    })
+                    self.write(payslip_values)
         res = super(hr_payslip, self).compute_sheet()
         return res
 

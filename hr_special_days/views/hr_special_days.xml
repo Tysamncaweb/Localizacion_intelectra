@@ -29,7 +29,6 @@
 	                    <field name="saturdays"/>
                         <field name="sundays"/>
                         <field name="workdays" invisible="1"/>
-                        <field name ="sueldo_men_integral" invisible="1"/>
                         </group>
                     </group>
                 </xpath>
