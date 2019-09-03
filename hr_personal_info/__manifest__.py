@@ -43,7 +43,7 @@ Agrega los siguientes campos a la ficha del empleado:\n
     'data': [
         'views/hr_personal_info_view.xml',
         ],
-    'depends': ['hr'],
+    'depends': ['hr','tys_l10n_ve'],
     'installable': True,
 
 }

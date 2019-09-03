@@ -128,7 +128,9 @@ class AccountInvoice(models.Model):
 
         move_obj = self.env['account.move']
         move_id = move_obj.create(move)
-        move_id.post()
+        #move_id.post()
+        #PARA FORZAR LA CULMINACION DE UNA TRANSACCION DE BASE DE DATOS
+        #self.env.cr.commit()
 
         return move_id
 

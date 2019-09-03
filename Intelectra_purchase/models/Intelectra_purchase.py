@@ -189,19 +189,24 @@ class generalsettingsintelectraplace(models.Model):
 
 
 class Partner(models.Model):
-    _description = 'Contact'
     _inherit ="res.partner"
 
 
-    def _get_country(self):
-        user_id = self.env['res.partner'].search(['country_id'])
 
 
-    country_id = fields.Many2one('res.country', string='Country', default='_get_country')
+    country_id = fields.Many2one('res.country', string='Country') #, default='_get_country'
     vat = fields.Char(string='Rif', help="Tax Identification Number. "
                                          "Fill it if the company is subjected to taxes. "
                                          "Used by the some of the legal statements.")
 
+
+
+    @api.onchange('country_id')
+    def _compute_country(self):
+        if not self.country_id:
+            country_id = self.env['res.country'].search([('code', 'like', 'VE')])
+            self.country_id =country_id.id
+        return
 
 
 
