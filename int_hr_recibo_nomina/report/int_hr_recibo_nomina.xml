@@ -104,7 +104,7 @@
                                         <tr style=" height: 6mm;">
                                               <td class="text-left" scope="col" style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-bottom: 1px solid #000000;  width:50%; border-spacing: 0;"><span t-esc="doc3['descripcion']"/></td>
                                               <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
-                                             <td class="text-left" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;">&amp;nbsp;&amp;nbsp;</td>
+                                             <td class="text-center" scope="col" style="border-bottom: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="doc3['porcentaje']"/></td>
                                              <td class="text-center" scope="col" style="border: 1px solid #000000; width:16,66%; border-spacing: 0;"><span t-esc="doc3['total_ded']"/></td>
                                         </tr>
 

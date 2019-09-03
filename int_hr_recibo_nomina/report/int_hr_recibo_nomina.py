@@ -18,6 +18,9 @@ class ReportAccountPayment(models.AbstractModel):
         docs3 =[]
         var2 = 0
         payslip = self.env['hr.payslip'].search([('id', '=', docids)])
+        if payslip.state == 'draft':
+            raise exceptions.except_orm(_('Advertencia!'), (
+                "No se puede imprimir un reporte que no se encuentre en estado Realizado"))
         for slip in payslip:
             name = slip.employee_id.display_name
             fecha_ing = slip.employee_id.fecha_inicio
@@ -42,6 +45,7 @@ class ReportAccountPayment(models.AbstractModel):
             if not slip.line_ids:
                 raise exceptions.except_orm(_('Advertencia!'),("Por favor verifique si tiene cargado los conceptos de la Estructura Salarial "))
             for a in slip.line_ids:
+                porcentaje = ' '
                 if a.category_id.code == 'ALW':
                     cont += 1
                     cont2 += 1
@@ -70,12 +74,24 @@ class ReportAccountPayment(models.AbstractModel):
                 elif a.category_id.code == 'DED':
                     cont += 1
                     total_ded_conv = '{0:,.2f}'.format(a.total).replace(',', 'X').replace('.', ',').replace('X', '.')
+                    if a.amount_python_compute:
+                        if (a.amount_python_compute.find("islr_withholding_value") != -1):
+                            if varsal:
+                                porcentaje = ((a.total*100)/varsal)
+                                porcentaje = '{0:,.2f}'.format(porcentaje).replace('.', ',')
+                                porcentaje = porcentaje + '%'
+
+                        if (a.amount_python_compute.find("categories.ALW") != -1):
+                            porcentaje = '1,00%'
+
+
                     docs3.append({
                         'descripcion': a.name,
                         'total_alw': ' ',
                         'total_ded': total_ded_conv,
                         'cant_sueldo': cant_sueldo,
                         'unidad': unidad_conv,
+                        'porcentaje':porcentaje,
                     })
 
                 if a.category_id.code == 'NET':

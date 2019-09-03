@@ -47,7 +47,7 @@ class PurchaseOrder(models.Model):
 
 
     name = fields.Char('Nº de Orden de Compra', required=True, index=True, copy=False, default='New')
-    Rif_prueba = fields.Char(string="RIF", size=15, required=True, related='partner_id.vat')
+    Rif_prueba = fields.Char(string="RIF", size=15, required=True,  related='partner_id.vat' )
     Type_of_provider = fields.Selection([
         ('national', 'Nacionales'),
         ('national_div', 'Nacionales con divisas '),
