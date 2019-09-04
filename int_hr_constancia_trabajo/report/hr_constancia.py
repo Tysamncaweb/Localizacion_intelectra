@@ -30,14 +30,20 @@ class ReportAccountPayment_2(models.AbstractModel):
         employee = self.env['hr.employee'].search([('id','=',data['id_employee'])])
         res = dict()
         docs = []
-        fecha_actual0 = date.today()
-        fecha = fecha_actual0.strftime("%d de %B de %Y")
+
         contract = self.env['hr.contract'].search([('employee_id','=',data['id_employee'])])
-        fecha_entrega = datetime.strptime(employee.fecha_inicio, '%Y-%m-%d')
-        fecha_entrega = fecha_entrega.strftime('%d de %B de %Y')
+
         if not contract or len(contract) == 0:
             raise exceptions.except_orm(_('Advertencia!'), (u'La persona seleccionada, no posee contrato'))
 
+
+        #Fechas operaciones con ellas///////////////////////////////////////
+        fecha_actual0 = date.today()
+        fecha_entrega = datetime.strptime(employee.fecha_inicio, '%Y-%m-%d')
+
+        fecha_entrega = self.month_converter(fecha_entrega)
+        fecha = self.month_converter(fecha_actual0)
+        #Fin fechas formato///////////////////////////////////////////////
         salario = contract.wage
         salario_cifra = self.numero_to_letras(salario)
         entero = int(salario)
@@ -146,3 +152,22 @@ class ReportAccountPayment_2(models.AbstractModel):
                 texto_unidad = texto_unidad[sw]
 
         return "%s %s %s" % (texto_centena, texto_decena, texto_unidad)
+
+    def month_converter(self,fecha):
+        mes = fecha.strftime('%m')
+        meses = {'01': 'Enero',
+               '02': 'Febrero',
+               '03': 'Marzo',
+               '04': 'Abril',
+               '05': 'Mayo',
+               '06': 'Junio',
+               '07': 'Julio',
+               '08': 'Agosto',
+               '09': 'Septiembre',
+               '10': 'Octubre',
+               '11': 'Noviembre',
+               '12': 'Diciembre'
+        }
+        mes_letra = meses.get(mes)
+        fecha_lista = fecha.strftime('%d de {} de %Y').format(mes_letra)
+        return fecha_lista
