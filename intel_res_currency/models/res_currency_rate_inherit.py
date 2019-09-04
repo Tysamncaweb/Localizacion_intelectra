@@ -6,7 +6,7 @@ from datetime import timedelta, date, datetime
 class CurrencyRate(models.Model):
     _inherit = "res.currency.rate"
 
-    hora = fields.Datetime('Fecha y Hora')
+    hora = fields.Datetime('Fecha y Hora', default=datetime.today())
     rate_real = fields.Float(digits=(12, 2), help='se introduce la tasa real del mercado')
     rate = fields.Float(digits=(12, 9), help='The rate of the currency to the currency of rate 1')
     _sql_constraints = [('unique_name_per_day', 'CHECK(1=1)', 'Only one currency rate per day allowed!')]
@@ -35,7 +35,7 @@ class Currency(models.Model):
     rate_real = fields.Float(compute='_compute_current_rate', digits=(12, 2), help='se introduce la tasa real del mercado')
     rate = fields.Float(compute='_compute_current_rate', string='Current Rate', digits=(12, 9),
                         help='The rate of the currency to the currency of rate 1.')
-    rate_rounding = fields.Float(digits=(12, 9), help='la tasa inversa del mercado')
+    rate_rounding = fields.Float(compute='_compute_current_rate', digits=(12, 9), help='la tasa inversa del mercado')
 
 
     @api.multi
@@ -54,19 +54,21 @@ class Currency(models.Model):
                         fecha_dia_rate.append(a.id)
                     else:
                         fecha_next.append(a.id)
+                fecha_dia_rate.sort(reverse=True)
+                fecha_next.sort(reverse=True)
                 if fecha_dia_rate:
-                    rate_id = self.env['res.currency.rate'].search([('id', 'in', fecha_dia_rate)])
-                    currency.rate = rate_id[0].rate
-                    currency.rate_real = rate_id[0].rate_real
-                    currency.rate_rounding = rate_id[0].rate
+                    rate_id = self.env['res.currency.rate'].search([('id', '=', fecha_dia_rate[0])])
+                    currency.rate = rate_id.rate
+                    currency.rate_real = rate_id.rate_real
+                    currency.rate_rounding = rate_id.rate
                     currency.write({'rate_real': currency.rate_real,
                                     'rate_rounding':currency.rate_rounding,
                                     })
                 else:
-                    rate_id_next = self.env['res.currency.rate'].search([('id', 'in', fecha_next)])
-                    currency.rate = rate_id_next[0].rate
-                    currency.rate_real = rate_id_next[0].rate_real
-                    currency.rate_rounding = rate_id[0].rate
+                    rate_id_next = self.env['res.currency.rate'].search([('id', '=', fecha_next[0])])
+                    currency.rate = rate_id_next.rate
+                    currency.rate_real = rate_id_next.rate_real
+                    currency.rate_rounding = rate_id_next.rate
                     currency.write({'rate_real': currency.rate_real,
                                     'rate_rounding': currency.rate_rounding,
                                     })
@@ -75,10 +77,16 @@ class Currency(models.Model):
     @api.multi
     @api.depends('rate_ids.name')
     def _compute_date(self):
+        fecha = []
+        fecha1 = []
         for currency in self:
-            a = currency.rate_ids
             if currency.rate_ids:
-                currency.date = currency.rate_ids[0].name
+                for a in currency.rate_ids:
+                    fecha.append(a.id)
+                fecha.sort(reverse=True)
+                fecha_rate = self.env['res.currency.rate'].search([('id', '=', fecha[0])])
+                if fecha_rate:
+                    currency.date = fecha_rate.name
 
     def _get_conversion_rate(self, from_currency, to_currency):
         from_currency = from_currency.with_env(self.env)

@@ -21,7 +21,7 @@
                              <strong>R.I.F:</strong>
                          </td>
                          <td class="text-left" style="width:20%;">
-                             &amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-esc="company.vat"/>
+                             &amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-esc="rif"/>
                          </td>
                          <td class="text-right" style="width:20%;">
                              <strong>Teléfono:</strong>
@@ -31,7 +31,7 @@
                          </td>
                          <td style="width:30%;"></td>
                      </tr>
-                     <tr style="height:30px;">
+                     <tr style="height:20px;">
                          <td class="text-right" style="width:20%;">
                              <strong>Dirección Fiscal:</strong>
                          </td>
@@ -41,6 +41,9 @@
                          <td style="width:30%;"></td>
                          <td style="width:30%;"></td>
                      </tr>
+                     <tr style="height:30px;">
+                        <td rowspan="1"><p> &amp;nbsp;</p></td>
+                    </tr>
                      <tr style="height:30px;">
                          <td class="text-left" style="width:20%;">
                              &amp;nbsp;&amp;nbsp;&amp;nbsp;<strong>Fecha Desde:</strong> &amp;nbsp;&amp;nbsp;&amp;nbsp;<t t-esc="start_date" t-options="{'widget': 'date'}"/>
@@ -113,12 +116,12 @@
             <field name="page_width">297</field>
             <field name="page_height">210</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">35</field>
+            <field name="margin_top">45</field>
             <field name="margin_right">10</field>
             <field name="margin_bottom">10</field>
             <field name="margin_left">10</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">30</field>
+            <field name="header_spacing">45</field>
             <field name="dpi">80</field>
         </record>
 
@@ -143,7 +146,7 @@
                         <t t-foreach="pnre" t-as="type">
                             <t t-if="var_concept != type['name']"><br/>
                                 <table style="width:100%;" >
-                                     <tr class="text-right" style="height: 25px; font-size: 14px;">
+                                     <tr t-if="total_base_total != 0" class="text-right" style="height: 25px; font-size: 14px;">
                                         <td style="width:70%; border-top: 3px solid #3e5f8a; border-bottom: 3px solid #3e5f8a; vertical-align: middle;" class="text-right" colspan="4"><strong>Total General <t t-esc="var_concept"/></strong></td>
                                         <td style="width:15%; border-top: 3px solid #3e5f8a; border-bottom: 3px solid #3e5f8a; vertical-align: middle;" class="text-right"><strong><t t-esc="'{0:,.2f}'.format(total_base_total).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
                                         <td style="width:15%; border-top: 3px solid #3e5f8a; border-bottom: 3px solid #3e5f8a; vertical-align: middle;" class="text-right"><strong><t t-esc="'{0:,.2f}'.format(total_imp_ret_total).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
