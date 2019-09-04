@@ -8,9 +8,6 @@
                  <xpath expr="//sheet/group/group[1]/field[@name='partner_id']" position="before" >
                      <field name="rif_purchase"/>
                  </xpath>
-                 <xpath expr="//form/sheet/group/group/field[@name='currency_id']" position="replace" >
-                     <field name="currency_order_id" string="Moneda"/>
-                 </xpath>
                  <xpath expr="//form/sheet/group/group/field[@name='partner_id']" position="after" >
                      <field name="Type_of_provider"/>
                      <field name="date_offer"/>

@@ -85,7 +85,6 @@ class PurchaseOrder(models.Model):
 
     notes = fields.Text('Terms and Conditions', default=_default_note)
 
-    currency_order_id = fields.Many2one('res.currency', 'Moneda', default=lambda self: self.env.user.company_id.currency_id.id)
 
     @api.model
     def _default_note(self):
