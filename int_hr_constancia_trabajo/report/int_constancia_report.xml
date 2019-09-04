@@ -60,7 +60,6 @@
                 </div>
          </div>
     </template>
-
     <report
             id="action_hr_report_constancia_reporte"
             string="Recibo Cestaticket"
