@@ -56,7 +56,7 @@ class ReportAccountPayment_2(models.AbstractModel):
 
         salario_conv = '{0:,.2f}'.format(salario).replace(',', 'X').replace('.', ',').replace('X', '.')
 
-        docs.append({'fecha':fecha,
+        docs.append({'fecha':'probando',
                      'dirigido': data['dirigido'],
                      'nombre_empleador': employee.coach_id.name,
                      'letra_empleador': employee.coach_id.nationality,
