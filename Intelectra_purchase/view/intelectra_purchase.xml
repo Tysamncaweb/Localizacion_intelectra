@@ -6,7 +6,7 @@
              <field name="inherit_id" ref="purchase.purchase_order_form"/>
              <field name="arch" type="xml">
                  <xpath expr="//sheet/group/group[1]/field[@name='partner_id']" position="before" >
-                     <field name="Rif_prueba"/>
+                     <field name="rif_purchase"/>
                  </xpath>
                  <xpath expr="//form/sheet/group/group/field[@name='currency_id']" position="replace" >
                      <field name="currency_order_id" string="Moneda"/>
@@ -74,7 +74,7 @@
                     <field name="name" string="Nº de Orden de Compra"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='partner_id']" position="after" >
-                    <field name="Rif_prueba"/>
+                    <field name="rif_purchase"/>
                 </xpath>
             </field>
         </record>
@@ -228,10 +228,10 @@
                                     attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}" required="1"/>
                             </div>
                      </xpath>
-                     <xpath expr="//sheet/group/group/label[@for='street']" position="replace">
+                     <xpath expr="//sheet/group/group[1]/label[@for='street']" position="replace">
                             <label for="street" string="Dirección Fiscal"/>
                      </xpath>
-                      <xpath expr="//sheet/group/group/field[@name='vat']" position="replace">
+                      <xpath expr="//sheet/group/group[1]/field[@name='vat']" position="replace">
                             <field name="vat" placeholder="e.g. BE0477472701" string="RIF"/>
                      </xpath>
                </field>

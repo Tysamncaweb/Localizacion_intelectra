@@ -36,18 +36,20 @@ from ast import literal_eval
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
-    
-    name_id = fields.Many2one('res.users', 'Responsable',default=lambda s: s._uid)
-    phone = fields.Char(size=12,  related='name_id.phone' )
-    email = fields.Char(size=100,  related='name_id.email' )}
-    
+
+
+
+
     @api.model
     def _default_note(self):
         return self.env['ir.config_parameter'].sudo().get_param('purchase.notes')
 
 
+    name_id = fields.Many2one('res.users', 'Responsable', default=lambda s: s._uid)
+    phone = fields.Char(size=12, related='name_id.phone')
+    email = fields.Char(size=100, related='name_id.email')
     name = fields.Char('Nº de Orden de Compra', required=True, index=True, copy=False, default='New')
-    Rif_prueba = fields.Char(string="RIF", size=15, required=True,  related='partner_id.vat' )
+    rif_purchase = fields.Char(string="RIF", size=15, required=True, related='partner_id.vat')
     Type_of_provider = fields.Selection([
         ('national', 'Nacionales'),
         ('national_div', 'Nacionales con divisas '),
@@ -188,7 +190,7 @@ class Partner(models.Model):
 
 
 
-    country_id = fields.Many2one('res.country', string='Country') #, default='_get_country'
+    country_id = fields.Many2one('res.country', string='Country')
     vat = fields.Char(string='Rif', help="Tax Identification Number. "
                                          "Fill it if the company is subjected to taxes. "
                                          "Used by the some of the legal statements.")
