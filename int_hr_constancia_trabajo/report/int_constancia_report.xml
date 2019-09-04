@@ -41,16 +41,16 @@
                 <div class="article">
                     <t t-foreach="docs" t-as="doc">
                         <br/><br/><br/><br/><br/><br/>
-                        <h4 class="text-right"> <span t-field="res_company.city"/>, <span t-esc="doc['fecha']"/></h4>
+                        <h4 class="text-right"> <span t-field="res_company.city"/>, <span t-esc="doc['fecha_actual']"/></h4>
                         <br/><br/><br/>
                         <h4 class="text-left">Atención,</h4>
                         <h4 class="text-left"><span t-esc="doc['dirigido']"/></h4>
                         <br/><br/><br/>
-                        <h4 class="text-justify">Por medio de la presente, Yo, <span t-esc="doc['nombre_empleador']"/>, titular de la cédula de identidad <span t-esc="doc['letra_empleador']"/>-<span t-esc="doc['cedula_empleador']"/>, actuando en este caso como <span t-esc="doc['cargo_empleador']"/> de la empresa SOLUCIONES INTELECTRA, C.A, número de identificación fiscal RIF: J-29472987-8, hago constar que el ciudadano <span t-esc="doc['nombre_trabajador']"/>, titular de la cédula de identidad <span t-esc="doc['letra_trabajador']"/>-<span t-esc="doc['cedula_trabajador']"/>, trabaja en nuestra empresa como <span t-esc="doc['cargo_trabajador']"/> desde el <span t-esc="doc['fecha_ingreso']"/> devengando para la presente fecha un salario mensual de <span t-esc="doc['salario_cifra']"/> BOLIVARES (Bs <span t-esc="doc['salario']"/>).</h4>
+                        <h4 class="text-justify">Por medio de la presente, Yo, <span t-esc="doc['nombre_empleador']"/>, titular de la cédula de identidad <span t-esc="doc['letra_empleador']"/>-<span t-esc="doc['cedula_empleador']"/>, actuando en este caso como <span t-esc="doc['cargo_empleador']"/> de la empresa SOLUCIONES INTELECTRA, C.A, número de identificación fiscal RIF: J-29472987-8, hago constar que el ciudadano <span t-esc="doc['nombre_trabajador']"/>, titular de la cédula de identidad <span t-esc="doc['letra_trabajador']"/>-<span t-esc="doc['cedula_trabajador']"/>, trabaja en nuestra empresa como <span t-esc="doc['cargo_trabajador']"/> desde el <span t-esc="doc['fecha_ingreso_empleado']"/> devengando para la presente fecha un salario mensual de <span t-esc="doc['salario_cifra']"/> BOLIVARES (Bs <span t-esc="doc['salario']"/>).</h4>
                         <br/><br/>
                         <h4 class="text-left">Sin otro particular, se despide</h4>
                         <br/><br/>
-                        <h4>Constancia que se expide a solicitud de la parte interesada al día <span t-esc="doc['fecha']"/></h4>
+                        <h4>Constancia que se expide a solicitud de la parte interesada al día <span t-esc="doc['fecha_actual']"/></h4>
                         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <h4 class="text-center"><span t-esc="doc['nombre_empleador']"/></h4>
                         <h4 class="text-center"><span t-esc="doc['cargo_empleador']"/></h4>
@@ -62,7 +62,7 @@
     </template>
     <report
             id="action_hr_report_constancia_reporte"
-            string="Recibo Cestaticket"
+            string="Constancia de Trabajo"
             model="hr.constancia"
             report_type="qweb-pdf"
             name="int_hr_constancia_trabajo.template_constancia_trabajo"
