@@ -95,7 +95,7 @@ class FiscalBook(models.Model):
         return res
 
     @api.multi
-    def _get_total_with_iva_sum(self, field_names=None):
+    def _get_total_with_iva_sum(self, field_names):
         """ It returns sum of of all columns total with iva of the fiscal book
         lines.
         @param field_name: ['get_total_with_iva_sum',
@@ -104,9 +104,8 @@ class FiscalBook(models.Model):
                             'get_total_with_iva_tp_sum',
                             'get_total_with_iva_ntp_sum',
                             ]"""
-        res = {}
-        if field_names:
-            res = {}.fromkeys(self.ids, {}.fromkeys(field_names, 0.0))
+
+        res = {}.fromkeys(self.ids, {}.fromkeys(field_names, 0.0))
         op_types = ["imex", "do", "tp", "ntp"]
         for fb_brw in self.browse():
             for fbl_brw in fb_brw.fbl_ids:
@@ -585,16 +584,12 @@ class FiscalBook(models.Model):
         inv_state = ['paid', 'open']
         # pull invoice data
         local_period = self.get_time_period(self.time_period)
-        ref = fb_id.company_id.id
-
         inv_ids = inv_obj.search([('date_invoice', '>=', local_period.get('dt_from')),
                                   ('date_invoice', '<=', local_period.get('dt_to')),
                                   ('company_id', '=', fb_id.company_id.id),
                                   ('type', 'in', inv_type),
                                   ('state', 'in', inv_state)],
                                  order='date_invoice asc')
-
-
         if fb_id.fortnight:
             inv_ids = self.get_invoices_from_fortnight(fb_id, inv_ids)
         if fb_id.type == 'purchase':
@@ -976,7 +971,6 @@ class FiscalBook(models.Model):
                           'wh_number': iwdl_brw.retention_id.number or False,
                           'get_wh_vat': iwdl_brw and iwdl_brw.amount_tax_ret or 0.0,
                           'partner_name': rp_brw.name or 'N/A',
-                          'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
                           'partner_vat': rp_brw.vat or 'N/A',
                           'affected_invoice':
                               iwdl_brw.invoice_id.fiscal_printer and
@@ -1045,7 +1039,6 @@ class FiscalBook(models.Model):
                             False) or
                     False,
                 'partner_name': rp_brw.name or 'N/A',
-                'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
                 'partner_vat': rp_brw.vat and rp_brw.vat[2:] or 'N/A',  #TODO Revisar validación de rif en el partner. Esta guardando los partner sin rif
                 'invoice_number':
                     inv_brw.fiscal_printer and
@@ -1295,7 +1288,6 @@ class FiscalBook(models.Model):
             'child_ids': [(6, 0, child_ids)],
             # 'fb_id': first_item_brw.fb_id.id,
             'partner_name': 'No Contribuyente',
-            'people_type': first_item_brw.people_type.upper() if first_item_brw.people_type else '',
             'emission_date': first_item_brw.emission_date,
             'accounting_date': first_item_brw.accounting_date,
             'doc_type': first_item_brw.doc_type,
@@ -1352,10 +1344,7 @@ class FiscalBook(models.Model):
                 taxes = ait_obj.search([('invoice_id', '=', fbl.invoice_id.id)])
                 for ait in taxes:
                     if ait.tax_id.appl_type:
-                        if not fbl.invoice_id.number:
-                            base_sum[fbl.type][ait.tax_id.appl_type] += (fbl.invoice_id.factura_id.amount_gravable if ait.base == 0 else ait.base) * sign
-                        else:
-                            base_sum[fbl.type][ait.tax_id.appl_type] += ait.base * sign
+                        base_sum[fbl.type][ait.tax_id.appl_type] += ait.base * sign
                         tax_sum[fbl.type][ait.tax_id.appl_type] += ait.amount * sign
 
         data = [(0, 0, {'tax_type': ttype, 'op_type': optype,
@@ -1548,7 +1537,6 @@ class FiscalBook(models.Model):
         # write book taxes
         data = []
         tax_data = {}
-        exento = 0.0
         for fbl in self.browse(fb_id).fbl_ids:
             if fbl.invoice_id:
                 f_xc = ut_obj.sxc(
@@ -1558,7 +1546,7 @@ class FiscalBook(models.Model):
                 sign = 1 if fbl.doc_type != 'N/CR' else -1
                 amount_field_data = {'total_with_iva':
                                          f_xc(fbl.invoice_id.amount_untaxed) * sign,
-                                     'vat_sdcf': 0.0, 'vat_exempt': 0.0, 'vat_general_base': 0.0,}
+                                     'vat_sdcf': 0.0, 'vat_exempt': 0.0}
                 # TODO METODO RELACIONADO CON EL MODULO l10n_ve_imex (importaciones)
                 # taxes = fbl.type in ['im', 'ex'] and fbl.invoice_id.imex_tax_line \
                 #    or fbl.invoice_id.tax_line
@@ -1576,45 +1564,34 @@ class FiscalBook(models.Model):
                 #        data.append((0, 0, {
                 #            'fb_id': fb_id, 'fbl_id': False,
                 #            'ait_id': ait.id}))
-
                 taxes = ait_obj.search([('invoice_id', '=', fbl.invoice_id.id)])
                 for ait in taxes:
                     if ait.tax_id:
-                        if ait.base == 0 :
-                            base = fbl.invoice_id.amount_untaxed
-                            if not fbl.invoice_id.number:
-                                exento = fbl.invoice_id.factura_id.amount_exento if fbl.invoice_id.type == 'in_invoice' else fbl.invoice_id.amount_exento
-                        else:
-                            base = ait.base
                         data.append((0, 0, {'fb_id': fb_id,
                                             'fbl_id': fbl.id,
                                             'ait_id': ait.id
                                             }))
                         amount_field_data['total_with_iva'] += ait.amount * sign
                         if ait.tax_id.appl_type == 'sdcf':
-                            amount_field_data['vat_sdcf'] += base * sign
+                            amount_field_data['vat_sdcf'] += ait.base * sign
                         if ait.tax_id.appl_type == 'exento':
-                            amount_field_data['vat_exempt'] += base * sign
-                        if ait.tax_id.appl_type == 'general':
-                            amount_field_data['vat_general_base'] += base * sign
-                            if ait.base == 0 :
-                                amount_field_data['vat_exempt'] += exento * sign
+                            amount_field_data['vat_exempt'] += ait.base * sign
                         tax_data.update({'fb_id': fb_id,
                                          'fbl_id': fbl.id,
                                          'ait_id': ait.id,
-                                         'base_amount': base,
+                                         'base_amount': ait.base,
                                          'tax_amount': ait.amount})
                     else:
                         tax_data.update({'fb_id': fb_id,
                                          'fbl_id': False,
                                          'ait_id': ait.id,
-                                         'base_amount': base,
+                                         'base_amount': ait.base,
                                          'tax_amount': ait.amount})
                         data.append((0, 0, {
                             'fb_id': fb_id, 'fbl_id': False,
                             'ait_id': ait.id}))
-                    #fbt_id = fbt_obj.create(tax_data)
-                    #self.write(fbt_id)
+                    # fbt_id = fbt_obj.create(tax_data)
+                    # self.write(fbt_id)
                 fbl.write(amount_field_data)
 
         if data:
@@ -1643,11 +1620,7 @@ class FiscalBook(models.Model):
                 for field_name in field_names:
                     field_tax, field_amount = field_name[4:].split('_')
                     if fbt_brw.ait_id.tax_id.appl_type == tax_type[field_tax]:
-                        if not fbt_brw.fbl_id.invoice_id.number:
-                            data[field_name] += field_amount == 'base' and (fbt_brw.fbl_id.invoice_id.factura_id.amount_gravable if fbt_brw.base_amount == 0 else fbt_brw.base_amount) * sign \
-                                            or fbt_brw.tax_amount * sign
-                        else:
-                            data[field_name] += field_amount == 'base' and fbt_brw.base_amount * sign \
+                        data[field_name] += field_amount == 'base' and fbt_brw.base_amount * sign \
                                             or fbt_brw.tax_amount * sign
             fbl_brw.write(data)
         return True
@@ -1966,7 +1939,6 @@ class FiscalBookLines(models.Model):
                                        " (wh iva line, date_ret)]")
     doc_type = fields.Char('Doc. Type', size=8, help='Document Type')
     partner_name = fields.Char(size=128, string='Partner Name', help='')
-    people_type = fields.Char(string='People_Type', help='')
     partner_vat = fields.Char(size=128, string='Partner TIN', help='')
     affected_invoice = fields.Char(string='Affected Invoice', size=64,
                                    help="For an invoice line type means parent invoice for a Debit"

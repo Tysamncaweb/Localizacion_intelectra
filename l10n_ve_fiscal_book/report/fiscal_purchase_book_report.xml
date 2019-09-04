@@ -53,7 +53,6 @@
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Fecha de la Transacción</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de RIF</th>
                                 <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Nombre Razón Social</th>
-                                <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Tipo Prov.</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de Comprobante de Retención</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Planilla de Importación</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Expediente de Importación</th>
@@ -96,9 +95,6 @@
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['partner_name']"/><!-- Nombre razon social-->
-                                </td>
-                                <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['people_type']"/><!-- Nombre razon social-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['wh_number']"/><!-- Nro. de Comprobante de retención-->

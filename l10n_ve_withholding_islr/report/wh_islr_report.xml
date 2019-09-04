@@ -15,69 +15,69 @@
                 <br/>
             <table style="width:100%;">
                 <tr >
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-top:1px solid;">Nombre o Razón Social del Agente de Retención:
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-top:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Nombre o Razón Social del Agente de Retención:
                     </td>
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-top:1px solid;">Registro de Infomación Fiscal del Agente de Retención:
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-top:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Registro de Infomación Fiscal del Agente de Retención:
                     </td>
-                    <td style="width:20%;text-align:left;border-left:1px solid;border-top:1px solid;border-right:1px solid;">Período Fiscal:
+                    <td style="width:20%;text-align:left;border-left:1px solid;border-top:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Período Fiscal:
                     </td>
                 </tr>
                 <tr >
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;">
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="d.company_id.partner_id.name"/>
                     </td>
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;">
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="d.company_id.partner_id.vat"/>
                     </td>
-                    <td style="width:20%;text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                    <td style="width:20%;text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="model.get_period(d.date_ret)"/>
                     </td>
                 </tr>
                 <tr >
-                    <td colspan="3" style="text-align:left;border-left:1px solid;border-right:1px solid;">Dirección Fiscal del Agente de Retención:
+                    <td colspan="3" style="text-align:left;border-left:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Dirección Fiscal del Agente de Retención:
                     </td>
                 </tr>
                 <tr >
-                    <td colspan="3" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                    <td colspan="3" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="model.get_direction(d.company_id.partner_id)"/>
                     </td>
                 </tr>
                 <tr >
-                    <td style="width:40%;text-align:left;border-left:1px solid;">Nombre o Razón Social del Agente de Retenido:
+                    <td style="width:40%;text-align:left;border-left:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Nombre o Razón Social del Agente de Retenido:
                     </td>
-                    <td style="width:40%;text-align:left;border-left:1px solid;">Registro de Infomación Fiscal del Agente de Retenido:
+                    <td style="width:40%;text-align:left;border-left:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Registro de Infomación Fiscal del Agente de Retenido:
                     </td>
-                    <td style="width:20%;text-align:left;border-left:1px solid;border-right:1px solid;">Fecha:
+                    <td style="width:20%;text-align:left;border-left:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Fecha:
                     </td>
                 </tr>
                 <tr >
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;">
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="d.partner_id.name"/>
                     </td>
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;">
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="d.partner_id.vat[2:]"/>
                     </td>
-                    <td style="width:20%;text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                    <td style="width:20%;text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-field="d.date_ret" t-options='{"format": "dd/MM/yyyy"}'/>
                     </td>
                 </tr>
                 <tr >
-                    <td style="width:40%;text-align:left;border-left:1px solid;">Dirección Fiscal del Agente Retenido:
+                    <td style="width:40%;text-align:left;border-left:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Dirección Fiscal del Agente Retenido:
                     </td>
-                    <td style="width:40%;text-align:left;border-left:1px solid;">Teléfono del Agente Retenido:
+                    <td style="width:40%;text-align:left;border-left:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Teléfono del Agente Retenido:
                     </td>
-                    <td style="width:20%;text-align:left;border-left:1px solid;border-right:1px solid;">Fax del Agente Retenido:
+                    <td style="width:20%;text-align:left;border-left:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Fax del Agente Retenido:
                     </td>
                 </tr>
                 <tr >
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;">
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="d.partner_id.street"/>
                         <span t-esc="d.partner_id.street2"/>
                     </td>
-                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;">
+                    <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="d.partner_id.phone"/>
                     </td>
-                    <td style="width:20%;text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                    <td style="width:20%;text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="d.partner_id.fax"/>
                     </td>
                 </tr>
@@ -85,29 +85,29 @@
                 <br/>
                 <table width="100%;margin-top:30px;">
                     <tr>
-                        <th style="width:10%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:10%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             Fecha Factura
                         </th>
-                        <th style="width:9%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:9%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             N° de Factura
                         </th>
-                        <th style="width:9%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:9%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             N° Control
                         </th>
-                        <th style="width:40%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:40%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             Concepto de Retención
                         </th>
-                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             % de Retención
                         </th>
-                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             Base
                         </th>
-                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             Sustraendo
                         </th>
 
-                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;">
+                        <th style="width:8%;text-align:center;background-color:#A9F5F2;border:1px solid #000;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                             ISLR Monto Retenido
                         </th>
                     </tr>

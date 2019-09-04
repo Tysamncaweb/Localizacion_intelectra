@@ -52,7 +52,6 @@
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Fecha de Transacción</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">RIF de comprador</th>
         	                <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Nombre y Apellido, Denominación o Razón Social del Comprador</th>
-                            <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Tipo Prov.</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Planilla de Exportación</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. De Comprobante</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. De Factura</th>
@@ -85,7 +84,6 @@
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['emission_date']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['partner_vat']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['partner_name']"/></td>
-                                <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['people_type']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['export_form']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['wh_number']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['invoice_number']"/></td>
