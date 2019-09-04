@@ -20,7 +20,7 @@
                      <field name="observations"/>
                  </xpath>
                  <xpath expr="//form/sheet/group/group/field[@name='company_id']" position="after"  ><br/><br/>
-                     <strong attrs="{'invisible':[('state', 'not in', ('purchase','sent','cancel'))]}">CONFIGURACIONES GENERALES</strong><br/><br/>
+                     <strong attrs="{'invisible':[('state', 'not in', ('purchase','done','cancel'))]}">CONFIGURACIONES GENERALES</strong><br/><br/>
                                          <field name="Payment_Methods" attrs="{'invisible':[('state', 'not in', ('purchase','done','cancel'))]}"/>
                                          <field name="date_created"  attrs="{'invisible':[('state', 'not in', ('purchase','done','cancel'))]}" />
                                          <field name="name_id"  attrs="{'invisible':[('state', 'not in', ('purchase','done','cancel'))]}"/>
