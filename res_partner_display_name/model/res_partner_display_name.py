@@ -37,7 +37,7 @@ class res_partner(models.Model):
     _description = "display_name"
 
     date = fields.Date('Date', select=1)
-    fax = fields.Char(string="Fax", size=13)
+
 
     # validacion de fecha
     @api.onchange('date')

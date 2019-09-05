@@ -976,6 +976,7 @@ class FiscalBook(models.Model):
                           'wh_number': iwdl_brw.retention_id.number or False,
                           'get_wh_vat': iwdl_brw and iwdl_brw.amount_tax_ret or 0.0,
                           'partner_name': rp_brw.name or 'N/A',
+                          'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
                           'partner_vat': rp_brw.vat or 'N/A',
                           'affected_invoice':
                               iwdl_brw.invoice_id.fiscal_printer and
@@ -1044,6 +1045,7 @@ class FiscalBook(models.Model):
                             False) or
                     False,
                 'partner_name': rp_brw.name or 'N/A',
+                'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
                 'partner_vat': rp_brw.vat and rp_brw.vat[2:] or 'N/A',  #TODO Revisar validación de rif en el partner. Esta guardando los partner sin rif
                 'invoice_number':
                     inv_brw.fiscal_printer and
@@ -1293,6 +1295,7 @@ class FiscalBook(models.Model):
             'child_ids': [(6, 0, child_ids)],
             # 'fb_id': first_item_brw.fb_id.id,
             'partner_name': 'No Contribuyente',
+            'people_type': first_item_brw.people_type.upper() if first_item_brw.people_type else '',
             'emission_date': first_item_brw.emission_date,
             'accounting_date': first_item_brw.accounting_date,
             'doc_type': first_item_brw.doc_type,
@@ -1963,6 +1966,7 @@ class FiscalBookLines(models.Model):
                                        " (wh iva line, date_ret)]")
     doc_type = fields.Char('Doc. Type', size=8, help='Document Type')
     partner_name = fields.Char(size=128, string='Partner Name', help='')
+    people_type = fields.Char(string='People_Type', help='')
     partner_vat = fields.Char(size=128, string='Partner TIN', help='')
     affected_invoice = fields.Char(string='Affected Invoice', size=64,
                                    help="For an invoice line type means parent invoice for a Debit"
