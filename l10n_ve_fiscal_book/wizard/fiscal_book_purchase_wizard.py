@@ -122,6 +122,7 @@ class PurchaseBook(models.AbstractModel):
                 'emission_date': h.emission_date,
                 'partner_vat': h.partner_vat,
                 'partner_name': h.partner_name,
+                'people_type': h.people_type,
                 'wh_number': h.wh_number,
                 'invoice_number': h.invoice_number,
                 'ctrl_number': h.ctrl_number,

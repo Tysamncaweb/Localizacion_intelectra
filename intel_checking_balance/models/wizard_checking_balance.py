@@ -44,7 +44,7 @@ class RetentionISLR(models.Model):
                 'amount': a.move_id.amount * currency.rate_rounding,
                 'debit': a.debit * currency.rate_rounding,
                 'credit': a.credit * currency.rate_rounding,
-                'saldo': (a.move_id.amount + (a.debit - a.credit)) * currency.rate_rounding,
+                'saldo': (a.debit - a.credit) * currency.rate_rounding,
             })
             b = sorted(cuenta, key=lambda k: k['codigo'])
 
@@ -431,7 +431,7 @@ class ReportRetentionISLR(models.AbstractModel):
                 'amount': a.move_id.amount*currency.rate_rounding,
                 'debit': a.debit*currency.rate_rounding,
                 'credit': a.credit*currency.rate_rounding,
-                'saldo': (a.move_id.amount + (a.debit - a.credit))*currency.rate_rounding,
+                'saldo': (a.debit - a.credit)*currency.rate_rounding,
             })
             b = sorted(cuenta, key=lambda k: k['codigo'])
 
