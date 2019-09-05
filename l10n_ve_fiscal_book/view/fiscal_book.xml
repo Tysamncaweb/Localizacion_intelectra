@@ -138,6 +138,7 @@ string="Invoice"
                                 <field name="affected_invoice"/>
                                 <field name="partner_name"/>
                                 <field name="partner_vat"/>
+                                <field name="people_type"/>
                                 <field name="void_form"/>
                                 <field name="custom_statement"/>
                                 <field name="imex_date"/>
@@ -249,6 +250,7 @@ string="Invoice"
                                 <field name="affected_invoice"/>
                                 <field name="partner_name"/>
                                 <field name="partner_vat"/>
+                                <field name="people_type"/>
                                 <field name="total_with_iva" sum=""/>
                                 <field name="vat_sdcf" sum=""/>
                                 <field name="vat_exempt" sum=""/>
@@ -343,6 +345,7 @@ string="Invoice"
                                 <field name="affected_invoice"/>
                                 <field name="partner_name"/>
                                 <field name="partner_vat"/>
+                                <field name="people_type"/>
                                 <field name="imex_date"/>
                                 <field name="custom_statement"/>
                                 <field name="void_form"/>
