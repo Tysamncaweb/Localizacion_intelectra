@@ -153,8 +153,8 @@
                 <table class="table table-condensed">
                     <thead>
                         <tr>
-                            <th>ITEM / COD</th>
-                            <th>DESCRIPCIÓN</th>
+                            <th>COD / DESCRIPCIÓN</th>
+                            <!--th>DESCRIPCIÓN</th-->
                             <th class="text-right">CANT.</th>
                             <th class="text-right">UNID.</th>
                             <th class="text-right">PRECIO UNIT</th>
@@ -189,7 +189,7 @@
                             <t t-foreach="layout_category['lines']" t-as="l">
                                 <tr>
                                         <td><span t-field="l.product_id"/></td>
-                                        <td><span t-field="l.name"/></td>
+                                        <!--td><span t-field="l.name"/></td-->
                                         <!--td t-if="not l.product_id.component" class="text-right">
                                             <span t-field="l.product_uom_qty"/>
                                         </td>

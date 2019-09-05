@@ -9,7 +9,7 @@
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="type_of_sale" string="Type of Sales"/>
                     <field name="rif" string='Rif'/>
-                    <field name="direction" string="Direction"/>
+                    <field name="direction" string="Direction Fiscal"/>
                     <field name="contact" string="Contact" domain="[('parent_id', '=',partner_id)]" options="{'no_create': True}"/>
                     <field name="phone" string='Phone'/>
                     <field name="email" string='E-Mail'/>
@@ -49,10 +49,22 @@
                 <xpath expr="//sheet/group/group[1]/field[@name='partner_id']" position="attributes">
                     <attribute name="domain">[('customer','=',True),('parent_id','=',False)]</attribute>
                 </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
             </field>
         </record>
 
-
+        <!--record id="sale_order_view_inherits" model="ir.ui.view">
+            <field name="name">sale.order.inherits</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="print_sale.sale_order_view_form_inherit_print_sale"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(print_sale.print_order_wizard_action_print_sale)d']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record-->
 
     </data>
 </odoo>

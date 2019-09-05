@@ -5,12 +5,12 @@ import time
 class sale_order(models.Model):
     _inherit = 'sale.order'
 
-    def _get_user_id(self):
+    """def _get_user_id(self):
         user_id = self.env['hr.employee'].search([('user_id','=',self._uid)])
         if user_id:
             return user_id
         else:
-            return None
+            return None"""
 
     type_of_sale = fields.Many2one('type.of.sale')
     rif = fields.Char(related='partner_id.vat',string ='Rif')
@@ -22,9 +22,9 @@ class sale_order(models.Model):
     date_time = fields.Date('Date', default=time.strftime('%Y-%m-%d'))
     site = fields.Char('Place of delivery')
     #date_time_emit = fields.Datetime('Date Issue')
-    name_seller = fields.Many2one('hr.employee',default=_get_user_id)
-    email_seller = fields.Char(related='name_seller.personal_email')
-    phone_seller = fields.Char(related='name_seller.telf_Contacto')
+    name_seller = fields.Many2one('res.users', default=lambda s: s._uid)
+    email_seller = fields.Char(related='name_seller.email')
+    phone_seller = fields.Char(related='name_seller.phone')
 
 class type_sale(models.Model):
     _name = 'type.of.sale'

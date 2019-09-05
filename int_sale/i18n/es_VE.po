@@ -43,7 +43,7 @@ msgstr "Plazos de pago"
 #. module: sale
 #: model:ir.model.fields,field_description:sale.field_sale_order_line_product_id
 msgid "Product"
-msgstr "Código de Producto"
+msgstr "Código de Producto/Descripción"
 
 #. module: sale
 #: model:ir.ui.view,arch_db:sale.view_order_form
@@ -82,8 +82,8 @@ msgstr "Contacto"
 
 #. module: int_sale
 #: model:ir.ui.view,arch_db:int_sale.sale_order_form_inherit
-msgid "Direction"
-msgstr "Dirección"
+msgid "Direction fiscal"
+msgstr "Dirección fiscal"
 
 #. module: int_sale
 #: model:ir.model.fields,field_description:int_sale.field_sale_order_project
