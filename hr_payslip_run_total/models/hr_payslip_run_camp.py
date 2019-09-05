@@ -48,7 +48,7 @@ class hr__days_period(models.Model):
 
     @api.multi
     def compute_sheet(self):
-
+        cont_dias = 0
         worked_days = self.env['hr.payslip.worked_days']
 
         for a in self:
@@ -72,11 +72,13 @@ class hr__days_period(models.Model):
             #            if var.number_of_days == 5:
             #                var.write({'number_of_days': '7'})
             if check_struct != False:
-                if  a.payslip_run_id.struct_id.code == '7000':
+               if  a.payslip_run_id.struct_id.code == '7000':
                     for var2 in a.worked_days_line_ids:
-                        if var2.code == 'WORK100':
-                            if var2.number_of_days > 30:
-                                var2.write({'number_of_days': '30'})
+                         if var2.code != 'WORK100':
+                            cont_dias += var2.number_of_days
+                    for var3 in a.worked_days_line_ids:
+                         if var3.code == 'WORK100':
+                            var3.write({'number_of_days': 30 - cont_dias})
         res = super(hr__days_period, self).compute_sheet()
         return res
             

@@ -57,7 +57,7 @@ class bono(models.TransientModel):
                 imprimir0 = '0'
             monto = monto.replace(".", "")
             #formato monto+decimales(00)+fechapago
-            formato = monto + d+m+a
+            formato = monto+imprimir0 + d+m+a
             formato = str(formato).zfill(29)  # agrega ceros delente del pago segun lo establecido por Cestaticket
             # imprimo en el txt
             lineas = [letra,

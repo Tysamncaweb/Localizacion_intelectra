@@ -42,7 +42,7 @@ class AccountInvoiceLine(models.Model):
         factura original.
         '''
         res = {}
-        if self.invoice_id.type in ['in_refund', 'out_refund']:
+        if self.ids and self.invoice_id.type in ['in_refund', 'out_refund']:
             line_id = self._origin._ids[0]
             query = "SELECT price_unit FROM account_invoice_line WHERE id=%s" % (line_id)
             self.env.cr.execute(query)
