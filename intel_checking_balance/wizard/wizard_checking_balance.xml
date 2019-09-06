@@ -17,6 +17,7 @@
                                     <field name="company" string="Empresa"/>
                                     <field name="balance" string="Incluir Saldo inicial"/>
                                     <field name="currency_id" string="Moneda" options="{'no_create': True, 'no_create_edit':True}"/>
+                                    <field name="tasa" domain="[('currency_id', '=', currency_id)]" options="{'no_create': True, 'no_edit': True, 'no_open':True}" />
                                     <field name="report_format" widget="radio"/>
                                     <field name="end_date" string="Fecha Final"/>
                                 </group>

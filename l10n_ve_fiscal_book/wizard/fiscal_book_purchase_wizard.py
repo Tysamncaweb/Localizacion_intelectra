@@ -52,7 +52,7 @@ class report_fiscal_book_purchase(models.Model):
 
             purchase_book_obj = self.env['fiscal.book.line']
             purchase_book_ids = purchase_book_obj.search(
-                [('emission_date', '>=', fecha_inicio), ('emission_date', '<=', fecha_fin)])
+                [('accounting_date', '>=', fecha_inicio), ('accounting_date', '<=', fecha_fin)])
             if purchase_book_ids:
                 ids = []
                 for id in purchase_book_ids:
@@ -82,7 +82,7 @@ class PurchaseBook(models.AbstractModel):
         date_end = datetime.strptime(data['form']['date_to'], DATE_FORMAT)
         datos_compras = []
         purchasebook_ids = self.env['fiscal.book.line'].search(
-            [('emission_date', '>=', date_start.strftime(DATETIME_FORMAT)), ('emission_date', '<=', date_end.strftime(DATETIME_FORMAT))])
+            [('accounting_date', '>=', date_start.strftime(DATETIME_FORMAT)), ('accounting_date', '<=', date_end.strftime(DATETIME_FORMAT))])
 
         sum_compras_credit = 0
         sum_total_with_iva = 0

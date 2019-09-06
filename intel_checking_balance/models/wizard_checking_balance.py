@@ -7,6 +7,16 @@ from io import BytesIO
 import xlwt, base64
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
+class modificacion_name_get(models.Model):
+    _inherit = 'res.currency.rate'
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for res in self:
+            name = str(res.rate_real) + ' - ' + str(res.hora)
+            result.append((res.id, name))
+        return result
 
 class RetentionISLR(models.Model):
     _name = 'checking.balance'
@@ -34,17 +44,18 @@ class RetentionISLR(models.Model):
     state = fields.Selection([('choose', 'choose'), ('get', 'get')], default='choose')
     report = fields.Binary('Descargar xls', filters='.xls', readonly=True)
     name = fields.Char('File Name', size=32)
+    tasa = fields.Many2one('res.currency.rate', string="Tasa Monetaria", required=True)
 
     @api.multi
-    def cuentas(self, move_validate, cuenta, b, unico, repetido, currency):
+    def cuentas(self, move_validate, cuenta, b, unico, repetido, currency, currency_line):
         for a in move_validate:
             cuenta.append({
                 'codigo': a.account_id.code,
                 'name': a.account_id.name,
-                'amount': a.move_id.amount * currency.rate_rounding,
-                'debit': a.debit * currency.rate_rounding,
-                'credit': a.credit * currency.rate_rounding,
-                'saldo': (a.debit - a.credit) * currency.rate_rounding,
+                'amount': a.move_id.amount * currency_line.rate_real,
+                'debit': a.debit * currency_line.rate_real,
+                'credit': a.credit * currency_line.rate_real,
+                'saldo': (a.debit - a.credit) * currency_line.rate_real,
             })
             b = sorted(cuenta, key=lambda k: k['codigo'])
 
@@ -132,6 +143,7 @@ class RetentionISLR(models.Model):
                     'report_format':self.report_format,
                     'company': self.company.id,
                     'balance': self.balance,
+                    'tasa': self.tasa.id,
                     },
                 'context': self._context
             }
@@ -214,6 +226,7 @@ class RetentionISLR(models.Model):
 
             account_account = self.env['account.account'].search([('id', '!=', 0)])
             currency = self.env['res.currency'].search([('id', '=', self.currency_id.id)])
+            currency_line = self.env['res.currency.rate'].search([('id', '=', self.tasa.id)])
             # TODOS LOS ASIENTOS VALIDADOS CON MOVIMIENTOS
             if self.target_movement == False and self.show_accounts == False:
                 for account in account_account:
@@ -226,7 +239,7 @@ class RetentionISLR(models.Model):
                         cuenta = []
                         b = []
                         repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
 
                 suma = self.suma_totales(unico)
                 cuentas = self.format_new(unico)
@@ -243,7 +256,7 @@ class RetentionISLR(models.Model):
                         cuenta = []
                         b = []
                         repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
 
                 suma = self.suma_totales(unico)
                 cuentas = self.SaldoDistintoCero(unico)
@@ -259,7 +272,7 @@ class RetentionISLR(models.Model):
                         cuenta = []
                         b = []
                         repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
                 suma = self.suma_totales(unico)
                 cuentas = self.format_new(unico)
 
@@ -274,7 +287,7 @@ class RetentionISLR(models.Model):
                         cuenta = []
                         b = []
                         repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
 
                 suma = self.suma_totales(unico)
                 cuentas = self.SaldoDistintoCero(unico)
@@ -333,6 +346,7 @@ class ReportRetentionISLR(models.AbstractModel):
         show_accounts = data['form']['show_accounts']
         company = data['form']['company']
         balance = data['form']['balance']
+        tasa = data['form']['tasa']
         report_format = data['form']['report_format']
         today = datetime.now()
         hora = today.hour
@@ -348,6 +362,7 @@ class ReportRetentionISLR(models.AbstractModel):
         account_account = self.env['account.account'].search([('id', '!=', 0)])
         currency = self.env['res.currency'].search([('id', '=', currency_id1)])
 
+
         # TODOS LOS ASIENTOS VALIDADOS CON MOVIMIENTOS
         if target_movement == False and show_accounts == False:
             for account in account_account:
@@ -360,7 +375,7 @@ class ReportRetentionISLR(models.AbstractModel):
                     cuenta = []
                     b = []
                     repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
 
             suma = self.suma_totales(unico)
 
@@ -377,7 +392,7 @@ class ReportRetentionISLR(models.AbstractModel):
                     cuenta = []
                     b = []
                     repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
 
             suma = self.suma_totales(unico)
 
@@ -392,7 +407,7 @@ class ReportRetentionISLR(models.AbstractModel):
                     cuenta = []
                     b = []
                     repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
             suma = self.suma_totales(unico)
 
         # TODOS LOS ASIENTOS CON SALDO DISTINTO A 0
@@ -406,7 +421,7 @@ class ReportRetentionISLR(models.AbstractModel):
                     cuenta = []
                     b = []
                     repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency)
+                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
 
             suma = self.suma_totales(unico)
 
@@ -423,15 +438,16 @@ class ReportRetentionISLR(models.AbstractModel):
             'suma': suma,
         }
     @api.multi
-    def cuentas(self, move_validate, cuenta, b, unico, repetido, currency):
+    def cuentas(self, move_validate, cuenta, b, unico, repetido, currency, tasa):
+        currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
         for a in move_validate:
             cuenta.append({
                 'codigo': a.account_id.code,
                 'name': a.account_id.name,
-                'amount': a.move_id.amount*currency.rate_rounding,
-                'debit': a.debit*currency.rate_rounding,
-                'credit': a.credit*currency.rate_rounding,
-                'saldo': (a.debit - a.credit)*currency.rate_rounding,
+                'amount': a.move_id.amount*currency_line.rate_real,
+                'debit': a.debit*currency_line.rate_real,
+                'credit': a.credit*currency_line.rate_real,
+                'saldo': (a.debit - a.credit)*currency_line.rate_real,
             })
             b = sorted(cuenta, key=lambda k: k['codigo'])
 

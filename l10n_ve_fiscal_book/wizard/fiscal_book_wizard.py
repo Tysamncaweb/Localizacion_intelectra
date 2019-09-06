@@ -247,7 +247,7 @@ class PurchaseBook(models.AbstractModel):
         date_end = datetime.strptime(data['form']['date_to'], DATE_FORMAT)
         datos_compras = []
         purchasebook_ids = self.env['fiscal.book.line'].search(
-            [('fb_id','=',data['form']['book_id']), ('emission_date', '>=', date_start.strftime(DATETIME_FORMAT)), ('emission_date', '<=', date_end.strftime(DATETIME_FORMAT))])
+            [('fb_id','=',data['form']['book_id']), ('accounting_date', '>=', date_start.strftime(DATETIME_FORMAT)), ('accounting_date', '<=', date_end.strftime(DATETIME_FORMAT))])
 
         sum_compras_credit = 0
         sum_total_with_iva = 0
@@ -351,8 +351,8 @@ class FiscalBookSaleReport(models.AbstractModel):
         date_end = datetime.strptime(data['form']['date_to'], DATE_FORMAT)
         fbl_obj = self.env['fiscal.book.line'].search(
             [('fb_id','=',data['form']['book_id']),
-             ('emission_date', '>=', date_start.strftime(DATETIME_FORMAT)),
-             ('emission_date', '<=', date_end.strftime(DATETIME_FORMAT))])
+             ('accounting_date', '>=', date_start.strftime(DATETIME_FORMAT)),
+             ('accounting_date', '<=', date_end.strftime(DATETIME_FORMAT))])
 
         docs = []
         suma_total_w_iva = 0
