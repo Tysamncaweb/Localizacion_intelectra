@@ -7,6 +7,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//tree" position="inside">
                     <field name="tasa_me" />
+                    <!--field name="tax" /-->
                 </xpath>
             </field>
         </record>
@@ -21,6 +22,7 @@
                 </xpath>
                  <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
                     <field name="tasa_me" string="Precio total Bs." readonly="1" force_save="1"/>
+                     <!--field name="tax" string="tax Bs." readonly="1" force_save="1"/-->
                 </xpath>
                 <xpath expr="//tree/field[@name='price_subtotal']" position="replace">
                     <field name="price_subtotal" string="Precio Total M/E"  attrs="{'invisible': [('currency_id', '=', 4)]}"/>
