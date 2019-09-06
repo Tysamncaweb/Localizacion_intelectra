@@ -102,8 +102,6 @@ class AccountInvoice(models.Model):
         move.write({'state': 'posted'})
         return to_open_invoices.invoice_validate()
 
-
-
 #Heredamos la vista de las lineas para presentar los totales en moneda extranjera...
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
