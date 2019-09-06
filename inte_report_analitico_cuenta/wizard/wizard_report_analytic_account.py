@@ -141,6 +141,12 @@ class WizardReportAnalytic(models.TransientModel):
 
         report_obj = self.env['report.inte_report_analitico_cuenta.report_analytic_por_cuenta']
         num_cuenta_contables_obj = self.env['account.account']
+        #cambiar formato fecha:
+        formato_fecha = "%d/%m/%Y"
+        date_now = today
+        date_now = datetime.strftime(datetime.strptime(date_now, DATE_FORMAT), formato_fecha)
+        date_start = datetime.strftime(datetime.strptime(date_start, DATE_FORMAT), formato_fecha)
+        date_end = datetime.strftime(datetime.strptime(date_end, DATE_FORMAT), formato_fecha)
 
         # Todas las cuentas
         if cuentas_contables == 'all':
@@ -168,6 +174,43 @@ class WizardReportAnalytic(models.TransientModel):
 
         account_res = []
         account_res = report_obj._get_account_move_entry(num_cuenta_contables_obj, saldo_inicial, ordenado_fecha, cuentas_contables,move_dest,date_start,date_end,empresa.id,currency_obj)
+        # suma de debit, credit, balance para calcular los totales
+        res_totales = dict((fn, 0.0) for fn in ['credit_total_bs', 'debit_total_bs', 'balance_total_bs',
+                                                'credit_total_usd', 'debit_total_usd', 'balance_total_bs',
+                                                'credit_total_eur', 'debit_total_eur', 'balance_total_eur'])
+        total_credit_bs = 0.0
+        total_debit_bs = 0.0
+        total_balance_bs = 0.0
+        total_credit_usd = 0.0
+        total_debit_usd = 0.0
+        total_balance_usd = 0.0
+        total_credit_eur = 0.0
+        total_debit_eur = 0.0
+        total_balance_eur = 0.0
+
+        for account in account_res:
+            # totales en bs
+            total_credit_bs += account['credit']
+            total_debit_bs += account['debit']
+            total_balance_bs += account['balance']
+            total_credit_usd += account['credit_usd']
+            total_debit_usd += account['debit_usd']
+            total_balance_usd += account['balance_usd']
+            total_credit_eur += account['credit_eur']
+            total_debit_eur += account['debit_eur']
+            total_balance_eur += account['balance_eur']
+
+        res_totales['credit_total_bs'] = total_credit_bs
+        res_totales['debit_total_bs'] = total_debit_bs
+        res_totales['balance_total_bs'] = total_balance_bs
+
+        res_totales['credit_total_usd'] = total_credit_usd
+        res_totales['debit_total_usd'] = total_debit_usd
+        res_totales['balance_total_usd'] = total_balance_usd
+
+        res_totales['credit_total_eur'] = total_credit_eur
+        res_totales['debit_total_eur'] = total_debit_eur
+        res_totales['balance_total_eur'] = total_balance_eur
 
         #currency_name = self._get_datos_moneda(currency_obj)
         num_cuenta_contable = self._datos_cuentas_contables(self.num_cuenta_contables, self.cuenta_especifica)
@@ -175,11 +218,11 @@ class WizardReportAnalytic(models.TransientModel):
         wb = xlwt.Workbook(encoding='utf-8')
         sheet_analitico = wb.add_sheet('Analítico por cuenta')
         #formato del reporte
-        title_format = xlwt.easyxf("font: name Tahoma size 12 px, bold 1;")
+        title_format = xlwt.easyxf("font: name Tahoma size 14 px, bold 1;")
         sub_title_style = xlwt.easyxf(
             "font: name Helvetica size 10 px, bold 1, height 170; borders: left thin, right thin, top thin, bottom thin;")
 
-        sub_title_style_bold = xlwt.easyxf("font: name Helvetica size 10 px, height 170, bold 1;")
+        sub_title_style_bold = xlwt.easyxf("font: name Helvetica size 10 px, height 170, bold 1;",num_format_str='#,##0.00')
         line_content_style = xlwt.easyxf("font: name Helvetica, height 170; align: horiz right;",num_format_str='#,##0.00')
 
         row = 1
@@ -190,33 +233,33 @@ class WizardReportAnalytic(models.TransientModel):
 
         #impresion de la fecha del reporte:
         sheet_analitico.write(0,0,"Fecha:")
-        sheet_analitico.write(0,1,str(today))
+        sheet_analitico.write(0,1,str(date_now))
         #impresion del nombre de la empresa:
         sheet_analitico.write_merge(0,0,5,7,str(self.company.name))
         #titulo del reporte
 
         sheet_analitico.write_merge(1,1,0,3, "Reporte Analítico por Cuenta",title_format)
         #Fecha desde y hasta
-        sheet_analitico.write(2, 0, "Fecha desde:")
-        sheet_analitico.write_merge(2,2,1,1,str(self.date_start))
-        sheet_analitico.write(3, 0, "Fecha hasta:")
-        sheet_analitico.write_merge(3,3,1,1,str(self.date_end))
+        sheet_analitico.write(2, 0, "Fecha desde:", sub_title_style)
+        sheet_analitico.write_merge(2,2,1,1,str(date_start))
+        sheet_analitico.write(3, 0, "Fecha hasta:", sub_title_style)
+        sheet_analitico.write_merge(3,3,1,1,str(date_end))
         #Mostrar cuenta
-        sheet_analitico.write_merge(2,2,4,5,"Mostrar cuenta")
+        sheet_analitico.write_merge(2,2,4,5,"Mostrar cuenta:", sub_title_style)
         sheet_analitico.write_merge(3,3,4,5,str(self.cuentas_contables))
         #Movimiento destino
-        sheet_analitico.write_merge(2,2,7,8, "Movimiento destino")
+        sheet_analitico.write_merge(2,2,7,8, "Movimiento destino:", sub_title_style)
         sheet_analitico.write_merge(3,3,7,8, str(self.move_dest))
         # Ordenado por Fecha
-        sheet_analitico.write_merge(2, 2, 10, 11, "Ordenado por:")
+        sheet_analitico.write_merge(2, 2, 10, 11, "Ordenado por:", sub_title_style)
         sheet_analitico.write_merge(3, 3, 10, 11, "Fecha")
 
         # número de cuenta contable
-        sheet_analitico.write_merge(5, 5 , 0, 1, "Nro de Cuenta de Contable:")
+        sheet_analitico.write_merge(5, 5 , 0, 1, "Nro de Cuenta de Contable:", sub_title_style)
         sheet_analitico.write_merge(5, 5, 2, 3, num_cuenta_contable[0].get('codigo'))
-        sheet_analitico.write_merge(5, 5, 6, 6, "Nombre: ")
+        sheet_analitico.write_merge(5, 5, 6, 6, "Nombre: ", sub_title_style)
         sheet_analitico.write_merge(5, 5, 8, 10, num_cuenta_contable[0].get('nombre'))
-        sheet_analitico.write_merge(5, 5, 11, 11, "Moneda:")
+        sheet_analitico.write_merge(5, 5, 11, 11, "Moneda:", sub_title_style)
         sheet_analitico.write_merge(5, 5, 12, 12, currency_name)
 
         #Lineas del Reporte###############################
@@ -246,25 +289,17 @@ class WizardReportAnalytic(models.TransientModel):
             sheet_analitico.write_merge(row, row, 15, 15, "Débito EUR", sub_title_style)
             sheet_analitico.write_merge(row, row, 16, 16, "Crédito EUR", sub_title_style)
             sheet_analitico.write_merge(row, row, 17, 17, "Saldo EUR", sub_title_style)
-        elif self.currency_id.name == 'USD':
-            #sheet_analitico.write_merge(row, row, 7, 7, "Débito Bs", sub_title_style)
-            #sheet_analitico.write_merge(row, row, 8, 8, "Crédito Bs", sub_title_style)
-            #sheet_analitico.write_merge(row, row, 9, 9, "Saldo Bs", sub_title_style)
-
+        elif self.currency_id.id == 3:
             sheet_analitico.write_merge(row, row, 7, 7, "Tasa USD", sub_title_style)
             sheet_analitico.write_merge(row, row, 8, 8, "Débito USD", sub_title_style)
             sheet_analitico.write_merge(row, row, 9, 9, "Crédito USD", sub_title_style)
             sheet_analitico.write_merge(row, row, 10, 10, "Saldo USD", sub_title_style)
-        elif self.currency_id.name == 'EUR':
-            #sheet_analitico.write_merge(row, row, 7, 7, "Débito Bs", sub_title_style)
-            #sheet_analitico.write_merge(row, row, 8, 8, "Crédito Bs", sub_title_style)
-            #sheet_analitico.write_merge(row, row, 9, 9, "Saldo Bs", sub_title_style)
-
+        elif self.currency_id.id == 1:
             sheet_analitico.write_merge(row, row, 7, 7, "Tasa EUR", sub_title_style)
             sheet_analitico.write_merge(row, row, 8, 8, "Débito EUR", sub_title_style)
             sheet_analitico.write_merge(row, row, 9, 9, "Crédito EUR", sub_title_style)
             sheet_analitico.write_merge(row, row, 10, 10, "Saldo EUR", sub_title_style)
-        elif self.currency_id.name == 'VEF':
+        elif self.currency_id.id == 4:
             sheet_analitico.write_merge(row, row, 7, 7, "Débito Bs", sub_title_style)
             sheet_analitico.write_merge(row, row, 8, 8, "Crédito Bs", sub_title_style)
             sheet_analitico.write_merge(row, row, 9, 9, "Saldo Bs", sub_title_style)
@@ -274,49 +309,44 @@ class WizardReportAnalytic(models.TransientModel):
             if not self.currency_id:
                 sheet_analitico.write_merge(row, row, 0, 0, a['code'], sub_title_style_bold)
                 sheet_analitico.write_merge(row, row, 2, 2, a['name'], sub_title_style_bold)
-                sheet_analitico.write_merge(row, row, 7, 7, a['debit'], line_content_style)
-                sheet_analitico.write_merge(row, row, 8, 8, a['credit'], line_content_style)
-                sheet_analitico.write_merge(row, row, 9, 9, a['balance'], line_content_style)
+                sheet_analitico.write_merge(row, row, 7, 7, a['debit'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 8, 8, a['credit'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 9, 9, a['balance'], sub_title_style_bold)
 
-                sheet_analitico.write_merge(row, row, 10, 10, a['tasa_usd'], line_content_style)
-                sheet_analitico.write_merge(row, row, 11, 11, a['debit_usd'], line_content_style)
-                sheet_analitico.write_merge(row, row, 12, 12, a['credit_usd'], line_content_style)
-                sheet_analitico.write_merge(row, row, 13, 13, a['balance_usd'], line_content_style)
+                sheet_analitico.write_merge(row, row, 10, 10, a['tasa_usd'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 11, 11, a['debit_usd'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 12, 12, a['credit_usd'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 13, 13, a['balance_usd'], sub_title_style_bold)
 
-                sheet_analitico.write_merge(row, row, 14, 14, a['debit_eur'], line_content_style)
-                sheet_analitico.write_merge(row, row, 15, 15, a['debit_eur'], line_content_style)
-                sheet_analitico.write_merge(row, row, 16, 16, a['credit_eur'], line_content_style)
-                sheet_analitico.write_merge(row, row, 17, 17, a['balance_eur'], line_content_style)
+                sheet_analitico.write_merge(row, row, 14, 14, a['debit_eur'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 15, 15, a['debit_eur'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 16, 16, a['credit_eur'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 17, 17, a['balance_eur'], sub_title_style_bold)
 
-            elif self.currency_id.name == 'USD':
+            elif self.currency_id.id == 3:
                 sheet_analitico.write_merge(row, row, 0, 0, a['code'], sub_title_style_bold)
                 sheet_analitico.write_merge(row, row, 2, 2, a['name'], sub_title_style_bold)
-                #sheet_analitico.write_merge(row, row, 7, 7, a['debit'], line_content_style)
-                #sheet_analitico.write_merge(row, row, 8, 8, a['credit'], line_content_style)
-                #sheet_analitico.write_merge(row, row, 9, 9, a['balance'], line_content_style)
 
-                sheet_analitico.write_merge(row, row, 7, 7, a['tasa_usd'], line_content_style)
-                sheet_analitico.write_merge(row, row, 8, 8, a['debit_usd'], line_content_style)
-                sheet_analitico.write_merge(row, row, 9, 9, a['credit_usd'], line_content_style)
-                sheet_analitico.write_merge(row, row, 10, 10, a['balance_usd'], line_content_style)
-            elif self.currency_id.name == 'EUR':
+                sheet_analitico.write_merge(row, row, 7, 7, a['tasa_usd'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 8, 8, a['debit_usd'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 9, 9, a['credit_usd'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 10, 10, a['balance_usd'], sub_title_style_bold)
+
+            elif self.currency_id.id == 1:
                 sheet_analitico.write_merge(row, row, 0, 0, a['code'], sub_title_style_bold)
                 sheet_analitico.write_merge(row, row, 2, 2, a['name'], sub_title_style_bold)
-                #sheet_analitico.write_merge(row, row, 7, 7, a['debit'], line_content_style)
-                #sheet_analitico.write_merge(row, row, 8, 8, a['credit'], line_content_style)
-                #sheet_analitico.write_merge(row, row, 9, 9, a['balance'], line_content_style)
 
-                sheet_analitico.write_merge(row, row, 7, 7, a['debit_eur'], line_content_style)
-                sheet_analitico.write_merge(row, row, 8, 8, a['debit_eur'], line_content_style)
-                sheet_analitico.write_merge(row, row, 9, 9, a['credit_eur'], line_content_style)
-                sheet_analitico.write_merge(row, row, 10, 10, a['balance_eur'], line_content_style)
+                sheet_analitico.write_merge(row, row, 7, 7, a['debit_eur'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 8, 8, a['debit_eur'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 9, 9, a['credit_eur'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 10, 10, a['balance_eur'], sub_title_style_bold)
 
-            elif self.currency_id.name == 'VEF':
+            elif self.currency_id.id == 4:
                 sheet_analitico.write_merge(row, row, 0, 0, a['code'], sub_title_style_bold)
                 sheet_analitico.write_merge(row, row, 2, 2, a['name'], sub_title_style_bold)
-                sheet_analitico.write_merge(row, row, 7, 7, a['debit'], line_content_style)
-                sheet_analitico.write_merge(row, row, 8, 8, a['credit'], line_content_style)
-                sheet_analitico.write_merge(row, row, 9, 9, a['balance'], line_content_style)
+                sheet_analitico.write_merge(row, row, 7, 7, a['debit'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 8, 8, a['credit'], sub_title_style_bold)
+                sheet_analitico.write_merge(row, row, 9, 9, a['balance'], sub_title_style_bold)
 
             for line in a.get('move_lines'):
                 row += 1
@@ -346,7 +376,7 @@ class WizardReportAnalytic(models.TransientModel):
                     sheet_analitico.write_merge(row, row, 16, 16, line['credit_eur'], line_content_style)
                     sheet_analitico.write_merge(row, row, 17, 17, line['balance_eur'], line_content_style)
 
-                elif self.currency_id.name == 'USD':
+                elif self.currency_id.id == 3:
                     sheet_analitico.write_merge(row, row, 0, 0, line['ldate'])
                     sheet_analitico.write_merge(row, row, 1, 1, line['lcode'])
                     sheet_analitico.write_merge(row, row, 2, 2, line['partner_name'])
@@ -358,16 +388,12 @@ class WizardReportAnalytic(models.TransientModel):
                         sheet_analitico.write_merge(row, row, 6, 6, " ")
                     else:
                         sheet_analitico.write_merge(row, row, 6, 6, line['analytic_account_name'])
-
-                    #sheet_analitico.write_merge(row, row, 7, 7, line['debit'], line_content_style)
-                    #sheet_analitico.write_merge(row, row, 8, 8, line['credit'], line_content_style)
-                    #sheet_analitico.write_merge(row, row, 9, 9, line['balance'], line_content_style)
 
                     sheet_analitico.write_merge(row, row, 7, 7, line['tasa_usd'], line_content_style)
                     sheet_analitico.write_merge(row, row, 8, 8, line['debit_usd'], line_content_style)
                     sheet_analitico.write_merge(row, row, 9, 9, line['credit_usd'], line_content_style)
                     sheet_analitico.write_merge(row, row, 10, 10, line['balance_usd'], line_content_style)
-                elif self.currency_id.name == 'EUR':
+                elif self.currency_id.id == 1:
                     sheet_analitico.write_merge(row, row, 0, 0, line['ldate'])
                     sheet_analitico.write_merge(row, row, 1, 1, line['lcode'])
                     sheet_analitico.write_merge(row, row, 2, 2, line['partner_name'])
@@ -379,15 +405,11 @@ class WizardReportAnalytic(models.TransientModel):
                     else:
                         sheet_analitico.write_merge(row, row, 6, 6, line['analytic_account_name'])
 
-                    #sheet_analitico.write_merge(row, row, 7, 7, line['debit'], line_content_style)
-                    #sheet_analitico.write_merge(row, row, 8, 8, line['credit'], line_content_style)
-                    #sheet_analitico.write_merge(row, row, 9, 9, line['balance'], line_content_style)
-
                     sheet_analitico.write_merge(row, row, 7, 7, line['tasa_eur'], line_content_style)
                     sheet_analitico.write_merge(row, row, 8, 8, line['debit_eur'], line_content_style)
                     sheet_analitico.write_merge(row, row, 9, 9, line['credit_eur'], line_content_style)
                     sheet_analitico.write_merge(row, row, 10, 10, line['balance_eur'], line_content_style)
-                elif self.currency_id.name == 'VEF':
+                elif self.currency_id.id == 4:
                     sheet_analitico.write_merge(row, row, 0, 0, line['ldate'])
                     sheet_analitico.write_merge(row, row, 1, 1, line['lcode'])
                     sheet_analitico.write_merge(row, row, 2, 2, line['partner_name'])
@@ -403,7 +425,17 @@ class WizardReportAnalytic(models.TransientModel):
                     sheet_analitico.write_merge(row, row, 8, 8, line['credit'], line_content_style)
                     sheet_analitico.write_merge(row, row, 9, 9, line['balance'], line_content_style)
         col = 1
-
+        row += 1
+        sheet_analitico.write_merge(row, row, 6, 6, "Totales", sub_title_style)
+        sheet_analitico.write_merge(row, row, 7, 7, res_totales['debit_total_bs'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 8, 8, res_totales['credit_total_bs'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 9, 9, res_totales['balance_total_bs'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 11, 11, res_totales['debit_total_usd'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 12, 12, res_totales['credit_total_usd'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 13, 13, res_totales['balance_total_usd'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 15, 15, res_totales['debit_total_eur'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 16, 16, res_totales['credit_total_eur'], sub_title_style_bold)
+        sheet_analitico.write_merge(row, row, 17, 17, res_totales['balance_total_eur'], sub_title_style_bold)
         wb.save(fp)
 
         out = base64.encodestring(fp.getvalue())
@@ -427,7 +459,7 @@ class WizardReportAnalytic(models.TransientModel):
         fecha_inicio = self.date_start
         fecha_fin = self.date_end
 
-        if datetime.strptime(fecha_inicio, DATE_FORMAT) >= datetime.strptime(fecha_fin, DATE_FORMAT):
+        if datetime.strptime(fecha_inicio, DATE_FORMAT) > datetime.strptime(fecha_fin, DATE_FORMAT):
             raise ValidationError('Advertencia! La fecha de inicio no puede ser superior a la fecha final')
 
         datas = [] #self.read(self.ids)[0]
@@ -495,10 +527,55 @@ class ReportAnalyticForAccount(models.AbstractModel):
         accounts_res = self._get_account_move_entry(num_cuenta_contables_obj, saldo_inicial, ordenado_fecha, cuentas_contables,move_dest,date_start,date_end,empresa,currency)
         datos_cuentas = self._datos_cuentas_contables(num_cuenta_contables)
         ordenado_fecha = self._get_orden(ordenado_fecha)
+        #cambiar formato fecha
+        formato_fecha = "%d/%m/%Y"
+        fecha_actual = date.today()
+        date_start = datetime.strftime(datetime.strptime(date_start, DATE_FORMAT), formato_fecha)
+        date_end = datetime.strftime(datetime.strptime(date_end, DATE_FORMAT), formato_fecha)
+        fecha_actual = datetime.strftime(datetime.strptime(str(fecha_actual), DATE_FORMAT), formato_fecha)
+
+        # suma de debit, credit, balance para calcular los totales
+        res_totales = dict((fn, 0.0) for fn in ['credit_total_bs', 'debit_total_bs', 'balance_total_bs',
+                                                'credit_total_usd', 'debit_total_usd', 'balance_total_bs',
+                                                'credit_total_eur', 'debit_total_eur', 'balance_total_eur'])
+        total_credit_bs = 0.0
+        total_debit_bs = 0.0
+        total_balance_bs = 0.0
+        total_credit_usd = 0.0
+        total_debit_usd = 0.0
+        total_balance_usd = 0.0
+        total_credit_eur = 0.0
+        total_debit_eur = 0.0
+        total_balance_eur = 0.0
+
+        for account in accounts_res:
+            # totales en bs
+            total_credit_bs += account['credit']
+            total_debit_bs += account['debit']
+            total_balance_bs += account['balance']
+            total_credit_usd += account['credit_usd']
+            total_debit_usd += account['debit_usd']
+            total_balance_usd += account['balance_usd']
+            total_credit_eur += account['credit_eur']
+            total_debit_eur += account['debit_eur']
+            total_balance_eur += account['balance_eur']
+
+        res_totales['credit_total_bs'] = total_credit_bs
+        res_totales['debit_total_bs'] = total_debit_bs
+        res_totales['balance_total_bs'] = total_balance_bs
+
+        res_totales['credit_total_usd'] = total_credit_usd
+        res_totales['debit_total_usd'] = total_debit_usd
+        res_totales['balance_total_usd'] = total_balance_usd
+
+        res_totales['credit_total_eur'] = total_credit_eur
+        res_totales['debit_total_eur'] = total_debit_eur
+        res_totales['balance_total_eur'] = total_balance_eur
 
         return {
             'doc_ids': data['ids'],
             'doc_model': data['model'],
+            'date_now':fecha_actual,
             'date_start': date_start,
             'date_end': date_end,
             'docs': docs,
@@ -510,7 +587,8 @@ class ReportAnalyticForAccount(models.AbstractModel):
             'currency': currency,
             'ordenado_fecha': ordenado_fecha,
             'datos_cuentas': datos_cuentas[0],
-            'Account': accounts_res
+            'Account': accounts_res,
+            'Totales': res_totales
         }
 
     @api.model
@@ -581,7 +659,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
 
         # Prepare initial sql query and Get the initial move lines
         if init_balance:
-            init_tables, init_where_clause, init_where_params = MoveLine.with_context(date_from=date_start, date_to=False, initial_bal=True, state=state,company_id=empresa, strict_range=True)._query_get()
+            init_tables, init_where_clause, init_where_params = MoveLine.with_context(date_from=date_start, date_to=date_end, initial_bal=True, state=state,company_id=empresa, strict_range=True)._query_get()
             init_wheres = [""]
             if init_where_clause.strip():
                 init_wheres.append(init_where_clause.strip())
@@ -610,7 +688,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
 
 
         # Prepare sql query base on selected parameters from wizard
-        tables, where_clause, where_params = MoveLine.with_context(date_from=date_start, date_to=date_end, initial_bal=False, state=state, company_id=empresa)._query_get()
+        tables, where_clause, where_params = MoveLine.with_context(date_from=date_start, date_to=date_end, initial_bal=False, state=state, company_id=empresa, strict_range=True)._query_get()
         wheres = [""]
         if where_clause.strip():
             wheres.append(where_clause.strip())
@@ -688,7 +766,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
                     res['credit_usd'] += credit_usd
                     res['debit_usd'] += debit_usd
                     account.update(res)
-            elif currency.id == 1:
+            elif currency.id == 1: #si la moneda es euro
                 for account in account_res:
                     res = dict((fn, 0.0) for fn in ['credit_eur', 'debit_eur', 'balance_eur','tasa_eur'])
                     balance_usd = 0

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <template id="header_report_analytic_account">
@@ -6,7 +6,8 @@
                 <table border="0px" style="width:100%; height:10px; font-size: 12px;">
                     <tr>
                         <td class="text-left" width="30%">
-                            <strong>Fecha:</strong><span t-esc="today"/>
+                            <strong>Fecha:</strong><span t-esc = "date_now"/>
+
                         </td>
                         <td class="text-center" width="40%">
                             <h5><u><span t-esc="res_company.name" /></u></h5>
@@ -241,13 +242,81 @@
                                                 </td>
                                             </span>
                                         </t>
-
                                     </tr>
                                 </t>
+                                <!--Tabla de los totales para bolivares-->
+                                 <t t-foreach="currency" t-as="c">
+                                    <span t-if="c.id == 4">
+                                        <table class="table table-bordered" style="width:700px; margin: 0 auto; border: 1px solid #000000; font-size: 15px;">
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Crédito en Bs.:</strong><span t-esc="Totales['credit_total_bs']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Débito en Bs.:</strong><span t-esc="Totales['debit_total_bs']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Balance en Bs.:</strong><span t-esc="Totales['balance_total_bs']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </span>
+                                 </t>
+                                <!--Tabla de los totales para euros-->
+                                 <t t-foreach="currency" t-as="c">
+                                    <span t-if="c.id == 1">
+                                        <table class="table table-bordered" style="width:700px; margin: 0 auto; border: 1px solid #000000; font-size: 15px;">
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Crédito en Euros.:</strong><span t-esc="Totales['credit_total_eur']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Débito en Euros.:</strong><span t-esc="Totales['debit_total_eur']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Balance en Euros.:</strong><span t-esc="Totales['balance_total_eur']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </span>
+                                 </t>
+                                <!--Tabla de los totales para dólares-->
+                                 <t t-foreach="currency" t-as="c">
+                                    <span t-if="c.id == 3">
+                                        <table class="table table-bordered" style="width:700px; margin: 0 auto; border: 1px solid #000000; font-size: 15px;">
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Crédito en Dólares.:</strong><span t-esc="Totales['credit_total_usd']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Débito en Dólares.:</strong><span t-esc="Totales['debit_total_usd']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Total Balance en Dólares.:</strong><span t-esc="Totales['balance_total_usd']" t-options="{'widget': 'monetary', 'display_currency': c}"/>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </span>
+                                 </t>
+
                             </tbody>
                         </table>
                     </div>
-
              </div>
 
                 <div class="footer">
