@@ -1012,7 +1012,10 @@ class FiscalBook(models.Model):
             rp_brw = rp_obj._find_accounting_partner(inv_brw.partner_id)
 
             iwdl_brw = iwdl_id if iwdl_id and iwdl_id not in no_match_dt_iwdl_ids else False
-
+            local_inv_nbr = inv_brw.fiscal_printer and inv_brw.invoice_printer or (
+                            fb_brw.type == 'sale' and
+                            inv_brw.number or
+                            inv_brw.supplier_invoice_number)
             values = {
                 'invoice_id': inv_brw.id,
                 'emission_date':
@@ -1058,12 +1061,7 @@ class FiscalBook(models.Model):
                 'partner_name': rp_brw.name or 'N/A',
                 'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
                 'partner_vat': rp_brw.vat and rp_brw.vat[2:] or 'N/A',  #TODO Revisar validación de rif en el partner. Esta guardando los partner sin rif
-                'invoice_number':
-                    inv_brw.fiscal_printer and
-                    inv_brw.invoice_printer or (
-                            fb_brw.type == 'sale' and
-                            inv_brw.number or
-                            inv_brw.supplier_invoice_number),
+                'invoice_number':local_inv_nbr,
                 'doc_type': doc_type,
                 #'void_form':
                 #    inv_brw.name and (
@@ -1071,7 +1069,7 @@ class FiscalBook(models.Model):
                 #            '03-ANU' or
                 #            '01-REG') or
                 #    '01-REG',
-                'void_form': self.get_t_type(doc_type, inv_brw.name),
+                'void_form': self.get_t_type(doc_type, local_inv_nbr),
                 'fiscal_printer': inv_brw.fiscal_printer or False,
                 'z_report': inv_brw.z_report or False,
                 'custom_statement': False,
