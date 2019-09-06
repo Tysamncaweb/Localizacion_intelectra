@@ -153,7 +153,7 @@
                 <table class="table table-condensed">
                     <thead>
                         <tr>
-                            <th>COD / DESCRIPCIÓN</th>
+                            <th>CÓDIGO DE PRODUCTO / DESCRIPCIÓN</th>
                             <!--th>DESCRIPCIÓN</th-->
                             <th class="text-right">CANT.</th>
                             <th class="text-right">UNID.</th>

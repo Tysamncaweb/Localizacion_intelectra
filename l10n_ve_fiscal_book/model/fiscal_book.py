@@ -948,6 +948,17 @@ class FiscalBook(models.Model):
     #            self.write(fb_brw.id, {'cf_ids': [(4, cf) for cf in add_cf_ids]})
     #    return True
 
+    def get_t_type(self, doc_type=None, name=None):
+        tt = ''
+        if doc_type:
+            if doc_type == "N/DB" or doc_type == "N/CR":
+                tt = '02-COMP'
+            elif name and name.find('PAPELANULADO') >= 0:
+                tt = '03-ANU'
+            else:
+                tt = '01-REG'
+        return tt
+
     @api.multi
     def update_book_lines(self, fb_id):
         """ It updates the fiscal book lines values. Cretate, order and rank
@@ -1054,12 +1065,13 @@ class FiscalBook(models.Model):
                             inv_brw.number or
                             inv_brw.supplier_invoice_number),
                 'doc_type': doc_type,
-                'void_form':
-                    inv_brw.name and (
-                            inv_brw.name.find('PAPELANULADO') >= 0 and
-                            '03-ANU' or
-                            '01-REG') or
-                    '01-REG',
+                #'void_form':
+                #    inv_brw.name and (
+                #            inv_brw.name.find('PAPELANULADO') >= 0 and
+                #            '03-ANU' or
+                #            '01-REG') or
+                #    '01-REG',
+                'void_form': self.get_t_type(doc_type, inv_brw.name),
                 'fiscal_printer': inv_brw.fiscal_printer or False,
                 'z_report': inv_brw.z_report or False,
                 'custom_statement': False,
