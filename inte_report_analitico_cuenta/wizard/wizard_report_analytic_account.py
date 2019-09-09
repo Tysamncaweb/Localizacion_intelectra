@@ -188,17 +188,42 @@ class WizardReportAnalytic(models.TransientModel):
         total_debit_eur = 0.0
         total_balance_eur = 0.0
 
-        for account in account_res:
-            # totales en bs
-            total_credit_bs += account['credit']
-            total_debit_bs += account['debit']
-            total_balance_bs += account['balance']
-            total_credit_usd += account['credit_usd']
-            total_debit_usd += account['debit_usd']
-            total_balance_usd += account['balance_usd']
-            total_credit_eur += account['credit_eur']
-            total_debit_eur += account['debit_eur']
-            total_balance_eur += account['balance_eur']
+        if not self.currency_id:
+            for account in account_res:
+                    # totales en bs
+                    total_credit_bs += account['credit']
+                    total_debit_bs += account['debit']
+                    total_balance_bs += account['balance']
+
+                    # totales en dolares
+                    total_credit_usd += account['credit_usd']
+                    total_debit_usd += account['debit_usd']
+                    total_balance_usd += account['balance_usd']
+
+                    # totales en euros
+                    total_credit_eur += account['credit_eur']
+                    total_debit_eur += account['debit_eur']
+                    total_balance_eur += account['balance_eur']
+
+        elif self.currency_id.id == 4:
+            for account in account_res:
+                # totales en bs
+                total_credit_bs += account['credit']
+                total_debit_bs += account['debit']
+                total_balance_bs += account['balance']
+
+        elif self.currency_id.id == 3:
+            for account in account_res:
+                # totales en dolares
+                total_credit_usd += account['credit_usd']
+                total_debit_usd += account['debit_usd']
+                total_balance_usd += account['balance_usd']
+        elif self.currency_id.id == 1:
+            for account in account_res:
+                # totales en euros
+                total_credit_eur += account['credit_eur']
+                total_debit_eur += account['debit_eur']
+                total_balance_eur += account['balance_eur']
 
         res_totales['credit_total_bs'] = total_credit_bs
         res_totales['debit_total_bs'] = total_debit_bs
@@ -357,7 +382,7 @@ class WizardReportAnalytic(models.TransientModel):
                     sheet_analitico.write_merge(row, row, 3, 3, line['lref'])
                     sheet_analitico.write_merge(row, row, 4, 4, line['move_name'])
                     sheet_analitico.write_merge(row, row, 5, 5, line['lname'])
-                    if line['lname'] == 'Initial Balance':
+                    if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
                         sheet_analitico.write_merge(row, row, 6, 6, " ")
                     else:
                         sheet_analitico.write_merge(row, row, 6, 6, line['analytic_account_name'])
@@ -384,7 +409,8 @@ class WizardReportAnalytic(models.TransientModel):
                     sheet_analitico.write_merge(row, row, 4, 4, line['move_name'])
                     sheet_analitico.write_merge(row, row, 5, 5, line['lname'])
 
-                    if line['lname'] == 'Initial Balance':
+                    if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
+                        sheet_analitico.write_merge(row, row, 6, 6, " ")
                         sheet_analitico.write_merge(row, row, 6, 6, " ")
                     else:
                         sheet_analitico.write_merge(row, row, 6, 6, line['analytic_account_name'])
@@ -400,7 +426,7 @@ class WizardReportAnalytic(models.TransientModel):
                     sheet_analitico.write_merge(row, row, 3, 3, line['lref'])
                     sheet_analitico.write_merge(row, row, 4, 4, line['move_name'])
                     sheet_analitico.write_merge(row, row, 5, 5, line['lname'])
-                    if line['lname'] == 'Initial Balance':
+                    if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
                         sheet_analitico.write_merge(row, row, 6, 6, " ")
                     else:
                         sheet_analitico.write_merge(row, row, 6, 6, line['analytic_account_name'])
@@ -416,7 +442,7 @@ class WizardReportAnalytic(models.TransientModel):
                     sheet_analitico.write_merge(row, row, 3, 3, line['lref'])
                     sheet_analitico.write_merge(row, row, 4, 4, line['move_name'])
                     sheet_analitico.write_merge(row, row, 5, 5, line['lname'])
-                    if line['lname'] == 'Initial Balance':
+                    if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
                         sheet_analitico.write_merge(row, row, 6, 6, " ")
                     else:
                         sheet_analitico.write_merge(row, row, 6, 6, line['analytic_account_name'])
@@ -426,16 +452,33 @@ class WizardReportAnalytic(models.TransientModel):
                     sheet_analitico.write_merge(row, row, 9, 9, line['balance'], line_content_style)
         col = 1
         row += 1
-        sheet_analitico.write_merge(row, row, 6, 6, "Totales", sub_title_style)
-        sheet_analitico.write_merge(row, row, 7, 7, res_totales['debit_total_bs'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 8, 8, res_totales['credit_total_bs'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 9, 9, res_totales['balance_total_bs'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 11, 11, res_totales['debit_total_usd'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 12, 12, res_totales['credit_total_usd'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 13, 13, res_totales['balance_total_usd'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 15, 15, res_totales['debit_total_eur'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 16, 16, res_totales['credit_total_eur'], sub_title_style_bold)
-        sheet_analitico.write_merge(row, row, 17, 17, res_totales['balance_total_eur'], sub_title_style_bold)
+        if not self.currency_id:
+            sheet_analitico.write_merge(row, row, 6, 6, "Totales", sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 7, 7, res_totales['debit_total_bs'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 8, 8, res_totales['credit_total_bs'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 9, 9, res_totales['balance_total_bs'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 11, 11, res_totales['debit_total_usd'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 12, 12, res_totales['credit_total_usd'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 13, 13, res_totales['balance_total_usd'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 15, 15, res_totales['debit_total_eur'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 16, 16, res_totales['credit_total_eur'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 17, 17, res_totales['balance_total_eur'], sub_title_style_bold)
+        elif self.currency_id.id == 3:
+            sheet_analitico.write_merge(row, row, 6, 6, "Totales Dólares", sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 8, 8, res_totales['debit_total_usd'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 9, 9, res_totales['credit_total_usd'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 10, 10, res_totales['balance_total_usd'], sub_title_style_bold)
+        elif self.currency_id.id == 1:
+            sheet_analitico.write_merge(row, row, 6, 6, "Totales Euros", sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 8, 8, res_totales['debit_total_eur'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 9, 9, res_totales['credit_total_eur'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 10, 10, res_totales['balance_total_eur'], sub_title_style_bold)
+        elif self.currency_id.id == 4:
+            sheet_analitico.write_merge(row, row, 6, 6, "Totales Bolivares", sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 7, 7, res_totales['debit_total_bs'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 8, 8, res_totales['credit_total_bs'], sub_title_style_bold)
+            sheet_analitico.write_merge(row, row, 9, 9, res_totales['balance_total_bs'], sub_title_style_bold)
+
         wb.save(fp)
 
         out = base64.encodestring(fp.getvalue())
@@ -536,7 +579,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
 
         # suma de debit, credit, balance para calcular los totales
         res_totales = dict((fn, 0.0) for fn in ['credit_total_bs', 'debit_total_bs', 'balance_total_bs',
-                                                'credit_total_usd', 'debit_total_usd', 'balance_total_bs',
+                                                'credit_total_usd', 'debit_total_usd', 'balance_total_usd',
                                                 'credit_total_eur', 'debit_total_eur', 'balance_total_eur'])
         total_credit_bs = 0.0
         total_debit_bs = 0.0
@@ -547,18 +590,23 @@ class ReportAnalyticForAccount(models.AbstractModel):
         total_credit_eur = 0.0
         total_debit_eur = 0.0
         total_balance_eur = 0.0
-
-        for account in accounts_res:
-            # totales en bs
-            total_credit_bs += account['credit']
-            total_debit_bs += account['debit']
-            total_balance_bs += account['balance']
-            total_credit_usd += account['credit_usd']
-            total_debit_usd += account['debit_usd']
-            total_balance_usd += account['balance_usd']
-            total_credit_eur += account['credit_eur']
-            total_debit_eur += account['debit_eur']
-            total_balance_eur += account['balance_eur']
+        for c in currency:
+            for account in accounts_res:
+                    # totales en bs
+                if c.id == 4:
+                    total_credit_bs += account['credit']
+                    total_debit_bs += account['debit']
+                    total_balance_bs += account['balance']
+                    # totales en dolares
+                elif c.id == 3:
+                    total_credit_usd += account['credit_usd']
+                    total_debit_usd += account['debit_usd']
+                    total_balance_usd += account['balance_usd']
+                elif c.id == 1:
+                    # totales en euros
+                    total_credit_eur += account['credit_eur']
+                    total_debit_eur += account['debit_eur']
+                    total_balance_eur += account['balance_eur']
 
         res_totales['credit_total_bs'] = total_credit_bs
         res_totales['debit_total_bs'] = total_debit_bs
@@ -774,7 +822,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
                     debit_usd = 0
                     for line in account.get('move_lines'):
                         res_line = dict((fn, 0.0) for fn in ['credit_eur', 'debit_eur', 'balance_eur','tasa_eur'])
-                        if line.get('lname') == 'Initial Balance':
+                        if line.get('lname') == 'Initial Balance' or line.get('lname') == 'Balance Inicial':
                             fecha_movimiento = fields.Date.today()
 
                         else:

@@ -40,15 +40,15 @@ class AccountInvoice(models.Model):
         self.nro_ctrl = IrSequence.next_by_code(SEQUENCE_CODE)
 
         # if a sequence does not yet exist for this company create one
-        if not self.nro_ctrl:
-            IrSequence.sudo().create({
-                'prefix' : '00--',
-                'name': 'Localización Venezolana numero de control %s' % company_id.id,
-                'code': SEQUENCE_CODE,
-                'implementation': 'no_gap',
-                'padding': 6,
-                'number_increment': 1,
-                'company_id': company_id.id,
-            })
-            self.nro_ctrl_sale = IrSequence.next_by_code(SEQUENCE_CODE)
+        #if not self.nro_ctrl:
+        #    IrSequence.sudo().create({
+        #        'prefix' : '00--',
+        #        'name': 'Localización Venezolana numero de control %s' % company_id.id,
+        #        'code': SEQUENCE_CODE,
+        #        'implementation': 'no_gap',
+        #        'padding': 6,
+        #        'number_increment': 1,
+        #        'company_id': company_id.id,
+        #    })
+        #    self.nro_ctrl_sale = IrSequence.next_by_code(SEQUENCE_CODE)
         return self.nro_ctrl
