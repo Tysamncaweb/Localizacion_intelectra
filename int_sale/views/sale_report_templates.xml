@@ -35,8 +35,8 @@
                     <td class="text-right" style="width:50%;">
                         <h5 class="text-right">
                                 <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
-                                <span t-if="doc.state not in ['draft','sent']"><strong>Order #</strong></span>
-                                <span t-if="doc.state in ['draft','sent']">PRESUPUESTO  </span>
+                                <span t-if="doc.state not in ['draft','sent']">PRESUPUESTO</span>
+                                <span t-if="doc.state in ['draft','sent']">PRESUPUESTO</span>
                                 </t>
                                 <t t-if="env.context.get('proforma', False) or is_pro_forma">
                                 <span>Pro-Forma Invoice # </span>
@@ -128,10 +128,10 @@
                     <strong>Your Reference:</strong>
                     <p t-field="doc.client_order_ref"/>
                 </div>
-                <div t-if="doc.confirmation_date and doc.state not in ['draft','sent']" class="col-xs-3">
+                <!--div t-if="doc.confirmation_date and doc.state not in ['draft','sent']" class="col-xs-3">
                     <strong>Date Ordered:</strong>
                     <p t-field="doc.confirmation_date"/>
-                </div>
+                </div-->
                 <!--div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-xs-3">
                     <strong>Quotation Date:</strong>
                     <p t-field="doc.date_order"/>
