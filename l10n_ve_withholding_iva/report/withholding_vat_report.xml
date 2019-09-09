@@ -55,7 +55,9 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="d.company_id.partner_id.name"/></td>
-        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="d.company_id.partner_id.vat"/></td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
+            <span t-esc="(d.company_id.partner_id.vat[2:] if 'VE' in d.company_id.partner_id.vat else d.company_id.partner_id.vat) if d.company_id.partner_id.vat else ''"/>
+        </td>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="model.get_period(d.date_ret)"/></td>
     </tr>
     <tr>
@@ -70,7 +72,9 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="d.partner_id.name"/></td>
-        <td colspan="4" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="d.partner_id.vat"/></td>
+        <td colspan="4" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
+            <span t-esc="(d.partner_id.vat[2:] if 'VE' in d.partner_id.vat else d.partner_id.vat ) if d.partner_id.vat else ''"/>
+        </td>
     </tr>
     <tr>
         <td colspan="6" style="text-align:left;border-left:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Dirección Fiscal del Agente Retenido:</td>

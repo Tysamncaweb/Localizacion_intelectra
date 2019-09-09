@@ -948,6 +948,7 @@ class FiscalBook(models.Model):
     #            self.write(fb_brw.id, {'cf_ids': [(4, cf) for cf in add_cf_ids]})
     #    return True
 
+    # Funcion que detecta el tipo de documento
     def get_t_type(self, doc_type=None, name=None):
         tt = ''
         if doc_type:
