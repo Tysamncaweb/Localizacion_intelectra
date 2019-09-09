@@ -9,7 +9,7 @@
                     <attribute name="invisible">1</attribute>
                 </field>
                 <field name="name" position="replace">
-                    <field name="name" string="Fecha y Hora"/>
+                    <field name="hora" string="Fecha y Hora"/>
                 </field>
                 <field name="rate" position="before">
                     <field name="rate_real" string="Tasa"/>

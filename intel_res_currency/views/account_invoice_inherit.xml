@@ -20,6 +20,9 @@
                 <xpath expr="//field[@name='date_invoice']" position="attributes">
                     <attribute name="required">1</attribute>
                 </xpath>
+                <!--xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="tasa" domain="[('currency_id', '=', currency_id),('name', '=',date_invoice)]" options="{'no_create': True, 'no_edit': True, 'no_open':True}" attrs="{'invisible': [('currency_id', '=', 4)], 'required': [('currency_id', '!=', 4)]}"/>
+                </xpath-->
                  <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
                     <field name="tasa_me" string="Precio total Bs." readonly="1" force_save="1"/>
                      <!--field name="tax" string="tax Bs." readonly="1" force_save="1"/-->
@@ -38,6 +41,7 @@
                 </xpath>
             </field>
         </record>
+
         <!-- vista de proveedores..-->
         <record model="ir.ui.view" id="invoice_supplier_form_inherit">
             <field name="name">invoice.supplier.form.inherit</field>
@@ -63,6 +67,5 @@
                 </xpath>
             </field>
         </record>
-
     </data>
 </odoo>

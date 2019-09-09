@@ -94,30 +94,21 @@ class RetentionISLR(models.Model):
             concept = []
             for i in concepts:
                 concept.append(i.id)
-        if self.supplier == True and self.customer == True:
-            partner.append(self.partner_id.id)
-            partner.append(self.clientes.id)
-            for i in partner:
-                if i not in lista_nueva_partner:
-                    lista_nueva_partner.append(i)
         if self.supplier == True and self.customer == False:
-            client = self.env['res.partner'].search([('customer', '=', True)])
-            for j in client:
-                partner.append(j.id)
-            partner.append(self.clientes.id)
-            for i in partner:
-                if i not in lista_nueva_partner:
-                    lista_nueva_partner.append(i)
+            islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=',self.company.id),
+                                                              ('partner_id', '=', self.partner_id.id),
+                                                              ('type', '=', 'in_invoice'),
+                                                              ('state', '=', 'done'),
+                                                              ('date_ret', '>=', self.start_date),
+                                                              ('date_ret', '<=', self.end_date)])
 
         if self.supplier == False and self.customer == True:
-            vendor = self.env['res.partner'].search([('supplier', '=', True)])
-            for v in vendor:
-                partner.append(v.id)
-            partner.append(self.partner_id.id)
-
-            for i in partner:
-                if i not in lista_nueva_partner:
-                    lista_nueva_partner.append(i)
+            islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', self.company.id),
+                                                              ('partner_id', '=', self.clientes.id),
+                                                              ('type', '=', 'out_invoice'),
+                                                              ('state', '=', 'done'),
+                                                              ('date_ret', '>=', self.start_date),
+                                                              ('date_ret', '<=', self.end_date)])
 
         if self.supplier == False and self.customer == False:
             todo_supplier = self.env['res.partner'].search([('supplier', '=', True)])
@@ -130,16 +121,15 @@ class RetentionISLR(models.Model):
             for i in partner:
                 if i not in lista_nueva_partner:
                     lista_nueva_partner.append(i)
-        type = ['out_invoice', 'in_invoice']
+            type = ['out_invoice', 'in_invoice']
 
+            islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', self.company.id),
+                                                              ('partner_id', 'in', lista_nueva_partner),
+                                                              ('type', 'in', type),
+                                                              ('state', '=', 'done'),
+                                                              ('date_ret', '>=', self.start_date),
+                                                              ('date_ret', '<=', self.end_date)])
 
-
-        islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', self.company.id),
-                                                          ('partner_id', 'in', lista_nueva_partner),
-                                                          ('type', 'in', type),
-                                                          ('state', '=', 'done'),
-                                                          ('date_ret', '>=', self.start_date),
-                                                          ('date_ret', '<=', self.end_date)])
 
         for a in islr_concept_id:
             islr_concept.append(a.id)
@@ -366,30 +356,22 @@ class ReportRetentionISLR(models.AbstractModel):
                 concept.append(i.id)
 
         company = self.env['res.company'].search([('id', '=', company_id)])
-        if supplier == True and customer == True:
-            partner.append(partner_id)
-            partner.append(clientes)
-            for i in partner:
-                if i not in lista_nueva_partner:
-                    lista_nueva_partner.append(i)
+
         if supplier == True and customer == False:
-            client = self.env['res.partner'].search([('customer', '=', True)])
-            for j in client:
-                partner.append(j.id)
-            partner.append(clientes)
-            for i in partner:
-                if i not in lista_nueva_partner:
-                    lista_nueva_partner.append(i)
+            islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', company_id),
+                                                              ('partner_id', '=', partner_id),
+                                                              ('type', '=', 'in_invoice'),
+                                                              ('state', '=', 'done'),
+                                                              ('date_ret', '>=', date_start),
+                                                              ('date_ret', '<=', end_date)])
 
         if supplier == False and customer == True:
-            vendor = self.env['res.partner'].search([('supplier', '=', True)])
-            for v in vendor:
-                partner.append(v.id)
-            partner.append(partner_id)
-
-            for i in partner:
-                if i not in lista_nueva_partner:
-                    lista_nueva_partner.append(i)
+            islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', company_id),
+                                                              ('partner_id', '=', clientes),
+                                                              ('type', '=', 'out_invoice'),
+                                                              ('state', '=', 'done'),
+                                                              ('date_ret', '>=', date_start),
+                                                              ('date_ret', '<=', end_date)])
 
         if supplier == False and customer == False:
             todo_supplier = self.env['res.partner'].search([('supplier', '=', True)])
@@ -402,16 +384,14 @@ class ReportRetentionISLR(models.AbstractModel):
             for i in partner:
                 if i not in lista_nueva_partner:
                     lista_nueva_partner.append(i)
-        type = ['out_invoice', 'in_invoice']
+            type = ['out_invoice', 'in_invoice']
 
-
-
-        islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', company_id),
-                                                          ('partner_id', 'in', lista_nueva_partner),
-                                                          ('type', 'in', type),
-                                                          ('state', '=', 'done'),
-                                                          ('date_ret', '>=', date_start),
-                                                          ('date_ret', '<=', end_date)])
+            islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', company_id),
+                                                              ('partner_id', 'in', lista_nueva_partner),
+                                                              ('type', 'in', type),
+                                                              ('state', '=', 'done'),
+                                                              ('date_ret', '>=', date_start),
+                                                              ('date_ret', '<=', end_date)])
 
 
 

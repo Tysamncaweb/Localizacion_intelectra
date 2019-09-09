@@ -2,6 +2,18 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+
+class modificacion_name_get(models.Model):
+    _inherit = 'res.currency.rate'
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for res in self:
+            name = str(res.rate_real) + ' - ' + str(res.hora)
+            result.append((res.id, name))
+        return result
+
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
@@ -12,6 +24,15 @@ class AccountInvoice(models.Model):
     amount_tax_bs = fields.Float('Impuesto Bs', digits=(12, 2), compute='_compute_amount')
     amount_total_bs = fields.Float('Total Bs', digits=(12, 2), compute='_compute_amount')
     residual_bs = fields.Float('Saldo', digits=(12, 2), compute='_compute_amount')
+    tasa = fields.Many2one('res.currency.rate', string="Tasa Monetaria")
+
+    '''@api.onchange('date_invoice', 'currency_id')
+    def tasa_me(self):
+        date_invoice = self.env['res.currency.rate'].search([('name', '=', self.date_invoice),
+                                                                 ('currency_id', '=', self.currency_id.id)])
+        if date_invoice:
+            for a in date_invoice:
+                self.tasa = a'''
 
     @api.one
     @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount', 'tax_line_ids.amount_rounding',
@@ -54,9 +75,8 @@ class AccountInvoice(models.Model):
                     self.amount_total_bs = self.amount_total_company_signed = amount_total_company_signed * sign
                     self.amount_total_signed = self.amount_total * sign
                     self.amount_untaxed_bs = self.amount_untaxed_signed = amount_untaxed_signed * sign
-
-        else:
-            raise UserError('No hay tasas en esta fecha')
+            else:
+                raise UserError('No hay tasas en esta fecha')
 
     @api.multi
     def action_invoice_open(self):
@@ -146,4 +166,3 @@ class AccountInvoiceLine(models.Model):
                     self.price_subtotal_signed = price_subtotal_signed * sign
                     if self.invoice_line_tax_ids:
                         self.tax = (self.invoice_line_tax_ids.amount * self.tasa_me) / 100
-
