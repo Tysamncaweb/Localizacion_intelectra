@@ -793,7 +793,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
                     debit_usd = 0
                     for line in account.get('move_lines'):
                         res_line = dict((fn, 0.0) for fn in ['credit_usd', 'debit_usd', 'balance_usd','tasa_usd'])
-                        if line.get('lname') == 'Initial Balance':
+                        if line.get('lname') == 'Initial Balance' or line.get('lname') == 'Balance Inicial':
                             fecha_movimiento = fields.Date.today()
 
                         else:
@@ -857,22 +857,38 @@ class ReportAnalyticForAccount(models.AbstractModel):
             fecha_dia_rate_ord = []
             rate_id = self.env['res.currency.rate'].search(
                 [('company_id', '=', company_id), ('currency_id', '=', currency.id)])
+
             if rate_id:
                 for a in rate_id:
                     fecha_rate = a.hora
                     fecha_dia_rate.append(fecha_rate)
                 fecha_dia_rate.append(fecha_movimiento)
                 fecha_dia_rate_ord = sorted(fecha_dia_rate)
-                posicion = 0
-                for fecha in fecha_dia_rate_ord:
-                    posicion += 1
-                    if fecha == fecha_movimiento:
-                        fecha_anterior = fecha_dia_rate_ord[posicion-2]
-                        rate_id = self.env['res.currency.rate'].search(
-                            [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
-                        tasa_me = rate_id.rate_real
-                    else:
-                        pass
+                posicion = fecha_dia_rate_ord.index(fecha_movimiento)
+                if posicion == 0:
+                    fecha_anterior = fecha_dia_rate_ord[posicion +1]
+                    rate_id = self.env['res.currency.rate'].search(
+                        [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
+                    tasa_me = rate_id.rate_real
+                elif posicion >= 1:
+                    fecha_anterior = fecha_dia_rate_ord[posicion-1]
+                    rate_id = self.env['res.currency.rate'].search(
+                        [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
+                    tasa_me = rate_id[0].rate_real
+
+                #for fecha in fecha_dia_rate_ord:
+                #    posicion += 1
+                #    if fecha == fecha_movimiento:
+                #        fecha_anterior = fecha_dia_rate_ord[posicion-2]
+                #        rate_id = self.env['res.currency.rate'].search(
+                #            [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
+                #        tasa_me = rate_id.rate_real
+
+                #rate_id = self.env['res.currency.rate'].search(
+                #            [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
+                #tasa_me = rate_id.rate_real
+            else:
+                pass
         return tasa_me
 
 
