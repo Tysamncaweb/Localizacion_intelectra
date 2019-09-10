@@ -3,7 +3,7 @@
 from odoo import fields,models,api
 
 
-class ResCompany(models.Model):
+class Company(models.Model):
     _inherit = 'res.company'
 
     jour_id = fields.Many2one(
@@ -21,8 +21,8 @@ class ResCompany(models.Model):
 
     fax=fields.Char( string="Fax", size=13)
 
-
-    def create(self,val):
+    @api.model
+    def create(self, vals):
         """ To create a new record,
         adds a Boolean field to true
         indicates that the partner is a company
@@ -31,7 +31,7 @@ class ResCompany(models.Model):
             context = {}
         context = dict(self._context)
         context.update({'create_company': True})
-        return super(ResCompany, self).create(val)
+        return super(Company, self).create(vals)
 
     def write(self, values):
         """ To write a new record,
@@ -40,6 +40,6 @@ class ResCompany(models.Model):
         """
         context = dict(self._context or {})
         context.update({'create_company': True})
-        return super(ResCompany, self).write(values)
+        return super(Company, self).write(values)
 
-ResCompany()
+Company()
