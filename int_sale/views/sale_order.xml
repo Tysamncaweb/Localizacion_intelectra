@@ -52,19 +52,12 @@
                 <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+                <xpath expr="//sheet/group/group[2]//field[@name='pricelist_id']" position="attributes">
+                    <attribute name="required">0</attribute>
+                </xpath>
+
             </field>
         </record>
-
-        <!--record id="sale_order_view_inherits" model="ir.ui.view">
-            <field name="name">sale.order.inherits</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="print_sale.sale_order_view_form_inherit_print_sale"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='%(print_sale.print_order_wizard_action_print_sale)d']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-            </field>
-        </record-->
 
     </data>
 </odoo>
