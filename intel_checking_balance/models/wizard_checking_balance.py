@@ -49,6 +49,13 @@ class RetentionISLR(models.Model):
     @api.multi
     def amount_initial1(self, account_account, show_accounts, balance, start_date, end_date, company, state, currency, tasa):
         cuentas = []
+
+
+        if currency.id == 4:
+            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency.id)])
+        else:
+            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
+            
         cr = self.env.cr
         MoveLine = self.env['account.move.line']
         move_lines = {x: [] for x in account_account.ids}
@@ -107,11 +114,6 @@ class RetentionISLR(models.Model):
                         WHERE l.account_id IN %s ''' + filters + ''' GROUP BY l.id, l.account_id, l.date, j.code, l.currency_id, l.amount_currency, l.ref, l.name, m.name, c.symbol, p.name, a.id, m.id ORDER BY ''' + sql_sort)
         params = (tuple(account_account.ids),) + tuple(where_params)
         cr.execute(sql, params)
-
-        if currency.id == 4:
-            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency.id)])
-        else:
-            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
 
         for row in cr.dictfetchall():
             balance = 0
@@ -394,6 +396,10 @@ class ReportRetentionISLR(models.AbstractModel):
     @api.multi
     def amount_initial(self, account_account,show_accounts, balance,date_start,end_date,company,currency, state, currency_id1, tasa):
         cuentas = []
+        if currency_id1 == 4:
+            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency_id1)])
+        else:
+            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
         cr = self.env.cr
         MoveLine = self.env['account.move.line']
         move_lines = {x: [] for x in account_account.ids}
@@ -453,17 +459,13 @@ class ReportRetentionISLR(models.AbstractModel):
         params = (tuple(account_account.ids),) + tuple(where_params)
         cr.execute(sql, params)
 
-        if currency_id1 == 4:
-            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency_id1)])
-        else:
-            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
-
         for row in cr.dictfetchall():
             balance = 0
             for line in move_lines.get(row['account_id']):
                 balance += (line['debit'] - line['credit'])/currency_line.rate_real
             row['balance'] += balance
             move_lines[row.pop('account_id')].append(row)
+
 
         for account in account_account:
             res = dict((fn, 0.0) for fn in ['credit', 'debit', 'balance'])
