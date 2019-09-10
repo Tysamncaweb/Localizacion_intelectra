@@ -44,89 +44,121 @@ class RetentionISLR(models.Model):
     state = fields.Selection([('choose', 'choose'), ('get', 'get')], default='choose')
     report = fields.Binary('Descargar xls', filters='.xls', readonly=True)
     name = fields.Char('File Name', size=32)
-    tasa = fields.Many2one('res.currency.rate', string="Tasa Monetaria", required=True)
+    tasa = fields.Many2one('res.currency.rate', string="Tasa Monetaria")
 
     @api.multi
-    def cuentas(self, move_validate, cuenta, b, unico, repetido, currency, currency_line):
-        for a in move_validate:
-            cuenta.append({
-                'codigo': a.account_id.code,
-                'name': a.account_id.name,
-                'amount': a.move_id.amount * currency_line.rate_real,
-                'debit': a.debit * currency_line.rate_real,
-                'credit': a.credit * currency_line.rate_real,
-                'saldo': (a.debit - a.credit) * currency_line.rate_real,
-            })
-            b = sorted(cuenta, key=lambda k: k['codigo'])
+    def amount_initial1(self, account_account, show_accounts, balance, start_date, end_date, company, state, currency, tasa):
+        cuentas = []
+        cr = self.env.cr
+        MoveLine = self.env['account.move.line']
+        move_lines = {x: [] for x in account_account.ids}
+        init_tables, init_where_clause, init_where_params = MoveLine.with_context(date_from=start_date,
+                                                                                  date_to=end_date,
+                                                                                  initial_bal=True,
+                                                                                  state=state,
+                                                                                  company_id=company,
+                                                                                  strict_range=True)._query_get()
+        init_wheres = [""]
+        if init_where_clause.strip():
+            init_wheres.append(init_where_clause.strip())
+        init_filters = " AND ".join(init_wheres)
+        filters = init_filters.replace('account_move_line__move_id', 'm').replace('account_move_line',
+                                                                                  'l')
+        sql = ("""SELECT 0 AS lid, l.account_id AS account_id, '' AS ldate, '' AS lcode, NULL AS amount_currency, '' AS lref, 'Initial Balance' AS lname, COALESCE(SUM(l.debit),0.0) AS debit, COALESCE(SUM(l.credit),0.0) AS credit, COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) as balance, '' AS lpartner_id,\
+                                    '' AS move_name, '' AS currency_code,\
+                                    NULL AS currency_id,\
+                                    '' AS invoice_id, '' AS invoice_type, '' AS invoice_number,\
+                                    '' AS partner_name\
+                                    FROM account_move_line l\
+                                    LEFT JOIN account_move m ON (l.move_id=m.id)\
+                                    LEFT JOIN res_currency c ON (l.currency_id=c.id)\
+                                    LEFT JOIN res_partner p ON (l.partner_id=p.id)\
+                                    LEFT JOIN account_invoice i ON (m.id =i.move_id)\
+                                    JOIN account_journal j ON (l.journal_id=j.id)\
+                                    WHERE l.account_id IN %s""" + filters + ' GROUP BY l.account_id')
+        params = (tuple(account_account.ids),) + tuple(init_where_params)
+        cr.execute(sql, params)
+        for row in cr.dictfetchall():
+            move_lines[row.pop('account_id')].append(row)
 
-        for vars in b:
-            if unico:
-                cont = 0
-                for vars2 in unico:
-                    if (vars.get('codigo') == vars2.get('codigo') and vars.get('name') == vars2.get('name')):
-                        repetido.append(vars)
-                        cont += 1
-                if cont == 0:
-                    unico.append(vars)
-            else:
-                unico.append(vars)
+        sql_sort = 'j.code, p.name, l.move_id'
 
-        for cuentas in unico:
-            for unidad in repetido:
-                if (cuentas['name'] == unidad['name']) and (cuentas['codigo'] == unidad['codigo']):
-                    cuentas.update({'amount': unidad.get('amount') + cuentas.get('amount'),
-                                    'debit': unidad.get('debit') + cuentas.get('debit'),
-                                    'credit': unidad.get('credit') + cuentas.get('credit'),
-                                    'saldo': unidad.get('saldo') + cuentas.get('saldo')})
-        return unico
+        # Prepare sql query base on selected parameters from wizard
+        tables, where_clause, where_params = MoveLine.with_context(date_from=start_date, date_to=end_date,
+                                                                   initial_bal=False, state=state, company_id=company,
+                                                                   strict_range=True)._query_get()
+        wheres = [""]
+        if where_clause.strip():
+            wheres.append(where_clause.strip())
+        filters = " AND ".join(wheres)
+        filters = filters.replace('account_move_line__move_id', 'm').replace('account_move_line', 'l')
+
+        # Get move lines base on sql query and Calculate the total balance of move lines
+        sql = ('''SELECT l.id AS lid, l.account_id AS account_id, l.date AS ldate, j.code AS lcode, l.currency_id, l.amount_currency, l.ref AS lref, l.name AS lname, COALESCE(l.debit,0) AS debit, COALESCE(l.credit,0) AS credit, COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) AS balance,\
+                        m.name AS move_name, '' AS move_id, c.symbol AS currency_code, p.name AS partner_name,\
+                        l.write_date AS write_date, l.move_id AS move_id\
+                        FROM account_move_line l\
+                        JOIN account_move m ON (l.move_id=m.id)\
+                        LEFT JOIN res_currency c ON (l.currency_id=c.id)\
+                        LEFT JOIN res_partner p ON (l.partner_id=p.id)\
+                        LEFT JOIN account_analytic_account a ON (l.analytic_account_id = a.id)\
+                        JOIN account_journal j ON (l.journal_id=j.id)\
+                        JOIN account_account acc ON (l.account_id = acc.id) \
+                        WHERE l.account_id IN %s ''' + filters + ''' GROUP BY l.id, l.account_id, l.date, j.code, l.currency_id, l.amount_currency, l.ref, l.name, m.name, c.symbol, p.name, a.id, m.id ORDER BY ''' + sql_sort)
+        params = (tuple(account_account.ids),) + tuple(where_params)
+        cr.execute(sql, params)
+
+        if currency.id == 4:
+            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency.id)])
+        else:
+            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
+
+        for row in cr.dictfetchall():
+            balance = 0
+            for line in move_lines.get(row['account_id']):
+                balance += (line['debit'] - line['credit']) / currency_line.rate_real
+            row['balance'] += balance
+            move_lines[row.pop('account_id')].append(row)
+
+        for account in account_account:
+            res = dict((fn, 0.0) for fn in ['credit', 'debit', 'balance'])
+            res['code'] = account.code
+            res['name'] = account.name
+            res['move_lines'] = move_lines[account.id]
+            for line in res.get('move_lines'):
+                res['debit'] += line['debit'] / currency_line.rate_real
+                res['credit'] += line['credit'] / currency_line.rate_real
+                res['balance'] = line['balance'] / currency_line.rate_real
+
+            if show_accounts == 0 and res.get('move_lines'):
+                cuentas.append(res)
+            if show_accounts == 1 and not currency[0].is_zero(res['balance']):
+                cuentas.append(res)
+        return cuentas
 
     @api.multi
-    def SaldoDistintoCero(self, unico):
-        sd0 = []
-        for a in unico:
-            if a['saldo'] > 0.00:
-                sd0.append({
-                    'codigo': a['codigo'],
-                    'name': a['name'],
-                    'amount': locale.format_string("%f", a['amount'], grouping=True)[:-4],
-                    'debit': locale.format_string("%f", a['debit'], grouping=True)[:-4],
-                    'credit': locale.format_string("%f", a['credit'], grouping=True)[:-4],
-                    'saldo': locale.format_string("%f", a['saldo'], grouping=True)[:-4]
-                })
-        return sd0
+    def suma_totales(self, cuentas, currency, tasa):
+        if currency.id == 4:
+            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency.id)])
+        else:
+            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
 
-    @api.multi
-    def format_new(self, unico):
-        new = []
-        locale.setlocale(locale.LC_ALL, '')
-        for a in unico:
-            new.append({
-                'codigo': a['codigo'],
-                'name': a['name'],
-                'amount': locale.format_string("%f", a['amount'], grouping=True)[:-4],
-                'debit': locale.format_string("%f", a['debit'], grouping=True)[:-4],
-                'credit': locale.format_string("%f", a['credit'], grouping=True)[:-4],
-                'saldo': locale.format_string("%f", a['saldo'], grouping=True)[:-4]
-            })
-        return new
+        res_totales = dict((fn, 0.0) for fn in ['credit_total', 'debit_total', 'balance_total'])
+        total_credit = 0.0
+        total_debit = 0.0
+        total_balance = 0.0
 
-    @api.multi
-    def suma_totales(self, unico):
-        suma_debit = 0
-        suma_credit = 0
-        suma_saldo = 0
-        suma = []
-        for f in unico:
-            suma_debit += f['debit']
-            suma_credit += f['credit']
-            suma_saldo += f['saldo']
-        suma.append({
-            'suma_debit': locale.format_string("%f", suma_debit, grouping=True)[:-4],
-            'suma_credit': locale.format_string("%f", suma_credit, grouping=True)[:-4],
-            'suma_saldo': locale.format_string("%f", suma_saldo, grouping=True)[:-4],
-        })
+        for account in cuentas:
+            total_credit += account['credit']
+            total_debit += account['debit']
+            total_balance += account['balance']
 
-        return suma
+        res_totales['credit_total'] = total_credit / currency_line.rate_real
+        res_totales['debit_total'] = total_debit / currency_line.rate_real
+        res_totales['balance_total'] = total_balance / currency_line.rate_real
+
+        return res_totales
+
     @api.multi
     def generate_checking_balance(self, data):
         if self.report_format == False:
@@ -172,6 +204,7 @@ class RetentionISLR(models.Model):
             header_content_style = xlwt.easyxf("font: name Helvetica size 80 px, bold 1, height 400;")
             sub_header_style = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; borders: left thin, right thin, top thin, bottom thin;")
             sub_header_style_bold = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170;")
+            sub_header_style_bold1 = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; align: horiz right;")
             sub_header_content_style = xlwt.easyxf("font: name Helvetica size 10 px, height 170;")
             line_content_style = xlwt.easyxf("font: name Helvetica, height 170; align: horiz right;")
             line_content_style_totales = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; borders: left thin, right thin, top thin, bottom thin; align: horiz right;")
@@ -214,102 +247,59 @@ class RetentionISLR(models.Model):
             row +=2
             col= 1
 
-            writer.write_merge(row, row, 1, 4, "Cuenta", sub_header_style)
-            if self.balance == True:
-                writer.write_merge(row, row, 5, 6, "Saldo Inicial", sub_header_style )
-            else:
-                writer.write_merge(row, row, 5, 6, "", sub_header_style)
-            writer.write_merge(row, row, 7, 8, "Débito", sub_header_style )
+            writer.write_merge(row, row, 1, 6, "Cuenta", sub_header_style)
+            writer.write_merge(row, row, 7, 8, "Débito", sub_header_style)
             writer.write_merge(row, row, 9, 10, "Crédito", sub_header_style)
             writer.write_merge(row, row, 11, 12, "Saldo", sub_header_style)
 
-
             account_account = self.env['account.account'].search([('id', '!=', 0)])
             currency = self.env['res.currency'].search([('id', '=', self.currency_id.id)])
-            currency_line = self.env['res.currency.rate'].search([('id', '=', self.tasa.id)])
+
+            if currency.id == 4:
+                currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency.id)])
+            else:
+                currency_line = self.env['res.currency.rate'].search([('id', '=', self.tasa.id)])
+
             # TODOS LOS ASIENTOS VALIDADOS CON MOVIMIENTOS
             if self.target_movement == False and self.show_accounts == False:
-                for account in account_account:
-                    move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                          ('move_id.state', '=', 'posted'),
-                                                                          ('company_id', '=', self.company.id),
-                                                                          ('date', '>=', self.start_date),
-                                                                          ('date', '<=', self.end_date)])
-                    if move_validate:
-                        cuenta = []
-                        b = []
-                        repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
-
-                suma = self.suma_totales(unico)
-                cuentas = self.format_new(unico)
+                state = 'posted'
 
             # TODOS LOS ASIENTOS VALIDADOS CON SALDO DISTINTO A 0
             if self.target_movement == False and self.show_accounts == 1:
-                for account in account_account:
-                    move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                          ('move_id.state', '=', 'posted'),
-                                                                          ('company_id', '=', self.company.id),
-                                                                          ('date', '>=', self.start_date),
-                                                                          ('date', '<=', self.end_date)])
-                    if move_validate:
-                        cuenta = []
-                        b = []
-                        repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
+                state = 'posted'
 
-                suma = self.suma_totales(unico)
-                cuentas = self.SaldoDistintoCero(unico)
-
-            # TODOS LOS ASIENTOS CON MOVIMIENTOS
-            if self.target_movement == 1 and self.show_accounts == False:
-                for account in account_account:
-                    move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                          ('company_id', '=', self.company.id),
-                                                                          ('date', '>=', self.start_date),
-                                                                          ('date', '<=', self.end_date)])
-                    if move_validate:
-                        cuenta = []
-                        b = []
-                        repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
-                suma = self.suma_totales(unico)
-                cuentas = self.format_new(unico)
-
+            # TODOS LOS ASIENTOS CON MOVIMIENTOS 0
+            if self.target_movement == 1 and self.show_accounts == 0:
+                state = 'all'
             # TODOS LOS ASIENTOS CON SALDO DISTINTO A 0
             if self.target_movement == 1 and self.show_accounts == 1:
-                for account in account_account:
-                    move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                          ('company_id', '=', self.company.id),
-                                                                          ('date', '>=', self.start_date),
-                                                                          ('date', '<=', self.end_date)])
-                    if move_validate:
-                        cuenta = []
-                        b = []
-                        repetido = []
-                        unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, currency_line)
-
-                suma = self.suma_totales(unico)
-                cuentas = self.SaldoDistintoCero(unico)
+                state = 'all'
+            cuentas = self.amount_initial1(account_account, self.show_accounts, self.balance, start_date, end_date, self.company.id, state, currency, self.tasa.id)
+            suma = self.suma_totales(cuentas, currency, self.tasa.id)
 
             for a in cuentas:
                 row += 1
-                writer.write_merge(row, row, 1, 1, a['codigo'],sub_header_content_style )
+                writer.write_merge(row, row, 1, 1, a['code'],sub_header_content_style )
                 writer.write_merge(row, row, 2, 4, a['name'], sub_header_content_style)
-                if self.balance == True:
-                    writer.write_merge(row, row, 5, 6, a['amount'], line_content_style)
-                else:
-                    writer.write_merge(row, row, 5, 6, "", line_content_style)
-                writer.write_merge(row, row, 7, 8, a['debit'], line_content_style)
-                writer.write_merge(row, row, 9, 10, a['credit'], line_content_style)
-                writer.write_merge(row, row, 11, 12, a['saldo'], line_content_style)
+                writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", a['debit'], grouping=True), line_content_style)
+                writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", a['credit'], grouping=True), line_content_style)
+                writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", a['balance'], grouping=True), line_content_style)
 
-            for g in suma:
-                row +=1
-                writer.write_merge(row, row, 1, 4, "Total", sub_header_style)
-                writer.write_merge(row, row, 7, 8, g['suma_debit'], line_content_style_totales)
-                writer.write_merge(row, row, 9, 10, g['suma_credit'], line_content_style_totales)
-                writer.write_merge(row, row, 11, 12, g['suma_saldo'], line_content_style_totales)
+                row += 1
+                if self.balance == True:
+                    for line in a['move_lines']:
+                        writer.write_merge(row, row, 1, 4, "Balance Inicial", sub_header_style_bold)
+                        writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", line['debit']/currency_line.rate_real, grouping=True),
+                                           sub_header_style_bold1)
+                        writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", line['credit']/currency_line.rate_real, grouping=True), sub_header_style_bold1)
+                        writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", line['balance']/currency_line.rate_real, grouping=True), sub_header_style_bold1)
+
+
+            row +=1
+            writer.write_merge(row, row, 1, 4, "Total", sub_header_style)
+            writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", suma['debit_total'], grouping=True), line_content_style_totales)
+            writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", suma['credit_total'], grouping=True), line_content_style_totales)
+            writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", suma['balance_total'], grouping=True), line_content_style_totales)
 
             col = 1
 
@@ -362,68 +352,30 @@ class ReportRetentionISLR(models.AbstractModel):
         account_account = self.env['account.account'].search([('id', '!=', 0)])
         currency = self.env['res.currency'].search([('id', '=', currency_id1)])
 
+        if currency_id1 == 4:
+            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency_id1)])
+        else:
+            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
+
 
         # TODOS LOS ASIENTOS VALIDADOS CON MOVIMIENTOS
         if target_movement == False and show_accounts == False:
-            for account in account_account:
-                move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                  ('move_id.state', '=', 'posted'),
-                                                                  ('company_id', '=', company),
-                                                                  ('date', '>=', date_start),
-                                                                  ('date', '<=', end_date)])
-                if move_validate:
-                    cuenta = []
-                    b = []
-                    repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
+            state = 'posted'
 
-            suma = self.suma_totales(unico)
-
-
-        #TODOS LOS ASIENTOS VALIDADOS CON SALDO DISTINTO A 0
+        # TODOS LOS ASIENTOS VALIDADOS CON SALDO DISTINTO A 0
         if target_movement == False and show_accounts == 1:
-            for account in account_account:
-                move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                  ('move_id.state', '=', 'posted'),
-                                                                  ('company_id', '=', company),
-                                                                  ('date', '>=', date_start),
-                                                                  ('date', '<=', end_date)])
-                if move_validate:
-                    cuenta = []
-                    b = []
-                    repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
+            state = 'posted'
 
-            suma = self.suma_totales(unico)
-
-        # TODOS LOS ASIENTOS CON MOVIMIENTOS
-        if target_movement == 1 and show_accounts == False:
-            for account in account_account:
-                move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                      ('company_id', '=', company),
-                                                                      ('date', '>=', date_start),
-                                                                      ('date', '<=', end_date)])
-                if move_validate:
-                    cuenta = []
-                    b = []
-                    repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
-            suma = self.suma_totales(unico)
-
+        # TODOS LOS ASIENTOS CON MOVIMIENTOS 0
+        if target_movement == 1 and show_accounts == 0:
+            state = 'all'
         # TODOS LOS ASIENTOS CON SALDO DISTINTO A 0
         if target_movement == 1 and show_accounts == 1:
-            for account in account_account:
-                move_validate = self.env['account.move.line'].search([('account_id', '=', account.id),
-                                                                  ('company_id', '=', company),
-                                                                  ('date', '>=', date_start),
-                                                                  ('date', '<=', end_date)])
-                if move_validate:
-                    cuenta = []
-                    b = []
-                    repetido = []
-                    unico = self.cuentas(move_validate, cuenta, b, unico, repetido, currency, tasa)
+            state = 'all'
+        cuentas = self.amount_initial(account_account, show_accounts, balance, date_start, end_date, company,currency, state, currency_id1, tasa)
+        suma = self.suma_totales(cuentas, currency_id1,tasa)
 
-            suma = self.suma_totales(unico)
+
 
         return {
             'doc_ids': data['ids'],
@@ -434,73 +386,121 @@ class ReportRetentionISLR(models.AbstractModel):
             'currency_id': currency_id,
             'balance': balance,
             'hora': time,
-            'cuentas': unico,
+            'cuentas': cuentas,
             'suma': suma,
+            'currency_line': currency_line.rate_real,
         }
-    @api.multi
-    def cuentas(self, move_validate, cuenta, b, unico, repetido, currency, tasa):
-        currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
-        for a in move_validate:
-            cuenta.append({
-                'codigo': a.account_id.code,
-                'name': a.account_id.name,
-                'amount': a.move_id.amount*currency_line.rate_real,
-                'debit': a.debit*currency_line.rate_real,
-                'credit': a.credit*currency_line.rate_real,
-                'saldo': (a.debit - a.credit)*currency_line.rate_real,
-            })
-            b = sorted(cuenta, key=lambda k: k['codigo'])
-
-        for vars in b:
-            if unico:
-                cont = 0
-                for vars2 in unico:
-                    if (vars.get('codigo') == vars2.get('codigo') and vars.get('name') == vars2.get('name')):
-                        repetido.append(vars)
-                        cont += 1
-                if cont == 0:
-                    unico.append(vars)
-            else:
-                unico.append(vars)
-
-        for cuentas in unico:
-            for unidad in repetido:
-                if (cuentas['name'] == unidad['name']) and (cuentas['codigo'] == unidad['codigo']):
-                    cuentas.update({'amount': unidad.get('amount') + cuentas.get('amount'),
-                                    'debit': unidad.get('debit') + cuentas.get('debit'),
-                                    'credit': unidad.get('credit') + cuentas.get('credit'),
-                                    'saldo': unidad.get('saldo') + cuentas.get('saldo')})
-        return unico
 
     @api.multi
-    def SaldoDistintoCero(self, unico):
-        sd0 = []
-        for a in unico:
-            if a['saldo'] > 0.00:
-                sd0.append({
-                    'codigo': a['codigo'],
-                    'name': a['name'],
-                    'amount': a['amount'],
-                    'debit': a['debit'],
-                    'credit': a['credit'],
-                    'saldo': a['saldo'],
-                })
-        return sd0
+    def amount_initial(self, account_account,show_accounts, balance,date_start,end_date,company,currency, state, currency_id1, tasa):
+        cuentas = []
+        cr = self.env.cr
+        MoveLine = self.env['account.move.line']
+        move_lines = {x: [] for x in account_account.ids}
+        init_tables, init_where_clause, init_where_params = MoveLine.with_context(date_from=date_start,
+                                                                                  date_to=end_date,
+                                                                                  initial_bal=True,
+                                                                                  state=state,
+                                                                                  company_id=company,
+                                                                                  strict_range=True)._query_get()
+        init_wheres = [""]
+        if init_where_clause.strip():
+            init_wheres.append(init_where_clause.strip())
+        init_filters = " AND ".join(init_wheres)
+        filters = init_filters.replace('account_move_line__move_id', 'm').replace('account_move_line',
+                                                                                  'l')
+        sql = ("""SELECT 0 AS lid, l.account_id AS account_id, '' AS ldate, '' AS lcode, NULL AS amount_currency, '' AS lref, 'Initial Balance' AS lname, COALESCE(SUM(l.debit),0.0) AS debit, COALESCE(SUM(l.credit),0.0) AS credit, COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) as balance, '' AS lpartner_id,\
+                                '' AS move_name, '' AS currency_code,\
+                                NULL AS currency_id,\
+                                '' AS invoice_id, '' AS invoice_type, '' AS invoice_number,\
+                                '' AS partner_name\
+                                FROM account_move_line l\
+                                LEFT JOIN account_move m ON (l.move_id=m.id)\
+                                LEFT JOIN res_currency c ON (l.currency_id=c.id)\
+                                LEFT JOIN res_partner p ON (l.partner_id=p.id)\
+                                LEFT JOIN account_invoice i ON (m.id =i.move_id)\
+                                JOIN account_journal j ON (l.journal_id=j.id)\
+                                WHERE l.account_id IN %s""" + filters + ' GROUP BY l.account_id')
+        params = (tuple(account_account.ids),) + tuple(init_where_params)
+        cr.execute(sql, params)
+        for row in cr.dictfetchall():
+            move_lines[row.pop('account_id')].append(row)
+
+        sql_sort = 'j.code, p.name, l.move_id'
+
+        # Prepare sql query base on selected parameters from wizard
+        tables, where_clause, where_params = MoveLine.with_context(date_from=date_start, date_to=end_date,
+                                                                   initial_bal=False, state=state, company_id=company,
+                                                                   strict_range=True)._query_get()
+        wheres = [""]
+        if where_clause.strip():
+            wheres.append(where_clause.strip())
+        filters = " AND ".join(wheres)
+        filters = filters.replace('account_move_line__move_id', 'm').replace('account_move_line', 'l')
+
+        # Get move lines base on sql query and Calculate the total balance of move lines
+        sql = ('''SELECT l.id AS lid, l.account_id AS account_id, l.date AS ldate, j.code AS lcode, l.currency_id, l.amount_currency, l.ref AS lref, l.name AS lname, COALESCE(l.debit,0) AS debit, COALESCE(l.credit,0) AS credit, COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) AS balance,\
+                    m.name AS move_name, '' AS move_id, c.symbol AS currency_code, p.name AS partner_name,\
+                    l.write_date AS write_date, l.move_id AS move_id\
+                    FROM account_move_line l\
+                    JOIN account_move m ON (l.move_id=m.id)\
+                    LEFT JOIN res_currency c ON (l.currency_id=c.id)\
+                    LEFT JOIN res_partner p ON (l.partner_id=p.id)\
+                    LEFT JOIN account_analytic_account a ON (l.analytic_account_id = a.id)\
+                    JOIN account_journal j ON (l.journal_id=j.id)\
+                    JOIN account_account acc ON (l.account_id = acc.id) \
+                    WHERE l.account_id IN %s ''' + filters + ''' GROUP BY l.id, l.account_id, l.date, j.code, l.currency_id, l.amount_currency, l.ref, l.name, m.name, c.symbol, p.name, a.id, m.id ORDER BY ''' + sql_sort)
+        params = (tuple(account_account.ids),) + tuple(where_params)
+        cr.execute(sql, params)
+
+        if currency_id1 == 4:
+            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency_id1)])
+        else:
+            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
+
+        for row in cr.dictfetchall():
+            balance = 0
+            for line in move_lines.get(row['account_id']):
+                balance += (line['debit'] - line['credit'])/currency_line.rate_real
+            row['balance'] += balance
+            move_lines[row.pop('account_id')].append(row)
+
+        for account in account_account:
+            res = dict((fn, 0.0) for fn in ['credit', 'debit', 'balance'])
+            res['code'] = account.code
+            res['name'] = account.name
+            res['move_lines'] = move_lines[account.id]
+            for line in res.get('move_lines'):
+                res['debit'] += line['debit']/currency_line.rate_real
+                res['credit'] += line['credit']/currency_line.rate_real
+                res['balance'] = line['balance']/currency_line.rate_real
+
+
+            if show_accounts == 0 and res.get('move_lines'):
+                cuentas.append(res)
+            if show_accounts == 1 and not currency[0].is_zero(res['balance']):
+                cuentas.append(res)
+        return cuentas
 
     @api.multi
-    def suma_totales(self, unico):
-        suma_debit = 0
-        suma_credit = 0
-        suma_saldo = 0
-        suma = []
-        for f in unico:
-            suma_debit += f['debit']
-            suma_credit += f['credit']
-            suma_saldo += f['saldo']
-        suma.append({
-            'suma_debit': suma_debit,
-            'suma_credit': suma_credit,
-            'suma_saldo': suma_saldo,
-        })
+    def suma_totales(self, cuentas, currency_id1,tasa):
+        if currency_id1 == 4:
+            currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency_id1)])
+        else:
+            currency_line = self.env['res.currency.rate'].search([('id', '=', tasa)])
 
-        return suma
+        res_totales = dict((fn, 0.0) for fn in ['credit_total', 'debit_total', 'balance_total'])
+        total_credit = 0.0
+        total_debit = 0.0
+        total_balance = 0.0
+
+        for account in cuentas:
+            total_credit += account['credit']
+            total_debit += account['debit']
+            total_balance += account['balance']
+
+        res_totales['credit_total'] = total_credit/currency_line.rate_real
+        res_totales['debit_total'] = total_debit/currency_line.rate_real
+        res_totales['balance_total'] = total_balance/currency_line.rate_real
+        return res_totales
+
