@@ -1,6 +1,4 @@
 # coding: utf-8
-
-
 from odoo import models, fields, api
 from odoo.tools.translate import _
 from datetime import datetime,date
@@ -16,11 +14,13 @@ class AccountInvoice(models.Model):
              " need to put here this number to be able to declarate on"
              " Fiscal reports correctly.", store=True)
 
+    @api.multi
     def _get_company(self):
         uid = self._uid
         res_company = self.env['res.company'].search([('id', '=', uid)])
         return res_company
 
+    @api.multi
     def action_invoice_open(self):
         var = super(AccountInvoice, self).action_invoice_open()
         if self.type in ('out_invoice', 'out_refund'):
@@ -29,6 +29,7 @@ class AccountInvoice(models.Model):
 
         return var
 
+    @api.multi
     def _get_sequence_code(self):
         '''metodo que crea la secuencia del número de control, si no esta creada crea una con el
         nombre: 'l10n_nro_control'''

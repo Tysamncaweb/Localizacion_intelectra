@@ -12,6 +12,8 @@
     "colaborador":"Nathaly Partidas",
     "depends": [
         "account",
+        "l10n_ve_fiscal_requirements",
+        "base"
     ],
     'demo': [
     ],
