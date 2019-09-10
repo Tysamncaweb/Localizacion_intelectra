@@ -869,24 +869,20 @@ class ReportAnalyticForAccount(models.AbstractModel):
                     fecha_anterior = fecha_dia_rate_ord[posicion +1]
                     rate_id = self.env['res.currency.rate'].search(
                         [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
-                    tasa_me = rate_id.rate_real
+                    if rate_id:
+                        for r in rate_id:
+                            tasa_me = r.rate_real
+                    else:
+                        tasa_me = 1
                 elif posicion >= 1:
                     fecha_anterior = fecha_dia_rate_ord[posicion-1]
                     rate_id = self.env['res.currency.rate'].search(
                         [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
-                    tasa_me = rate_id[0].rate_real
-
-                #for fecha in fecha_dia_rate_ord:
-                #    posicion += 1
-                #    if fecha == fecha_movimiento:
-                #        fecha_anterior = fecha_dia_rate_ord[posicion-2]
-                #        rate_id = self.env['res.currency.rate'].search(
-                #            [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
-                #        tasa_me = rate_id.rate_real
-
-                #rate_id = self.env['res.currency.rate'].search(
-                #            [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
-                #tasa_me = rate_id.rate_real
+                    if rate_id:
+                        for r in rate_id:
+                            tasa_me = r.rate_real
+                    else:
+                        tasa_me = 1
             else:
                 pass
         return tasa_me
