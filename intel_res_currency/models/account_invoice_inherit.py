@@ -75,6 +75,7 @@ class AccountInvoice(models.Model):
                     self.amount_total_bs = self.amount_total_company_signed = amount_total_company_signed * sign
                     self.amount_total_signed = self.amount_total * sign
                     self.amount_untaxed_bs = self.amount_untaxed_signed = amount_untaxed_signed * sign
+                    self.residual_bs= self.residual * fecha_rate.rate_real
             else:
                 raise UserError('No hay tasas en esta fecha')
 
@@ -100,24 +101,45 @@ class AccountInvoice(models.Model):
         move = self.env['account.move'].search([('id', '=', self.move_id.id)])
         move.write({'amount': self.amount_total_bs,
                     'state': 'draft'})
+        if self.type == 'out_invoice' or self.type == 'out_refund':
 
-        for a in move_id:
-            move_line.append(a.id)
-        move_line.sort(reverse=True)
+            for a in move_id:
+                move_line.append(a.id)
+            move_line.sort(reverse=True)
 
-        for m in self.invoice_line_ids:
-            for u in move_id:
-                if u.product_id.id == m.product_id.id:
-                    u.write({'debit': 0.00,
-                             'credit': m.price_subtotal_signed})
+            for m in self.invoice_line_ids:
+                for u in move_id:
+                    if u.product_id.id == m.product_id.id:
+                        u.write({'debit': 0.00,
+                                 'credit': m.price_subtotal_signed})
 
-                if u.name == m.invoice_line_tax_ids.name:
-                    u.write({'debit': 0.00,
-                             'credit': m.tax})
+                    if u.name == m.invoice_line_tax_ids.name:
+                        u.write({'debit': 0.00,
+                                 'credit': m.tax})
 
-                if move_line[0] == u.id:
-                    u.write({'debit': self.amount_total_bs,
-                             'credit': 0.00})
+                    if move_line[0] == u.id:
+                        u.write({'debit': self.amount_total_bs,
+                                 'credit': 0.00})
+        else:
+
+            for a in move_id:
+                move_line.append(a.id)
+            move_line.sort(reverse=True)
+
+            for m in self.invoice_line_ids:
+                for u in move_id:
+                    if u.product_id.id == m.product_id.id:
+                        u.write({'credit': 0.00,
+                                 'debit': m.price_subtotal_signed})
+
+                    if u.name == m.invoice_line_tax_ids.name:
+                        u.write({'credit': 0.00,
+                                 'debit': m.tax})
+
+                    if move_line[0] == u.id:
+                        u.write({'credit': self.amount_total_bs,
+                                 'debit': 0.00})
+
 
         move.write({'state': 'posted'})
         return to_open_invoices.invoice_validate()

@@ -6,28 +6,23 @@ from datetime import timedelta, date, datetime
 class CurrencyRate(models.Model):
     _inherit = "res.currency.rate"
 
-    hora = fields.Datetime('Fecha y Hora', default=datetime.today())
+    hora = fields.Datetime('Fecha y Hora', default=datetime.today(), required=True)
     rate_real = fields.Float(digits=(12, 2), help='se introduce la tasa real del mercado')
     rate = fields.Float(digits=(12, 9), help='The rate of the currency to the currency of rate 1')
     _sql_constraints = [('unique_name_per_day', 'CHECK(1=1)', 'Only one currency rate per day allowed!')]
 
-    @api.onchange('hora')
+    @api.onchange()
     def fecha_y_hora (self):
-        #fecha = self.env['res.currency.rate'].search([('id','=', self._origin._ids)])
-        #fecha.write({'name': self.hora[0:10]})
         self.name = self.hora[0:10]
 
 
-    @api.onchange('rate_real')
+    @api.onchange('rate_real', 'hora')
     def fecha_y_hora(self):
-
+        self.name = self.hora[0:10]
         if self.rate_real != 0.0:
             rate = (1 / self.rate_real)
             self.rate = rate
-            #factura = self.env['account.invoice'].search([('id', '=', self._origin._ids)])
-            #fecha.write({'rate': rate, })
-            #tasa = self.env['res.currency'].search([('id', '=', self.currency_id.id)])
-            #tasa.write({'rate_real': self.rate_real, })
+
 
 class Currency(models.Model):
     _inherit = "res.currency"
@@ -96,4 +91,14 @@ class Currency(models.Model):
             a = to_currency.rate / from_currency.rate
         return a
 
+class account_move(models.Model):
+    _inherit = 'account.move'
 
+    @api.multi
+    def assert_balanced(self):
+        if not self.ids:
+            return True
+        mlo = self.env['account.move.line'].search([('move_id', '=',self.ids[0])])
+        if not mlo.reconcile:
+            super(account_move, self).assert_balanced(fields)
+        return True

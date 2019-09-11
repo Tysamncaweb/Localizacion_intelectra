@@ -36,7 +36,7 @@
                         <field name="amount_untaxed_bs" attrs="{'invisible': [('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
                         <field name="amount_tax_bs" attrs="{'invisible': [('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
                         <field name="amount_total_bs" class="oe_subtotal_footer_separator" attrs="{'invisible': [('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
-                        <field name="residual_bs" class="oe_subtotal_footer_separator" attrs="{'invisible': ['|',('state', 'in', ('draft', 'open')),('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
+                        <field name="residual_bs" class="oe_subtotal_footer_separator" attrs="{'invisible': ['|',('state', '=', 'draft'),('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
                     </group>
                 </xpath>
             </field>
@@ -62,7 +62,7 @@
                         <field name="amount_untaxed_bs" attrs="{'invisible': [('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
                         <field name="amount_tax_bs" attrs="{'invisible': [('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
                         <field name="amount_total_bs" class="oe_subtotal_footer_separator" attrs="{'invisible': [('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
-                        <field name="residual_bs" class="oe_subtotal_footer_separator" attrs="{'invisible': ['|',('state', 'in', ('draft', 'open')),('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
+                        <field name="residual_bs" class="oe_subtotal_footer_separator" attrs="{'invisible': ['|',('state', 'in', 'draft'),('currency_id', '=', 4)]}" readonly="1" force_save="1"/>
                     </group>
                 </xpath>
             </field>

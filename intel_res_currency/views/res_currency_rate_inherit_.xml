@@ -5,11 +5,11 @@
             <field name="model">res.currency.rate</field>
             <field name="inherit_id" ref="base.view_currency_rate_tree"/>
             <field name="arch" type="xml">
-                <field name="name" position="attributes">
+                <!--field name="name" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </field>
-                <field name="name" position="replace">
-                    <field name="name" string="Fecha y Hora"/>
+                </field-->
+                <field name="name" position="before">
+                    <field name="hora" string="Fecha y Hora"/>
                 </field>
                 <field name="rate" position="before">
                     <field name="rate_real" string="Tasa"/>
