@@ -13,7 +13,8 @@
                     <field name="fecha_inicio" string="Fecha Inicio" readonly="1"/>
                     <field name="fecha_fin" string="Fecha Fin" readonly="1"/>
                     <field name="fecha_aporte" string="Fecha del Aporte" readonly="1"/>
-                    <field name="monto_incremento" string="Monto del Aporte" readonly="1"/>
+                    <field name="type_record" string="Tipo de Registro" readonly="1"/>
+                    <field name="monto_incremento" string="Monto Generado de Prestacion" readonly="1"/>
                     <field name="dias_aporte" string="Días de Aporte" readonly="1"/>
                     <field name="salario_diario" string="Salario Integral Diario" readonly="1"/>
                 </tree>
@@ -29,35 +30,37 @@
                 <form string="Historico Prestaciones Sociales" delete="0">
                      <group name="main_group" cols="4">
                             <group name="grupo_1" cols="2">
-                                <separator string="Trabajador" colspan="2"/>
+                                <h2><a><b>Trabajador</b></a></h2>
                                 <field name="employee_id" string="Empleado" readonly="1"/>
                                 <field name="cedula_identidad" string="Cédula de Identidad" readonly="1"/>
                                 <field name="salario_diario" string="Salario Integral Diario" readonly="1"/>
-                                <separator string="Período" colspan="2"/>
+                               <h2><a><b>Período</b></a></h2>
                                 <field name="fecha_inicio" string="Fecha Inicio" readonly="1"/>
                                 <field name="fecha_fin" string="Fecha Fin" readonly="1"/>
-                                <separator string="Aportes" colspan="2"/>
-                                <field name="monto_incremento" string="Monto del Aporte" readonly="1"/>
+                                <h2><a><b>Aportes</b></a></h2>
+                                <field name="monto_incremento" string="Monto Generado de Prestación" readonly="1"/>
                                 <field name="fecha_aporte" string="Fecha del Aporte" readonly="1"/>
                                 <field name="dias_aporte" string="Días de Aporte" readonly="1"/>
-                                <field name="monto_acumulado" string="Monto Acumulado" readonly="1"/>
+                                <field name="monto_acumulado" string="Antiguedad Neto Acumulado" readonly="1"/>
                                 <field name="dias_acumuluados" string="Días Acumulados" readonly="1"/>
                                 <field name="dias_adicionales" string="Días Adicionales" readonly="1"/>
                                 <field name="aporte_dias_adic" string="Aporte Días Adicionales" readonly="1"/>
                             </group>
                             <group name="grupo_2" >
-                                <separator string="Anticipos" colspan="2"/>
-                                <field name="total_anticipos" string="Total Anticipos" readonly="1"/>
+                                <h2><a><b>Anticipos</b></a></h2>
+                                <field name="total_anticipos" string="Total Anticipos Prestaciones" readonly="1"/>
                                 <field name="anticipo" string="Último de Anticipo" readonly="1"/>
-                                <field name="fecha_anticipo" string="Fecha del Anticipo" readonly="1"/>
-                                <separator string="Intereses" colspan="2"/>
+                                <field name="fecha_anticipo" string="Fecha del Último Anticipo" readonly="1"/>
+                                <h2><a><b>Intereses</b></a></h2>
+                                <field name="tasa" string="Tasa de Interes" readonly="1"/>
                                 <field name="monto_intereses" string="Intereses de Trimestre" readonly="1"/>
-                                <field name="monto_total_intereses" string="Total Intereses" readonly="1"/>
-                                <field name="anticipo_intereses" string="Anticipo de Intereses" readonly="1"/>
-                                <field name="fecha_anticipo_intereses" string="Fecha de Anticipo de Intereses" readonly="1"/>
+                                <field name="interes_a_pagar" string="Interés a Pagar" readonly="1"/>
+                                <field name="monto_total_intereses" string="Total Intereses Acumulados" readonly="1"/>
+                                <field name="anticipo_intereses" string="Intereses Pagados" readonly="1"/>
+                                <field name="fecha_anticipo_intereses" string="Fecha de Intereses Pagados" readonly="1"/>
                             </group>
                      </group>
-                     <notebook name="intereses_fideicomiso">
+                     <!--notebook name="intereses_fideicomiso">
                          <page string="Cálculo de Intereses">
                              <field name="intereses_ids">
                                 <tree string="Intereses" readonly="1">
@@ -68,11 +71,23 @@
                                 </tree>
                              </field>
                          </page>
-                     </notebook>
+                     </notebook-->
                 </form >
             </field>
         </record>
         <!--  vista formulario fin-->
+
+        <record id="hr_payslip_anticipo_prest_form" model="ir.ui.view">
+            <field name="name">hr.payslip.anticipo.check.form</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="inherit_id" ref="hr_special_struct.hr_payslip_run_form_struct"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='struct_id']" position="after">
+                    <field name="tipo_nomina1" invisible="1"/>
+                    <field name="anticipo_check1" string="Anticipo Prestaciones"  attrs="{'invisible': [('tipo_nomina1', '!=', 'True')]}"/>
+                </xpath>
+            </field>
+        </record>
 
         <!--busqueda inicio-->
         <record id="view_hr_historico_fideicomiso_search" model="ir.ui.view">
@@ -83,7 +98,8 @@
                 <search string="Audit Logs">
                     <field name="employee_id"/>
                     <field name="cedula_identidad"/>
-	                <newline/>
+	                <field name="type_record"/>
+                    <newline/>
                 </search>
             </field>
         </record>

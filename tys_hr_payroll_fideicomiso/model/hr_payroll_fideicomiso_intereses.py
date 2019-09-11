@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from odoo import fields, models, api, exceptions
-from openerp.osv import osv
+#from openerp.osv import osv
 from odoo.exceptions import Warning
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT

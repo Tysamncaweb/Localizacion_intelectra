@@ -49,44 +49,47 @@ class hr_payslip(models.Model):
                     payslip = self.search([('id', '=', payslip_id)])
                     special_obj = special_struvct_obj.browse(structure_ids)
                     if 'code' in special_obj:
-                        dias_str = config_obj._hr_get_parameter('hr.dias.bono.vacacional')
-                        tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
-                        vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
-                        sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_from, 0,
-                                                                       'fideicomiso')
-                        if not payslip.contract_id:
-                            raise Warning((
-                                              u'El emleado %s no tiene contrato o la fecha de ingreso es posterior al período seleccionado.\n'
-                                              u' Por favor consulte con su supervisor inmediato!') % payslip.employee_id.name)
-                        # factor = self.get_days_utilidades(cr, uid) / float(12)
-                        salario_integral, factor_x_dias_x_mes, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
-                             sueldo_promedio,
-                            vacaciones.get('asignacion') if int(dias_str) == 0 else int(dias_str),
-                            payslip.contract_id.date_start, payslip.date_to)
+                        if psr.anticipo_check1 == False:
+                            dias_str = config_obj._hr_get_parameter('hr.dias.bono.vacacional')
+                            tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
+                            vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
+                            sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_to, 1,
+                                                                           'fideicomiso')
+                            if not payslip.contract_id:
+                                raise Warning((
+                                                  u'El emleado %s no tiene contrato o la fecha de ingreso es posterior al período seleccionado.\n'
+                                                  u' Por favor consulte con su supervisor inmediato!') % payslip.employee_id.name)
+                            # factor = self.get_days_utilidades(cr, uid) / float(12)
+                            salario_integral, factor_x_dias_x_mes, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
+                                 sueldo_promedio,
+                                vacaciones.get('asignacion') if int(dias_str) == 0 else int(dias_str),
+                                payslip.contract_id.date_start, payslip.date_to)
 
-                        dias_adic = self.get_fi_dias_adicionales( payslip.contract_id.date_start, payslip.date_to,
-                                                                 payslip.date_from)
-                        if dias_adic < 0:
-                            raise Warning((u'La fecha de ingreso del empleado %s es posterior al período seleccionado.\n'
-                                           u' Por favor consulte con su supervisor inmediato!') % payslip.employee_id.name)
-                        elif dias_adic > 0:
-                            salario_integral_dias_adic, factor_x_dias_x_mes_adic, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
-                                 sueldo_promedio, vacaciones.get('asignacion'),
-                                payslip.contract_id.date_start, payslip.date_to,
-                                dias_adic)
-                        # dias_acum = fi_hist_obj.get_last_history_fi(cr, uid,payslip.employee_id.id, None, context=context).dias_acumuluados
-                        payslip_values.update({
-                            'salario_mensual_fi': sueldo_promedio,
-                            'salario_integral_fi': salario_integral_diario,
-                            # 'salario_integral_fi': salario_integral,
-                            'dias_adicionales': dias_adic,
-                            'dias_acumulados': factor_x_dias_x_mes,
-                        })
-                        payslip.write(payslip_values)
+                            dias_adic = self.get_fi_dias_adicionales( payslip.contract_id.date_start, payslip.date_to,
+                                                                     payslip.date_from)
+                            if dias_adic < 0:
+                                raise Warning((u'La fecha de ingreso del empleado %s es posterior al período seleccionado.\n'
+                                               u' Por favor consulte con su supervisor inmediato!') % payslip.employee_id.name)
+                            elif dias_adic > 0:
+                                history = fi_hist_obj.get_last_history_fi(payslip.employee_id, payslip.employee_id.id, None)
+                                if history:
+                                    dias_adic = dias_adic - history.dias_adicionales
+
+                                salario_integral_dias_adic, factor_x_dias_x_mes_adic, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
+                                     sueldo_promedio, vacaciones.get('asignacion'),
+                                    payslip.contract_id.date_start, payslip.date_to,
+                                    dias_adic)
+                            # dias_acum = fi_hist_obj.get_last_history_fi(cr, uid,payslip.employee_id.id, None, context=context).dias_acumuluados
+                            payslip_values.update({
+                                'salario_mensual_fi': sueldo_promedio,
+                                'salario_integral_fi': salario_integral_diario,
+                                # 'salario_integral_fi': salario_integral,
+                                'dias_adicionales': dias_adic,
+                                'dias_acumulados': factor_x_dias_x_mes,
+                            })
+                            payslip.write(payslip_values)
         res = super(hr_payslip, self).compute_sheet()
         return res
-
-
 
     @api.multi
     def calculo_fideicomiso(self,sueldo_normal, dias_b_v, date_start, fecha_hasta, dias_adic=None):
@@ -156,27 +159,26 @@ class hr_payslip(models.Model):
         diferencia = datetime.strptime(fecha_hasta, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT)
         diferencia2 = datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT)
 
-        if int(date_start.split('-')[1]) <= int(fecha_desde.split('-')[1]) <= int(fecha_hasta.split('-')[1]):
-            factor_str = config_obj._hr_get_parameter('hr.fi.factor.dias.adicionales')
-            if anios == int(anios_ley_str):
-                anios = 1
-            elif anios > 0:
-                anios = anios - 1
-            dias = int(factor_str) * anios
-            if dias > int(maximo_str): dias = int(maximo_str)
-        elif diferencia.days < 0:
-            dias = -1
-        elif diferencia2.days < 0:
-            dias = 0
-        return dias
+        if int(date_start.split('-')[0]) <= int(fecha_desde.split('-')[0]) <= int(fecha_hasta.split('-')[0]):
+            if int(fecha_desde.split('-')[1]) <= int(date_start.split('-')[1]) <= int(fecha_hasta.split('-')[1]):
+                factor_str = config_obj._hr_get_parameter('hr.fi.factor.dias.adicionales')
+                if anios == int(anios_ley_str):
+                    anios = 0
+                elif anios > 0 and anios > int(anios_ley_str) :
+                    anios = anios - 2
+                if anios != 1:
+                    dias = int(factor_str) * anios
+                if dias > int(maximo_str): dias = int(maximo_str)
+            elif diferencia.days < 0:
+                dias = -1
+            elif diferencia2.days < 0:
+                dias = 0
+            return dias
 
+'''
 class hr_contract(models.Model):
     _inherit = 'hr.contract'
 
     fecha_modificado = fields.Date('Bono Nocturno Valor')
     fideicomiso = fields.Float('Bono Nocturno', digits=(10, 2))
-
-
-
-
-
+'''
