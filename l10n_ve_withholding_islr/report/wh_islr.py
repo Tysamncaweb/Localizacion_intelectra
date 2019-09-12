@@ -56,7 +56,7 @@ class RepComprobanteIslr(models.AbstractModel):
 
     def _get_supplier_invoice_number(self, id):
 
-        supplier_number = id[0].invoice_id.supplier_invoice_number
+        supplier_number = id[0].invoice_id.number
         return supplier_number
 
     def _get_nro_ctrl(self, id):

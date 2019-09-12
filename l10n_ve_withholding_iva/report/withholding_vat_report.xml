@@ -136,7 +136,7 @@
                             <span t-field="d.wh_lines.invoice_id.date_document" t-options='{"format": "MM/dd/yyyy"}'/>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
-                            <span t-esc="d.wh_lines.invoice_id.supplier_invoice_number"/>
+                            <span t-esc="d.wh_lines.invoice_id.number"/>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <span t-esc="d.wh_lines.invoice_id.nro_ctrl"/>
