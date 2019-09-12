@@ -58,7 +58,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_enero += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_enero += regla.total
-                porcentaje_enero = (monto_islr_enero*100)/salario_enero
+                if salario_enero == 0:
+                    porcentaje_enero = 0.0
+                else:
+                    porcentaje_enero = (monto_islr_enero*100)/salario_enero
 
             if str(slip.date_to[5:7]) == '02':
                 mes = 'FEBRERO'
@@ -67,7 +70,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_febrero += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_febrero += regla.total
-                porcentaje_febrero = (monto_islr_febrero*100)/salario_febrero
+                if salario_febrero == 0:
+                    porcentaje_febrero = 0.0
+                else:
+                    porcentaje_febrero = (monto_islr_febrero*100)/salario_febrero
 
             if str(slip.date_to[5:7]) == '03':
                 mes = 'MARZO'
@@ -76,7 +82,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_marzo += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_marzo += regla.total
-                porcentaje_marzo = (monto_islr_marzo*100)/salario_marzo
+                if salario_marzo == 0:
+                    porcentaje_marzo = 0.0
+                else:
+                    porcentaje_marzo = (monto_islr_marzo*100)/salario_marzo
 
             if str(slip.date_to[5:7]) == '04':
                 mes = 'ABRIL'
@@ -85,7 +94,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_abril += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_abril += regla.total
-                porcentaje_abril = (monto_islr_abril*100)/salario_abril
+                if salario_abril == 0:
+                    porcentaje_abril = 0.0
+                else:
+                    porcentaje_abril = (monto_islr_abril*100)/salario_abril
 
             if str(slip.date_to[5:7]) == '05':
                 mes = 'MAYO'
@@ -94,7 +106,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_mayo += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_mayo += regla.total
-                porcentaje_mayo = (monto_islr_mayo*100)/salario_mayo
+                if salario_mayo == 0:
+                    porcentaje_mayo = 0.0
+                else:
+                    porcentaje_mayo = (monto_islr_mayo*100)/salario_mayo
 
             if str(slip.date_to[5:7]) == '06':
                 mes = 'JUNIO'
@@ -103,7 +118,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_junio += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_junio += regla.total
-                porcentaje_junio = (monto_islr_junio*100)/salario_junio
+                if salario_junio == 0:
+                    porcentaje_junio = 0.0
+                else:
+                    porcentaje_junio = (monto_islr_junio*100)/salario_junio
 
             if str(slip.date_to[5:7]) == '07':
                 mes = 'JULIO'
@@ -112,7 +130,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_julio += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_julio += regla.total
-                porcentaje_julio = (monto_islr_julio*100)/salario_julio
+                if salario_julio == 0:
+                    porcentaje_julio = 0.0
+                else:
+                     porcentaje_julio = (monto_islr_julio*100)/salario_julio
 
             if str(slip.date_to[5:7]) == '08':
                 mes = 'AGOSTO'
@@ -121,7 +142,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_agosto += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_agosto += regla.total
-                porcentaje_agosto = (monto_islr_agosto*100)/salario_agosto
+                if salario_agosto == 0:
+                    porcentaje_agosto = 0.0
+                else:
+                     porcentaje_agosto = (monto_islr_agosto*100)/salario_agosto
 
             if str(slip.date_to[5:7]) == '09':
                 mes = 'SEPTIEMBRE'
@@ -130,7 +154,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_septiembre += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_septiembre += regla.total
-                porcentaje_septiembre = (monto_islr_septiembre*100)/salario_septiembre
+                if salario_septiembre == 0:
+                    porcentaje_septiembre = 0.0
+                else:
+                    porcentaje_septiembre = (monto_islr_septiembre*100)/salario_septiembre
 
             if str(slip.date_to[5:7]) == '10':
                 mes = 'OCTUBRE'
@@ -139,7 +166,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_octubre += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_octubre += regla.total
-                porcentaje_octubre = (monto_islr_octubre*100)/salario_octubre
+                if salario_octubre == 0:
+                    porcentaje_octubre = 0.0
+                else:
+                    porcentaje_octubre = (monto_islr_octubre*100)/salario_octubre
 
             if str(slip.date_to[5:7]) == '11':
                 mes = 'NOVIEMBRE'
@@ -148,7 +178,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_noviembre += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_noviembre += regla.total
-                porcentaje_noviembre = (monto_islr_noviembre*100)/salario_noviembre
+                if salario_noviembre == 0:
+                    porcentaje_noviembre = 0.0
+                else:
+                    porcentaje_noviembre = (monto_islr_noviembre*100)/salario_noviembre
 
             if str(slip.date_to[5:7]) == '12':
                 mes = 'DICIEMBRE'
@@ -157,7 +190,10 @@ class ReportAccountPayment_5(models.AbstractModel):
                         monto_islr_diciembre += regla.total
                     if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
                         salario_diciembre += regla.total
-                porcentaje_diciembre = (monto_islr_diciembre*100)/salario_diciembre
+                if salario_diciembre == 0:
+                    porcentaje_diciembre = 0.0
+                else:
+                    porcentaje_diciembre = (monto_islr_diciembre*100)/salario_diciembre
 
         impuesto_enero = monto_islr_enero
         remuneracion_enero = salario_enero

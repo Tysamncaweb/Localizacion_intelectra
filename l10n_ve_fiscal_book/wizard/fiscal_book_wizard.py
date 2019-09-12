@@ -385,7 +385,7 @@ class FiscalBookSaleReport(models.AbstractModel):
                 'people_type': line.people_type,
                 'export_form': '',
                 'wh_number': line.wh_number,
-                'invoice_number': line.invoice_number if line.doc_type == 'FACT' else '',
+                'invoice_number': line.invoice_number,
                 'ctrl_number': line.ctrl_number,
                 'debit_note': '',
                 'credit_note': line.wh_number if line.doc_type == 'N/CR' else '',

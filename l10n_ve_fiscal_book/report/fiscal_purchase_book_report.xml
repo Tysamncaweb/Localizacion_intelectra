@@ -110,12 +110,12 @@
                                   <p></p> <!-- Nro. expediente de importación-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <t t-if="o['doc_type'] == 'N/DB'">
+                                    <!--t t-if="o['doc_type'] == 'N/DB'">
                                             <span t-esc="o['origin']"/>
                                     </t>
-                                    <t t-if="o['doc_type'] != 'N/DB'">
+                                    <t t-if="o['doc_type'] != 'N/DB'"-->
                                         <span t-esc="o['invoice_number']"/><!--Nro. documento o factura-->
-                                    </t>
+                                    <!--/t-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['ctrl_number']"/><!-- Nro. de control-->

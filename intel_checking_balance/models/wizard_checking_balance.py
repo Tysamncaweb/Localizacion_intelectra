@@ -290,8 +290,8 @@ class RetentionISLR(models.Model):
 
                 if self.balance == True:
                     row += 1
-                    for line in a['move_lines']:
-                        if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial' :
+                    for line in a.get('move_lines'):
+                        if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
                             writer.write_merge(row, row, 1, 6, "Balance Inicial", sub_header_content_style)
                             writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", line['debit']/currency_line.rate_real, grouping=True),
                                                line_content_style)

@@ -1053,8 +1053,7 @@ class FiscalBook(models.Model):
                     False,
                 'ctrl_number':
                     not inv_brw.fiscal_printer and
-                    inv_brw.nro_ctrl or
-                    False,
+                    (inv_brw.nro_ctrl if inv_brw.nro_ctrl != 'False' else ''),
                 'affected_invoice':
                     (doc_type == "N/DB" or doc_type == "N/CR") and (
                             inv_brw.parent_id and
