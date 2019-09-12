@@ -976,15 +976,17 @@ class FiscalBook(models.Model):
         if fb_brw.iwdl_ids:
             orphan_iwdl_ids = self._get_orphan_iwdl_ids(fb_id)
             no_match_dt_iwdl_ids = self._get_no_match_date_iwdl_ids(fb_id)
-            iwdl_ids = orphan_iwdl_ids + no_match_dt_iwdl_ids
+            iwdl_ids = orphan_iwdl_ids
+            for nm in no_match_dt_iwdl_ids:
+                iwdl_ids += nm
             t_type = fb_brw.type == 'sale' and 'tp' or 'do'
-            for iwdl_brw in iwdl_obj.browse(iwdl_ids):
+            for iwdl_brw in iwdl_ids:
                 rp_brw = rp_obj._find_accounting_partner(iwdl_brw.retention_id.partner_id)
                 values = {'iwdl_id': iwdl_brw.id,
                           'type': t_type,
                           'accounting_date': iwdl_brw.date_ret or False,
                           'emission_date': iwdl_brw.date or iwdl_brw.date_ret or False,
-                          'doc_type': self.get_doc_type(iwdl_id=iwdl_brw.id, fb_id=fb_id),
+                          'doc_type': self.get_doc_type(inv_id=iwdl_brw.invoice_id.id, iwdl_id=iwdl_brw.id),
                           'wh_number': iwdl_brw.retention_id.number or False,
                           'get_wh_vat': iwdl_brw and iwdl_brw.amount_tax_ret or 0.0,
                           'partner_name': rp_brw.name or 'N/A',

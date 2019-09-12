@@ -79,12 +79,12 @@ class hr_historico_fideicomiso(models.Model):
                            u' Por favor consulte con su supervisor inmediato!'))
 
     @api.multi
-    def get_last_history_fi(self,emplo, employee_id, id =None):
+    def get_last_history_fi(self, employee_id, id =None):
         dominio = [('employee_id', '=', employee_id)]
         fecha = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
-        fechita = emplo.contract_id.fecha22
+      #  fechita = emplo.contract_id.fecha22
 
-        dominio.append(('fecha_fin', '<', fechita))
+        dominio.append(('fecha_fin', '<', fecha))
         # if record_type == 'fideicomiso':
         #     dominio.append(('monto_acumulado','!=',None),('monto_acum_tri_ant','!=',None))
         # elif record_type == 'anticipo':
@@ -177,7 +177,7 @@ class hr_historico_fideicomiso(models.Model):
         return history_new_values
 
     @api.multi
-    def procesar_anticipo(self, lds, emplo, employee_id, values):
+    def procesar_anticipo(self, lds, employee_id, values):
         line_obj = self.env['hr.payslip.line']
         contract_obj = self.env['hr.contract']
         history_values = {}
@@ -189,7 +189,7 @@ class hr_historico_fideicomiso(models.Model):
             monto = line.amount
             contract_values = {}
             if line.code == values.get('code_anticipo',False):
-                history = self.get_last_history_fi(emplo, employee_id, None)
+                history = self.get_last_history_fi( employee_id, None)
                 if history:
                     acumulado = history.monto_acumulado
                 if acumulado > 0 and  acumulado >= monto:
@@ -240,7 +240,7 @@ class hr_historico_fideicomiso(models.Model):
         for line in lds:
             contract_values = {}
             if line.code == values.get('code_intereses', False):
-                history = self.get_last_history_fi(employee_id, employee_id.id, None)
+                history = self.get_last_history_fi( employee_id.id, None)
                 if history:
                     anticipo_ultimo = monto_anticipo1
                     tasa = intereses_obj.get_tasa(fecha_inicio)
@@ -322,7 +322,7 @@ class hr_payslip_run(models.Model):
                 contract_id = p.contract_id
                 sal_int_diario = p.salario_integral_fi
                 # REGISTRO DEL HISTORICO DE PRESTACIONES SOCIALES
-                history = fi_hist_obj.get_last_history_fi(p.employee_id, p.employee_id.id, None)
+                history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None)
                 history_new_values.update({'monto_acum_tri_ant':history.monto_acumulado})
                 payslip_values.update({'monto_incremento':sal_int_diario*p.dias_acumulados,'dias_acumulados':p.dias_acumulados,'dias_adicionales':p.dias_adicionales})
                 history_new_values = fi_hist_obj.calculate_acum(history, payslip_values)

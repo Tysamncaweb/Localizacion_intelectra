@@ -71,7 +71,7 @@ class hr_payslip(models.Model):
                                 raise Warning((u'La fecha de ingreso del empleado %s es posterior al período seleccionado.\n'
                                                u' Por favor consulte con su supervisor inmediato!') % payslip.employee_id.name)
                             elif dias_adic > 0:
-                                history = fi_hist_obj.get_last_history_fi(payslip.employee_id, payslip.employee_id.id, None)
+                                history = fi_hist_obj.get_last_history_fi(payslip.employee_id.id, None)
                                 if history:
                                     dias_adic = dias_adic - history.dias_adicionales
 

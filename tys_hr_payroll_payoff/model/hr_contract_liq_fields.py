@@ -51,13 +51,52 @@ class hr_payslip_run(models.Model):
 
     @api.multi
     def close_payslip_run(self):
+        res = super(hr_payslip_run, self).close_payslip_run()
+        payslip_obj = self.env['hr.payslip']
+        contract_obj = self.env['hr.contract']
+        fi_hist_obj = self.env['hr.historico.fideicomiso']
+        config_obj = self.env['hr.config.parameter']
+        line_obj = self.env['hr.payslip.line']
+        history = None
+        contract_values = {}
+        tipo_nomina = config_obj._hr_get_parameter('hr.payroll.codigos.nomina.prestaciones', True)
+        psr = self.browse(self._ids[0])
+        payslip_ids = payslip_obj.search([('payslip_run_id', '=', self._ids[0])])
+
+      #  payslips = payslip_obj.browse(payslip_ids)
+        if psr.check_special_struct and tipo_nomina in psr.struct_id.code:
+            for p in payslip_ids:
+                contract_id = p.contract_id
+                # REGISTRO DEL HISTORICO DE PRESTACIONES SOCIALES
+                history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None)
+                contract_values.update({'total_acum_ps': history.monto_acumulado,
+                                        'total_acum_anticipo_ps': history.total_anticipos,
+                                        'dias_acum_fideicomiso': history.dias_acumuluados,
+                                        'dias_adic_fideicomiso': history.dias_adicionales})
+                contract_id.write(contract_values)
+        else:
+            # ANTICIPOS
+            for p in payslip_ids:
+                # ANTICIPO DE PRESTACIONES SOCIALES
+                contract_id = p.contract_id
+                code_anticipo = config_obj._hr_get_parameter('hr.payroll.anticipo.prestaciones', False)
+                line_id = line_obj.search([('slip_id', '=', p.id), ('code', '=', code_anticipo)])
+                if line_id:
+                    history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None)
+                    contract_values.update({'total_acum_ps': history.monto_acumulado,
+                                            'total_acum_anticipo_ps': history.total_anticipos,
+                                            'dias_acum_fideicomiso': history.dias_acumuluados,
+                                            'dias_adic_fideicomiso': history.dias_adicionales})
+                    contract_id.write(contract_values)
+     #   return res
+
         config_obj = self.env['hr.config.parameter']
         if self._context is None: context = {}
         if not hasattr(self._ids, '__iter__'): ids = [self._ids]
         for pro in self.browse(self._ids):
             if pro.check_special_struct and config_obj._hr_get_parameter('hr.payroll.codigos.nomina.prestaciones',True) in pro.struct_id.code:
                 self.actualiza_dias_acum_fi(pro.slip_ids)
-        res = super(hr_payslip_run, self).close_payslip_run(self._ids)
+
         return res
 
     @api.multi
@@ -65,17 +104,18 @@ class hr_payslip_run(models.Model):
         payslip_obj = self.env['hr.payslip']
         contract_obj = self.env['hr.contract']
         payslip_ids = payslip_obj.search([('id', '=', [s.id for s in ids])])
-        payslips = payslip_obj.browse(payslip_ids)
-        for p in payslips:
+     #   payslips = payslip_obj.browse(payslip_ids)
+        for p in payslip_ids:
             acumulado = p.contract_id.dias_acum_fideicomiso + p.dias_acumulados
             adicionales = p.contract_id.dias_adic_fideicomiso + p.dias_adicionales
             contract_obj.write({
                     'dias_acum_fideicomiso': acumulado,
                     'dias_adic_fideicomiso': adicionales})
 
-    @api.multi
+'''
+@api.multi
     def close_payslip_run(self):
-        res = super(hr_payslip_run, self).close_payslip_run(self)
+        res = super(hr_payslip_run, self).close_payslip_run()
         payslip_obj = self.env['hr.payslip']
         contract_obj = self.env['hr.contract']
         fi_hist_obj = self.env['hr.historico.fideicomiso']
@@ -114,5 +154,5 @@ class hr_payslip_run(models.Model):
 
 hr_payslip_run()
 
-
+'''
 

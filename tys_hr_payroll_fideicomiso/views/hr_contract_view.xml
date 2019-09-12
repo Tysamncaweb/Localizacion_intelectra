@@ -15,7 +15,7 @@
                            <field name="monto_acumulado" string="Monto Acumulado de Prestaciones" readonly="1" style="width: 35%%"/>
                            <field name="fecha_ult_actualizacion" string="Fecha de Última Actualización" readonly="1"/>
                            <label for= "anticipo_check" string="Anticipo de Prestaciones"/>
-                            <field name="fecha22" string="fehca que tal"/>
+
                            <div>
                                <div class="address_format">
                                    <field name="anticipo_check" style="width: 15%%"/>
