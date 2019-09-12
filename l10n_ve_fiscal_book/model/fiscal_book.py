@@ -971,6 +971,7 @@ class FiscalBook(models.Model):
         iwdl_obj = self.env['account.wh.iva.line']
         fb_brw = self.browse(fb_id)
         rp_obj = self.env['res.partner']
+        local_inv_affected = ''
 
         # add book lines for withholding iva lines
         if fb_brw.iwdl_ids:
@@ -1019,6 +1020,13 @@ class FiscalBook(models.Model):
                             fb_brw.type == 'sale' and
                             inv_brw.number or
                             inv_brw.supplier_invoice_number)
+            if (doc_type == "N/DB" or doc_type == "N/CR"):
+                if fb_brw.type == 'sale':
+                    if inv_brw.refund_invoice_id:
+                        local_inv_affected = inv_brw.parent_id and inv_brw.parent_id.number or ''
+                else:
+                    local_inv_affected = inv_brw.refund_invoice_id and inv_brw.refund_invoice_id.supplier_invoice_number or ''
+
             values = {
                 'invoice_id': inv_brw.id,
                 'emission_date':
@@ -1055,11 +1063,7 @@ class FiscalBook(models.Model):
                     not inv_brw.fiscal_printer and
                     (inv_brw.nro_ctrl if inv_brw.nro_ctrl != 'False' else ''),
                 'affected_invoice':
-                    (doc_type == "N/DB" or doc_type == "N/CR") and (
-                            inv_brw.parent_id and
-                            inv_brw.parent_id.number or
-                            False) or
-                    False,
+                    (doc_type == "N/DB" or doc_type == "N/CR") and local_inv_affected,
                 'partner_name': rp_brw.name or 'N/A',
                 'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
                 'partner_vat': rp_brw.vat and rp_brw.vat[2:] or 'N/A',  #TODO Revisar validación de rif en el partner. Esta guardando los partner sin rif

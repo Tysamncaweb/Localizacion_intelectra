@@ -71,6 +71,7 @@ class hr__days_period(models.Model):
             #               var.write({'number_of_days': '7'})
             #            if var.number_of_days == 5:
             #                var.write({'number_of_days': '7'})
+            #codigo_vacaciones = self.env['hr.config.parameter']._hr_get_parameter('hr.payroll.codigos.nomina.vacaciones', True)
             if check_struct != False:
                if  a.payslip_run_id.struct_id.code == '7000':
                     for var2 in a.worked_days_line_ids:
@@ -79,6 +80,19 @@ class hr__days_period(models.Model):
                     for var3 in a.worked_days_line_ids:
                          if var3.code == 'WORK100':
                             var3.write({'number_of_days': 30 - cont_dias})
+
+            if a.payslip_run_id.struct_id.code :
+                dias_vacaciones = 0
+                #vacacion =   self.env['hr.holidays'].search([('employee_id', '=', a.employee_id.id),('vacation','=',True),('date_from','<=',a.date_to),('date_to','>=',a.date_from)])
+                for vac1 in a.worked_days_line_ids:
+                    if (vac1.code.find("acacion") != -1) or (vac1.code.find("ACACION") != -1):
+                        dias_vacaciones = vac1.number_of_days
+                for vac1 in a.worked_days_line_ids:
+                    if dias_vacaciones > 0:
+                        for var33 in a.worked_days_line_ids:
+                            if var33.code == 'WORK100':
+                                var33.write({'number_of_days': dias_vacaciones + var33.number_of_days})
+                                dias_vacaciones = 0
         res = super(hr__days_period, self).compute_sheet()
         return res
             
