@@ -269,9 +269,9 @@ class hr_payslip_run(models.Model):
         if especial or struct_id:
             struct = struct_obj.browse(struct_id)
             struct_name = struct.name
-            if 'UTILIDAD' in struct_name.upper() and is_anticipo and dias == 0:
-                raise exceptions.except_orm(('Advertencia!'), (
-                    u'El Número de días a pagar no puede ser 0! Por favor verifique e intente nuevamente.'))
+          #  if 'UTILIDAD' in struct_name.upper() and is_anticipo and dias == 0:
+           #     raise exceptions.except_orm(('Advertencia!'), (
+            #        u'El Número de días a pagar no puede ser 0! Por favor verifique e intente nuevamente.'))
         else:
             hr_util_obj = self.env['hr.payroll.utilidades']
             # for psr in self.browse(cr, uid, id, context=context):

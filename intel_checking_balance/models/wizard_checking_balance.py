@@ -281,22 +281,22 @@ class RetentionISLR(models.Model):
 
             for a in cuentas:
                 row += 1
-                writer.write_merge(row, row, 1, 1, a['code'],sub_header_content_style )
-                writer.write_merge(row, row, 2, 4, a['name'], sub_header_content_style)
-                writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", a['debit'], grouping=True), line_content_style)
-                writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", a['credit'], grouping=True), line_content_style)
-                writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", a['balance'], grouping=True), line_content_style)
+                writer.write_merge(row, row, 1, 1, a['code'],sub_header_style_bold )
+                writer.write_merge(row, row, 2, 4, a['name'], sub_header_style_bold)
+                writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", a['debit'], grouping=True), sub_header_style_bold1)
+                writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", a['credit'], grouping=True), sub_header_style_bold1)
+                writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", a['balance'], grouping=True), sub_header_style_bold1)
 
 
                 if self.balance == True:
+                    row += 1
                     for line in a['move_lines']:
                         if line['lname'] == 'Initial Balance':
-                            row += 1
-                            writer.write_merge(row, row, 1, 6, "Balance Inicial", sub_header_style_bold)
+                            writer.write_merge(row, row, 1, 6, "Balance Inicial", sub_header_content_style)
                             writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", line['debit']/currency_line.rate_real, grouping=True),
-                                               sub_header_style_bold1)
-                            writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", line['credit']/currency_line.rate_real, grouping=True), sub_header_style_bold1)
-                            writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", line['balance']/currency_line.rate_real, grouping=True), sub_header_style_bold1)
+                                               line_content_style)
+                            writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", line['credit']/currency_line.rate_real, grouping=True), line_content_style)
+                            writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", line['balance']/currency_line.rate_real, grouping=True), line_content_style)
 
 
             row +=1

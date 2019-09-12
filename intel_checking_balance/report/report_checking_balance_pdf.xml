@@ -78,27 +78,27 @@
                             <tbody>
                                 <t t-foreach="cuentas" t-as="o" style=" height: 25px;">
                                     <tr>
-                                        <td class="text-left" style=" vertical-align: middle; "><span t-esc="o['code']"/></td>
-                                        <td class="text-left" style=" vertical-align: middle; "><span t-esc="o['name']"/></td>
+                                        <td class="text-left" style=" vertical-align: middle; "><strong><span t-esc="o['code']"/></strong></td>
+                                        <td class="text-left" style=" vertical-align: middle; "><strong><span t-esc="o['name']"/></strong></td>
                                         <!--td t-if="balance == True" class="text-right" style=" vertical-align: middle; "><span t-esc="'{0:,.2f}'.format(o['amount']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                         <td t-else="balance == False"></td-->
-                                        <td class="text-right" style=" vertical-align: middle;"><span t-esc="'{0:,.2f}'.format(o['debit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                                        <td class="text-right" style=" vertical-align: middle;"><span t-esc="'{0:,.2f}'.format(o['credit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                                        <td class="text-right" style=" vertical-align: middle;"><span t-esc="'{0:,.2f}'.format(o['balance']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                                        <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['debit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
+                                        <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['credit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
+                                        <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['balance']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
                                     </tr>
 
                                     <tr t-if="balance == True" t-foreach="o['move_lines']" t-as="line">
                                         <span t-if="line['lname'] == 'Initial Balance'">
-                                            <td colspan="2"><strong>Balance Inicial</strong></td>
+                                            <td colspan="2">Balance Inicial</td>
 
                                         <td class="text-right">
-                                            <strong><span t-esc="'{0:,.2f}'.format(line['debit']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
+                                           <span t-esc="'{0:,.2f}'.format(line['debit']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                         </td>
                                         <td class="text-right">
-                                            <strong><span t-esc="'{0:,.2f}'.format(line['credit']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
+                                            <span t-esc="'{0:,.2f}'.format(line['credit']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                         </td>
                                         <td class="text-right">
-                                            <strong><span t-esc="'{0:,.2f}'.format(line['balance']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')" /></strong>
+                                            <span t-esc="'{0:,.2f}'.format(line['balance']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')" />
                                         </td>
                                         </span>
                                     </tr>

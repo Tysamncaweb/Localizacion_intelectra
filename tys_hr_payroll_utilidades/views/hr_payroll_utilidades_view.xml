@@ -12,7 +12,7 @@
                     <newline/>
                     <group col="4" string="Utilidades">
                         <group col="2">
-                            <field name="salario_mensual_util" string="Salario Promedio de la Suma de lo Percibido en el Año" readonly="1"/>
+                            <field name="salario_mensual_util" string="Suma Total del Salario Percibido en el Año" readonly="1"/>
                             <!--field name="salario_integral_util" string="Salario Integral Diario" readonly="1"/-->
                             <!--field name="alic_bono_vac_util" string="Alícuota Bono Vacacional Diario" readonly="1"/-->
 
