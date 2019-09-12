@@ -101,7 +101,11 @@ class AccountInvoice(models.Model):
         move = self.env['account.move'].search([('id', '=', self.move_id.id)])
         move.write({'amount': self.amount_total_bs,
                     'state': 'draft'})
-        if self.type == 'out_invoice' or self.type == 'out_refund':
+        if self.type == 'out_invoice' or self.type == 'in_invoice':
+            sign = 1
+        else:
+            sign = -1
+        if self.type == 'out_invoice' or self.type == 'in_refund':
 
             for a in move_id:
                 move_line.append(a.id)
@@ -111,17 +115,17 @@ class AccountInvoice(models.Model):
                 for u in move_id:
                     if u.product_id.id == m.product_id.id:
                         u.write({'debit': 0.00,
-                                 'credit': m.price_subtotal_signed})
+                                 'credit': m.price_subtotal_signed * sign})
 
                     if u.name == m.invoice_line_tax_ids.name:
                         u.write({'debit': 0.00,
                                  'credit': m.tax})
 
                     if move_line[0] == u.id:
-                        u.write({'debit': self.amount_total_bs,
+                        u.write({'debit': self.amount_total_bs * sign,
                                  'credit': 0.00})
-        else:
 
+        elif self.type == 'in_invoice' or self.type == 'out_refund':
             for a in move_id:
                 move_line.append(a.id)
             move_line.sort(reverse=True)
@@ -130,14 +134,14 @@ class AccountInvoice(models.Model):
                 for u in move_id:
                     if u.product_id.id == m.product_id.id:
                         u.write({'credit': 0.00,
-                                 'debit': m.price_subtotal_signed})
+                                 'debit': m.price_subtotal_signed * sign})
 
                     if u.name == m.invoice_line_tax_ids.name:
                         u.write({'credit': 0.00,
                                  'debit': m.tax})
 
                     if move_line[0] == u.id:
-                        u.write({'credit': self.amount_total_bs,
+                        u.write({'credit': self.amount_total_bs * sign,
                                  'debit': 0.00})
 
 
