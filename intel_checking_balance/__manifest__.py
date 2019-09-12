@@ -14,7 +14,7 @@ Colaboradores: Yamile Rayme
     'category': 'Tools',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account', 'l10n_ve_withholding_islr'],
+    'depends': ['base', 'account', 'l10n_ve_withholding_islr', 'intel_retention_islr'],
 
     # always loaded
     'data': [

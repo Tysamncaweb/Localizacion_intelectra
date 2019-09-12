@@ -4,7 +4,7 @@
         <template id="header_report_checking_balance">
             <div class="header">
                 <h1><u><span t-esc="res_company.name" /></u></h1>
-                <h5><strong>Número de identificación fiscal:</strong>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-esc="res_company.vat[2:]"/></h5>
+                <h5><strong>Número de identificación fiscal:</strong>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-esc="res_company.vat"/></h5>
                 <table style="width:100%; height:40px;">
                     <tr style="height:30px;">
                         <td style="width:60%;"></td>
