@@ -54,6 +54,7 @@ class hr_payslip(models.Model):
                                  states={'draft': [('readonly', False)]},
                                  default=lambda self: self.env['account.journal'].search([('type', '=', 'general')],
                                                                                          limit=1))
+    vacaciones_fracc = fields.Float('Vacaciones Fraccionadas')
     @api.onchange('employee_id')
     def onchange_employee_dos(self):
         if self._context.get('is_payoff'):
@@ -96,15 +97,15 @@ class hr_payslip(models.Model):
                 'meses': 0,
                 'anios': 0,
             }
-            antiguedad_19061977 = {
-                'dias': 0,
-                'meses': 0,
-                'anios': 0,
-            }
+            #antiguedad_19061977 = {
+            #    'dias': 0,
+            #    'meses': 0,
+            #    'anios': 0,
+            #}
             months_worked_year = 0
             months_worked_year_int = 0
             ts = 0
-            ult_liqu_colectiva = config_obj._hr_get_parameter('hr.payslip.ultima.liquidacion.colectiva',True)
+         #   ult_liqu_colectiva = config_obj._hr_get_parameter('hr.payslip.ultima.liquidacion.colectiva',True)
             if self.date_from and self.date_to:
                 # se le suma un dia a la fecha de finalizacion de la relacion laboral porque se considera que ese dia el empleado trabaja
                 fecha_temp = datetime.strptime(self.date_to, DEFAULT_SERVER_DATE_FORMAT)
@@ -117,11 +118,11 @@ class hr_payslip(models.Model):
                 if self.employee_id:
                     #employee = self.env['hr.employee'].search(['id', '=', self.employee_id.id])
 
-                    if datetime.strptime(self.date_from, DEFAULT_SERVER_DATE_FORMAT) < datetime.strptime(ult_liqu_colectiva,
-                                                                                           DEFAULT_SERVER_DATE_FORMAT):
-                        antiguedad_19061977 = self.get_years_service(self.employee_id.fecha_inicio, date_end)
-                        ts = antiguedad_19061977['anios'] + 1 if antiguedad_19061977['meses'] >= 6 else antiguedad_19061977[
-                            'anios']
+              #      if datetime.strptime(self.date_from, DEFAULT_SERVER_DATE_FORMAT) < datetime.strptime(ult_liqu_colectiva,
+               #                                                                            DEFAULT_SERVER_DATE_FORMAT):
+                #        antiguedad_19061977 = self.get_years_service(self.employee_id.fecha_inicio, date_end)
+                 #       ts = antiguedad_19061977['anios'] + 1 if antiguedad_19061977['meses'] >= 6 else antiguedad_19061977[
+                  #          'anios']
 
                     months_worked_year, months_worked_year_int = self.get_year_worked_time(self.date_from, date_end)
 
@@ -129,9 +130,9 @@ class hr_payslip(models.Model):
                         'tiempo_servicio_dias': tiempo_servicio['dias'],
                         'tiempo_servicio_meses': tiempo_servicio['meses'],
                         'tiempo_servicio_year': tiempo_servicio['anios'],
-                        'antiguedad_19061997_dias': antiguedad_19061977['dias'],
-                        'antiguedad_19061997_meses': antiguedad_19061977['meses'],
-                        'antiguedad_19061997_year': antiguedad_19061977['anios'],
+                #        'antiguedad_19061997_dias': antiguedad_19061977['dias'],
+                 #       'antiguedad_19061997_meses': antiguedad_19061977['meses'],
+                  #      'antiguedad_19061997_year': antiguedad_19061977['anios'],
                         'month_worked_year_str': months_worked_year,
                         'month_worked_year': months_worked_year_int,
                         'tiempo_servicio': ts,
@@ -177,7 +178,9 @@ class hr_payslip(models.Model):
     def onchange_tipo_liquidacion(self):
         struct_obj = self.env['hr.payroll.structure']
         conceptos_ids = []
+
         if self.struct_id:
+            liquidacion = []
             conceptos_ids = [cs.id for tilio in struct_obj.browse(self.struct_id.id) for cs in tilio.rule_ids]
         if conceptos_ids:
             self.conceptos_salariales = [(6,0,conceptos_ids)]
@@ -312,12 +315,35 @@ class hr_payslip(models.Model):
             limite = self.get_mondays(self.date_to)
         promedio = self.calculo_sueldo_promedio(self.employee_id, self.date_to, 0, 'liquidacion', limite)
         #CALCULO DE ALICUOTAS
-        vacation_id = vacaciones_obj.search([('service_years', '=', self.tiempo_servicio_year)])
-        if vacation_id:
-            dias_b_v = vacaciones_obj.browse(int(vacation_id.pay_days))
+        vac_frac = 0
+        if self.tiempo_servicio:
+            min_days = int(config_obj._hr_get_parameter('hr.payroll.vacation.min'))
+            max_days = int(config_obj._hr_get_parameter('hr.payroll.vacation.max'))
+            pay_days = min_days + ((self.tiempo_servicio - 1) if self.tiempo_servicio > 0 else 0)  # * step_days
+            pay_days = pay_days if pay_days < max_days else max_days
+            if self.tiempo_servicio == 0 and int(self.month_worked_year_str[0:1]) >= 3:  # antiguedad menor a un anio y mayor a 3 meses
+                vac_frac = (float(self.month_worked_year_str[0:1]) / float(12)) * float(pay_days)
+                asignacion = pay_days
+            else:
+                asignacion = pay_days
+               # vac_frac = asignacion
+        else:
+            raise exceptions.except_orm((u'No se han calculado los días de bono vacacional, debido a que\n'
+                           u' no se ha cargado la lista de días a pagar por años de servicio.\n'
+                           u' Por favor consulte con el administrador!'))
+        if asignacion:
+            dias_bv = asignacion
+        if vac_frac and vac_frac > 0:
+            self.vacaciones_fracc = vac_frac
+        else:
+            if self.tiempo_servicio > 0 and int(self.month_worked_year_str[0:1]) > 0:
+                vac_frac2 = (float(self.month_worked_year_str[0:1]) / float(12)) * float(pay_days)
+                self.vacaciones_fracc = vac_frac2
 
-        alic_b_v = self.calculo_alic_bono_vac(sal_mensual+promedio, dias_b_v)
+        alic_b_v = self.calculo_alic_bono_vac((sal_mensual+promedio), dias_bv)
         alic_u =  self.calculo_alic_util(sal_mensual+promedio,alic_b_v)
+
+
         values.update({'salario_basico':sal_mensual,
                        'salario_basico_diario':sal_mensual/float(dias_str),
                        'salario_prom_mensual': sal_mensual + promedio,

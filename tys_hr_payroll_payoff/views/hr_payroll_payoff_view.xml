@@ -58,11 +58,11 @@
                                 <field name="month_worked_year_str" readonly="1" force_save="1"/>
                                 <field name="month_worked_year" readonly="1" invisible="1" force_save="1"/>
                             </group>
-                            <group string="Antigüedad (19/06/1997)">
+                            <!--group string="Antigüedad (19/06/1997)">
                                 <field name="antiguedad_19061997_year" string="Años" readonly="1" force_save="1"/>
                                 <field name="antiguedad_19061997_meses" string="Meses" readonly="1" force_save="1"/>
                                 <field name="antiguedad_19061997_dias" string="Días" readonly="1" force_save="1"/>
-                            </group>
+                            </group-->
                         </group>
                         <notebook colspan="4">
                              <page string="Liquidación">
@@ -129,6 +129,14 @@
                                              </div>
                                          </div>
                                      </group>
+                                     <!--group>
+                                         <label for="vacaciones_fracc" string="Vacaciones Fraccionadas"/>
+                                         <div>
+                                             <div>
+                                                 <field name="vacaciones_fracc" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
+                                     </group-->
                                  </group>
                              </page>
                         </notebook>
