@@ -141,13 +141,6 @@ class WizardReportAnalytic(models.TransientModel):
 
         report_obj = self.env['report.inte_report_analitico_cuenta.report_analytic_por_cuenta']
         num_cuenta_contables_obj = self.env['account.account']
-        #cambiar formato fecha:
-        formato_fecha = "%d/%m/%Y"
-        date_now = today
-        date_now = datetime.strftime(datetime.strptime(date_now, DATE_FORMAT), formato_fecha)
-        date_start = datetime.strftime(datetime.strptime(date_start, DATE_FORMAT), formato_fecha)
-        date_end = datetime.strftime(datetime.strptime(date_end, DATE_FORMAT), formato_fecha)
-
         # Todas las cuentas
         if cuentas_contables == 'all':
             num_cuenta_contables_obj = num_cuenta_contables_obj.search([])
@@ -174,6 +167,12 @@ class WizardReportAnalytic(models.TransientModel):
 
         account_res = []
         account_res = report_obj._get_account_move_entry(num_cuenta_contables_obj, saldo_inicial, ordenado_fecha, cuentas_contables,move_dest,date_start,date_end,empresa.id,currency_obj)
+        # cambiar formato fecha:
+        formato_fecha = "%d/%m/%Y"
+        date_now = today
+        date_now = datetime.strftime(datetime.strptime(date_now, DATE_FORMAT), formato_fecha)
+        date_start = datetime.strftime(datetime.strptime(date_start, DATE_FORMAT), formato_fecha)
+        date_end = datetime.strftime(datetime.strptime(date_end, DATE_FORMAT), formato_fecha)
         # suma de debit, credit, balance para calcular los totales
         res_totales = dict((fn, 0.0) for fn in ['credit_total_bs', 'debit_total_bs', 'balance_total_bs',
                                                 'credit_total_usd', 'debit_total_usd', 'balance_total_bs',
@@ -871,7 +870,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
                         [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
                     if rate_id:
                         for r in rate_id:
-                            tasa_me = r.rate_real
+                            tasa_me = rate_id.rate_real
                     else:
                         tasa_me = 1
                 elif posicion >= 1:

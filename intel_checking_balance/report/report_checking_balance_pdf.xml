@@ -80,7 +80,7 @@
                                     <tr>
                                         <td class="text-left" style=" vertical-align: middle; "><strong><span t-esc="o['code']"/></strong></td>
                                         <td class="text-left" style=" vertical-align: middle; "><strong><span t-esc="o['name']"/></strong></td>
-                                        <!--td t-if="balance == True" class="text-right" style=" vertical-align: middle; "><span t-esc="'{0:,.2f}'.format(o['amount']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                                        <!--.td t-if="balance == True" class="text-right" style=" vertical-align: middle; "><span t-esc="'{0:,.2f}'.format(o['amount']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                         <td t-else="balance == False"></td-->
                                         <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['debit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
                                         <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['credit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>

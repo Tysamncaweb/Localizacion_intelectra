@@ -40,7 +40,7 @@
                 </field>
         </record>
 
-      <!--act_window id="action_libro_ventas"
+      <!--.act_window id="action_libro_ventas"
         name="Asistente para impresion de factura de Clientes"
         src_model="checking.balance"
         res_model="checking.balance"

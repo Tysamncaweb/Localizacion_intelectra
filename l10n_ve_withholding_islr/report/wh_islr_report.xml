@@ -24,7 +24,7 @@
                 </tr>
                 <tr >
                     <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
-                        <span t-esc="d.company_id.partner_id.name"/>
+                        <span t-esc="d.partner_id.name if 'out' in d.type else d.company_id.partner_id.name"/>
                     </td>
                     <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="(d.company_id.partner_id.vat[2:] if 'VE' in d.company_id.partner_id.vat else d.company_id.partner_id.vat) if d.company_id.partner_id.vat else ''"/>
@@ -52,7 +52,7 @@
                 </tr>
                 <tr >
                     <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
-                        <span t-esc="d.partner_id.name"/>
+                        <span t-esc="d.company_id.partner_id.name if 'out' in d.type else d.partner_id.name"/>
                     </td>
                     <td style="width:40%;text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
                         <span t-esc="(d.partner_id.vat[2:] if 'VE' in d.partner_id.vat else d.partner_id.vat) if d.partner_id.vat else ''"/>

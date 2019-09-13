@@ -100,7 +100,7 @@ class RetentionISLR(models.Model):
         filters = " AND ".join(wheres)
         filters = filters.replace('account_move_line__move_id', 'm').replace('account_move_line', 'l')
 
-        # Get move lines base on sql query and Calculate the total balance of move lines
+        # Get move lines base on sql query and Calculate the total balance of move lines..
         sql = ('''SELECT l.id AS lid, l.account_id AS account_id, l.date AS ldate, j.code AS lcode, l.currency_id, l.amount_currency, l.ref AS lref, l.name AS lname, COALESCE(l.debit,0) AS debit, COALESCE(l.credit,0) AS credit, COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) AS balance,\
                         m.name AS move_name, '' AS move_id, c.symbol AS currency_code, p.name AS partner_name,\
                         l.write_date AS write_date, l.move_id AS move_id\
@@ -281,7 +281,7 @@ class RetentionISLR(models.Model):
 
             for a in cuentas:
                 row += 1
-                writer.write_merge(row, row, 1, 1, a['code'],sub_header_style_bold )
+                writer.write_merge(row, row, 1, 1, a['code'],sub_header_style_bold)
                 writer.write_merge(row, row, 2, 4, a['name'], sub_header_style_bold)
                 writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", a['debit'], grouping=True), sub_header_style_bold1)
                 writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", a['credit'], grouping=True), sub_header_style_bold1)

@@ -54,7 +54,9 @@
         <td colspan="2" style="text-align:left;border-left:1px solid;border-top:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Período Fiscal</td>
     </tr>
     <tr>
-        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="d.company_id.partner_id.name"/></td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
+            <span t-esc="d.partner_id.name if 'out' in d.type else d.company_id.partner_id.name"/>
+        </td>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
             <span t-esc="(d.company_id.partner_id.vat[2:] if 'VE' in d.company_id.partner_id.vat else d.company_id.partner_id.vat) if d.company_id.partner_id.vat else ''"/>
         </td>
@@ -71,7 +73,9 @@
         <td colspan="4" style="text-align:left;border-left:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Registro de Indentificación Fiscal del Agente Retenido</td>
     </tr>
     <tr>
-        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="d.partner_id.name"/></td>
+        <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
+            <span t-esc="d.company_id.partner_id.name if 'out' in d.type else d.partner_id.name"/>
+        </td>
         <td colspan="4" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
             <span t-esc="(d.partner_id.vat[2:] if 'VE' in d.partner_id.vat else d.partner_id.vat ) if d.partner_id.vat else ''"/>
         </td>
