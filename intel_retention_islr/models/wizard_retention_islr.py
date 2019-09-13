@@ -60,7 +60,7 @@ class RetentionISLR(models.Model):
         row += 1
 
         writer.write_merge(row, row, 3, 3, "R.I.F:", sub_header_style_bold)
-        writer.write_merge(row, row, 4, 5, str(self.company.vat[2:]), sub_header_content_style)
+        writer.write_merge(row, row, 4, 5, str(self.company.vat), sub_header_content_style)
         writer.write_merge(row, row, 8, 8, "Teléfono", sub_header_style_bold)
         writer.write_merge(row, row, 9, 9, str(self.company.phone), sub_header_content_style)
         row += 1
@@ -174,7 +174,7 @@ class RetentionISLR(models.Model):
                     'people_type': var,
                     'date': concept_line.invoice_id.date_invoice,
                     'invoice': concept_line.invoice_id.number,
-                    'rif': concept_line.invoice_id.partner_id.vat[2:],
+                    'rif': concept_line.invoice_id.partner_id.vat,
                     'proveedor': concept_line.invoice_id.partner_id.name,
                     'amount': concept_line.base_amount,
                     'amount_ret': concept_line.amount,
@@ -448,7 +448,7 @@ class ReportRetentionISLR(models.AbstractModel):
                     'people_type': var,
                     'date': concept_line.invoice_id.date_invoice,
                     'invoice': concept_line.invoice_id.number,
-                    'rif': concept_line.invoice_id.partner_id.vat[2:],
+                    'rif': concept_line.invoice_id.partner_id.vat,
                     'proveedor': concept_line.invoice_id.partner_id.name,
                     'amount': concept_line.base_amount,
                     'amount_ret': concept_line.amount,
@@ -493,7 +493,7 @@ class ReportRetentionISLR(models.AbstractModel):
             'start_date': date_start,
             'today': today,
             'company': company,
-            'rif': company.vat[2:],
+            'rif': company.vat,
             'pnre': unico,
             'concept_name': concept_name,
             'var_concept': concept_id,

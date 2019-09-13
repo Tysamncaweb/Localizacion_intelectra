@@ -91,7 +91,9 @@ class RetentionISLR(models.Model):
         sql_sort = 'j.code, p.name, l.move_id'
 
         # Prepare sql query base on selected parameters from wizard
-        tables, where_clause, where_params = MoveLine._query_get()
+        tables, where_clause, where_params = MoveLine.with_context(date_from=start_date, date_to=end_date,
+                                                                   initial_bal=False, state=state, company_id=company,
+                                                                   strict_range=True)._query_get()
         wheres = [""]
         if where_clause.strip():
             wheres.append(where_clause.strip())
@@ -288,7 +290,7 @@ class RetentionISLR(models.Model):
 
                 if self.balance == True:
                     row += 1
-                    for line in a.get('move_lines'):
+                    for line in a['move_lines']:
                         if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
                             writer.write_merge(row, row, 1, 6, "Balance Inicial", sub_header_content_style)
                             writer.write_merge(row, row, 7, 8, line['debit']/currency_line.rate_real,line_content_style)
@@ -434,7 +436,9 @@ class ReportRetentionISLR(models.AbstractModel):
         sql_sort = 'j.code, p.name, l.move_id'
 
         # Prepare sql query base on selected parameters from wizard
-        tables, where_clause, where_params = MoveLine._query_get()
+        tables, where_clause, where_params = MoveLine.with_context(date_from=date_start, date_to=end_date,
+                                                                   initial_bal=False, state=state, company_id=company,
+                                                                   strict_range=True)._query_get()
         wheres = [""]
         if where_clause.strip():
             wheres.append(where_clause.strip())
