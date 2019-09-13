@@ -91,9 +91,7 @@ class RetentionISLR(models.Model):
         sql_sort = 'j.code, p.name, l.move_id'
 
         # Prepare sql query base on selected parameters from wizard
-        tables, where_clause, where_params = MoveLine.with_context(date_from=start_date, date_to=end_date,
-                                                                   initial_bal=False, state=state, company_id=company,
-                                                                   strict_range=True)._query_get()
+        tables, where_clause, where_params = MoveLine._query_get()
         wheres = [""]
         if where_clause.strip():
             wheres.append(where_clause.strip())
@@ -188,8 +186,8 @@ class RetentionISLR(models.Model):
             hoy = date.today()
             format_new = "%d/%m/%Y"
             hoy_date = datetime.strftime(hoy, format_new)
-            start_date = datetime.strftime(datetime.strptime(self.start_date,DEFAULT_SERVER_DATE_FORMAT),format_new)
-            end_date = datetime.strftime(datetime.strptime(self.end_date,DEFAULT_SERVER_DATE_FORMAT),format_new)
+            start_date1 = datetime.strftime(datetime.strptime(self.start_date,DEFAULT_SERVER_DATE_FORMAT),format_new)
+            end_date1 = datetime.strftime(datetime.strptime(self.end_date,DEFAULT_SERVER_DATE_FORMAT),format_new)
             hora = today.hour
             minute = today.minute
             if minute < 10:
@@ -239,10 +237,10 @@ class RetentionISLR(models.Model):
             row +=1
 
             writer.write_merge(row, row, 5, 5, "Desde:", sub_header_style_bold)
-            writer.write_merge(row, row, 6, 6, start_date, sub_header_content_style)
+            writer.write_merge(row, row, 6, 6, start_date1, sub_header_content_style)
 
             writer.write_merge(row, row, 8, 8, "Hasta:", sub_header_style_bold)
-            writer.write_merge(row, row, 9, 9, end_date, sub_header_content_style)
+            writer.write_merge(row, row, 9, 9, end_date1, sub_header_content_style)
             row += 1
             writer.write_merge(row, row, 7, 7, "Moneda:", sub_header_style_bold)
             writer.write_merge(row, row, 8, 8, str(self.currency_id.name), sub_header_content_style)
@@ -276,7 +274,7 @@ class RetentionISLR(models.Model):
             # TODOS LOS ASIENTOS CON SALDO DISTINTO A 0
             if self.target_movement == 1 and self.show_accounts == 1:
                 state = 'all'
-            cuentas = self.amount_initial1(account_account, self.show_accounts, self.balance, start_date, end_date, self.company.id, state, currency, self.tasa.id)
+            cuentas = self.amount_initial1(account_account, self.show_accounts, self.balance, self.start_date, self.end_date, self.company.id, state, currency, self.tasa.id)
             suma = self.suma_totales(cuentas, currency, self.tasa.id)
 
             for a in cuentas:
@@ -437,9 +435,7 @@ class ReportRetentionISLR(models.AbstractModel):
         sql_sort = 'j.code, p.name, l.move_id'
 
         # Prepare sql query base on selected parameters from wizard
-        tables, where_clause, where_params = MoveLine.with_context(date_from=date_start, date_to=end_date,
-                                                                   initial_bal=False, state=state, company_id=company,
-                                                                   strict_range=True)._query_get()
+        tables, where_clause, where_params = MoveLine._query_get()
         wheres = [""]
         if where_clause.strip():
             wheres.append(where_clause.strip())

@@ -870,7 +870,7 @@ class ReportAnalyticForAccount(models.AbstractModel):
                         [('company_id', '=', company_id), ('hora', '=', fecha_anterior)])
                     if rate_id:
                         for r in rate_id:
-                            tasa_me = rate_id.rate_real
+                            tasa_me = r.rate_real
                     else:
                         tasa_me = 1
                 elif posicion >= 1:
