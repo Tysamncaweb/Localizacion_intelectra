@@ -204,10 +204,10 @@ class RetentionISLR(models.Model):
             header_content_style = xlwt.easyxf("font: name Helvetica size 80 px, bold 1, height 400;")
             sub_header_style = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; borders: left thin, right thin, top thin, bottom thin;")
             sub_header_style_bold = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170;")
-            sub_header_style_bold1 = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; align: horiz right;")
+            sub_header_style_bold1 = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; align: horiz right;", num_format_str='#,##0.00')
             sub_header_content_style = xlwt.easyxf("font: name Helvetica size 10 px, height 170;")
-            line_content_style = xlwt.easyxf("font: name Helvetica, height 170; align: horiz right;")
-            line_content_style_totales = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; borders: left thin, right thin, top thin, bottom thin; align: horiz right;")
+            line_content_style = xlwt.easyxf("font: name Helvetica, height 170; align: horiz right;", num_format_str='#,##0.00')
+            line_content_style_totales = xlwt.easyxf("font: name Helvetica size 10 px, bold 1, height 170; borders: left thin, right thin, top thin, bottom thin; align: horiz right;", num_format_str='#,##0.00')
 
             row = 1
             col = 0
@@ -281,9 +281,9 @@ class RetentionISLR(models.Model):
                 row += 1
                 writer.write_merge(row, row, 1, 1, a['code'],sub_header_style_bold)
                 writer.write_merge(row, row, 2, 4, a['name'], sub_header_style_bold)
-                writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", a['debit'], grouping=True), sub_header_style_bold1)
-                writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", a['credit'], grouping=True), sub_header_style_bold1)
-                writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", a['balance'], grouping=True), sub_header_style_bold1)
+                writer.write_merge(row, row, 7, 8, a['debit'], sub_header_style_bold1)
+                writer.write_merge(row, row, 9, 10,a['credit'], sub_header_style_bold1)
+                writer.write_merge(row, row, 11, 12, a['balance'], sub_header_style_bold1)
 
 
                 if self.balance == True:
@@ -291,17 +291,16 @@ class RetentionISLR(models.Model):
                     for line in a.get('move_lines'):
                         if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
                             writer.write_merge(row, row, 1, 6, "Balance Inicial", sub_header_content_style)
-                            writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", line['debit']/currency_line.rate_real, grouping=True),
-                                               line_content_style)
-                            writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", line['credit']/currency_line.rate_real, grouping=True), line_content_style)
-                            writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", line['balance']/currency_line.rate_real, grouping=True), line_content_style)
+                            writer.write_merge(row, row, 7, 8, line['debit']/currency_line.rate_real,line_content_style)
+                            writer.write_merge(row, row, 9, 10, line['credit']/currency_line.rate_real,  line_content_style)
+                            writer.write_merge(row, row, 11, 12,line['balance']/currency_line.rate_real, line_content_style)
 
 
             row +=1
             writer.write_merge(row, row, 1, 4, "Total", sub_header_style)
-            writer.write_merge(row, row, 7, 8, locale.format_string("%.2f", suma['debit_total'], grouping=True), line_content_style_totales)
-            writer.write_merge(row, row, 9, 10, locale.format_string("%.2f", suma['credit_total'], grouping=True), line_content_style_totales)
-            writer.write_merge(row, row, 11, 12, locale.format_string("%.2f", suma['balance_total'], grouping=True), line_content_style_totales)
+            writer.write_merge(row, row, 7, 8, suma['debit_total'], line_content_style_totales)
+            writer.write_merge(row, row, 9, 10, suma['credit_total'], line_content_style_totales)
+            writer.write_merge(row, row, 11, 12, suma['balance_total'], line_content_style_totales)
 
             col = 1
 
