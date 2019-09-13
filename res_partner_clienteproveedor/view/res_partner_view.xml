@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='vat']" position="replace">
-                         <field name="vat" placeholder="Ej.: VEV012345678" required="True"/>
+                         <field name="vat" placeholder="Ej.: V-012345678" string="RIF" required="True"/>
                  </xpath>
             </field>
         </record>

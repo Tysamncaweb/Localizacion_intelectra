@@ -228,9 +228,6 @@
                      <xpath expr="//sheet/group/group[1]/label[@for='street']" position="replace">
                             <label for="street" string="Dirección Fiscal"/>
                      </xpath>
-                      <xpath expr="//sheet/group/group[1]/field[@name='vat']" position="replace">
-                            <field name="vat" placeholder="e.g. BE0477472701" string="RIF"/>
-                     </xpath>
                </field>
          </record>
 

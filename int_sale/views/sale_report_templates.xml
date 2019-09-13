@@ -9,19 +9,21 @@
             <div class="oe_structure"/>
 
                 <div class="header">
-                    <div  style="border-bottom: 2px solid black">
-                        <table  cellspacing="0" cellpadding="0" border="0" style="width:100%; height:140px;">
-                            <tr style="height:100%;">
-                                <td style="width:17%;">
-                                    <img t-att-src="'data:image/png;base64,%s' %(to_text(res_company.logo))" style="width:290px; height:100px; margin-top:38px; margin-bottom:0px;"/>
-                                </td>
-                                <td  style="width:43%;">
-                                    <p><b><span t-field="doc.company_id.street"/>, <span t-field="doc.company_id.city"/> <span t-field="doc.company_id.zip"/>. <span t-field="doc.company_id.country_id.name"/>
-                                    TF.: (0212) <span t-field="doc.company_id.phone"/> / Fax.: (212) <span t-field="doc.company_id.fax"/> / Email: <span t-field="doc.company_id.email"/> / <span t-field="doc.company_id.website"/></b></p>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    <table cellspacing="0" cellpadding="0" border="0" style="width:100%; height:40px;">
+                        <tr style="height:40px;"><!--Altura-->
+                            <td  style="width:50%;"><!--Ancho-->
+                                <img t-att-src="'data:image/png;base64,%s' %(to_text(res_company.logo))" style="width:260px; height:80px; margin-top:40px; margin-bottom:0px;"/>
+                            </td>
+                            <td style="with:50%; font-size: 12px;" class="text-right">
+                                <!--strong>Compañia:</strong--><span t-esc="res_company.name" /><br></br>
+                                <!--strong>Rif.</strong--><span t-esc="res_company.vat"/><br></br>
+                                <!--strong>Dirección:</strong--><span t-esc="res_company.street"/><br></br>
+                                <!--strong>Tlf:</strong--><span t-esc="res_company.phone"/><br></br>
+                                <!--strong>Fax:</strong><span t-esc="res_company.name"/><br></br-->
+                                <strong>Email:</strong><span t-esc="res_company.email"/><br></br>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
 
             <table class="text-right" style=" font-size: 12px; width:100%;">
@@ -188,15 +190,15 @@
                             <!-- Lines associated -->
                             <t t-foreach="layout_category['lines']" t-as="l">
                                 <tr>
-                                        <td><span t-field="l.product_id"/></td>
+                                    <td><span t-field="l.product_id"/></td>
                                         <!--td><span t-field="l.name"/></td-->
-                                        <!--td t-if="not l.product_id.component" class="text-right">
-                                            <span t-field="l.product_uom_qty"/>
-                                        </td>
-                                    <td t-if="not l.product_id.component" class="text-right">
+                                    <td class="text-right">
+                                        <span t-field="l.product_uom_qty"/>
+                                    </td>
+                                    <td class="text-right">
                                         <span t-field="l.product_uom"/>
                                     </td>
-                                    <td t-if="not l.product_id.component" class="text-right">
+                                    <!--td t-if="not l.product_id.component" class="text-right">
                                         <span t-field="l.price_unit"/>
                                     </td-->
                                     <!--td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
@@ -347,6 +349,7 @@
                 </table>
     </t>
 </template>
+
 
 <template id="report_saleorder_inherit" inherit_id="sale.report_saleorder_document">
     <t t-call="web.external_layout" position="replace">

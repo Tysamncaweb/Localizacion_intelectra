@@ -5,7 +5,7 @@
     "version": "1.0",
     "author": "uedwin, itobetter@gmail.com",
     'depends' : [#"hr",
-                 "base"],
+                 "base","base_vat"],
     "data": [
         'view/res_partner_view.xml',
              ],
