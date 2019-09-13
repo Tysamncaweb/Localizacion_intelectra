@@ -329,7 +329,7 @@ class hr_payslip(models.Model):
 
     def get_mondays(self,fecha):
         mondays = 0
-        rango = self.rango_mes_anterior(fecha,0)
+        rango = self.rango_mes_anterior(fecha,0,'is_liq')
         recursive_days = date_from = datetime.strptime(rango[0], DEFAULT_SERVER_DATE_FORMAT)
         date_to = datetime.strptime(rango[1], DEFAULT_SERVER_DATE_FORMAT)
         date_end = date_to + relativedelta(days=+1)

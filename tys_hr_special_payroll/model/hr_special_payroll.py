@@ -100,7 +100,7 @@ class hr_payslip(models.Model):
         if not fecha_desde:
             fecha_desde = datetime.now().strftime('%Y-%m-%d')
 
-        rango = self.rango_mes_anterior(fecha_desde, meses)
+        rango = self.rango_mes_anterior(fecha_desde, meses, 'amount')
         if rango:
             if 'liquidacion' in tipo_nomina:
                 domain_ps.append(('date_from', '<=', fecha_desde))
@@ -160,14 +160,23 @@ class hr_payslip(models.Model):
         return alicuota
 
 
-    def rango_mes_anterior(self, date_base, meses):
+    def rango_mes_anterior(self, date_base, meses, tipo_trans=None):
         date_range = []
 
         mes_anterior = datetime.strptime(date_base, DEFAULT_SERVER_DATE_FORMAT) - relativedelta.relativedelta(months=meses)
         local_date = datetime.strftime(mes_anterior, DEFAULT_SERVER_DATE_FORMAT).split('-')
-        date_range.append(date(int(local_date[0]), int(local_date[1]), 1))  # primer dia del mes
-        date_range.append(date(int(local_date[0]), int(local_date[1]),
+        if tipo_trans != 'utilidad':
+            date_range.append(date(int(local_date[0]), int(local_date[1]), 1))  # primer dia del mes
+            date_range.append(date(int(local_date[0]), int(local_date[1]),
+                                   calendar.monthrange(int(local_date[0]), int(local_date[1]))[1]))  # ultimo dia del mes
+        elif local_date[1] == '01':
+            date_range.append(date(int(local_date[0]), int(local_date[1]),  int(local_date[2])))  # primer dia del mes
+            date_range.append(date(int(local_date[0]), int(local_date[1]),
                                calendar.monthrange(int(local_date[0]), int(local_date[1]))[1]))  # ultimo dia del mes
+        elif local_date[1] != '01' and tipo_trans == 'utilidad':
+            date_range.append(date(int(local_date[0]), int(local_date[1]), 1))  # primer dia del mes
+            date_range.append(date(int(local_date[0]), int(local_date[1]),
+                                   calendar.monthrange(int(local_date[0]), int(local_date[1]))[1]))
 
         return date_range
 

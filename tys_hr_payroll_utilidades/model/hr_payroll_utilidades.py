@@ -52,8 +52,8 @@ class hr_payslip(models.Model):
             psr = run_obj.browse(active_id)
             is_anticipo = psr.is_anticipo
             if tipo_nomina in psr.struct_id.code:
-                for payslip_id in self.ids:
-                    payslip = self.search([('id', '=', payslip_id)])
+                for payslip in self:
+               #     payslip = self.search([('id', '=', payslip_id)])
                 #    if payslip.contract_id.date_end:    #Si el contrato no esta ctivo no ss hace nomina de utilidades
                 #       continue
                     dias_str = config_obj._hr_get_parameter('hr.dias.bono.vacacional')
@@ -120,7 +120,7 @@ class hr_payslip(models.Model):
                     #    'anticipos_util':total_anticipos if not period_end else 0.0,
                         #'dias_x_anio':dias_x_anio
                     })
-                    self.write(payslip_values)
+                    payslip.write(payslip_values)
         res = super(hr_payslip, self).compute_sheet()
         return res
 
@@ -166,7 +166,7 @@ class hr_payslip(models.Model):
                 if date_start > fecha_desde:
                     fecha_desde = date_start
             while fecha_desde.month <= fecha_hasta.month and mes_pago > fecha_desde.month:
-                rango = self.rango_mes_anterior( datetime.strftime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT), 0)
+                rango = self.rango_mes_anterior( datetime.strftime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT), 0, 'utilidad')
                 sueldo_temp = self.get_amount_util( code, employee_id.id, rango[0],rango[1], is_anticipo, True)  # ultimo sueldo
                 fecha_desde = fecha_desde + relativedelta.relativedelta(months=+1)
                 ultimo_sueldo += sueldo_temp
