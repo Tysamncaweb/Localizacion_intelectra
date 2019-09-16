@@ -55,10 +55,10 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
-            <span t-esc="d.partner_id.name if 'out' in d.type else d.company_id.partner_id.name"/>
+            <span t-esc="model.get_retenido_name(d)"/>
         </td>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
-            <span t-esc="(d.company_id.partner_id.vat[2:] if 'VE' in d.company_id.partner_id.vat else d.company_id.partner_id.vat) if d.company_id.partner_id.vat else ''"/>
+            <span t-esc="model.get_retenido_vat(d)"/>
         </td>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="model.get_period(d.date_ret)"/></td>
     </tr>
@@ -66,7 +66,9 @@
         <td colspan="6" style="text-align:left;border-left:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Dirección Fiscal del Agente de Retención:</td>
     </tr>
     <tr>
-        <td colspan="6" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="model.get_direction(d.company_id.partner_id)"/></td>
+        <td colspan="6" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
+            <span t-esc="model.get_direction(d)"/>
+        </td>
     </tr>
     <tr>
         <td colspan="2" style="text-align:left;border-left:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Nombre y Apellido o Razón Social del Agente Retenido:</td>
@@ -74,17 +76,19 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align:left;border-left:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
-            <span t-esc="d.company_id.partner_id.name if 'out' in d.type else d.partner_id.name"/>
+            <span t-esc="model.get_retencion_name(d)"/>
         </td>
         <td colspan="4" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
-            <span t-esc="(d.partner_id.vat[2:] if 'VE' in d.partner_id.vat else d.partner_id.vat ) if d.partner_id.vat else ''"/>
+            <span t-esc="model.get_retencion_vat(d)"/>
         </td>
     </tr>
     <tr>
         <td colspan="6" style="text-align:left;border-left:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Dirección Fiscal del Agente Retenido:</td>
     </tr>
     <tr>
-        <td colspan="6" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="model.get_direction(d.partner_id)"/></td>
+        <td colspan="6" style="text-align:left;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">
+            <span t-esc="model.get_retencion_dir(d)"/>
+        </td>
     </tr>
     <tr>
                         <td colspan="6" style="padding: 5px;"></td>
@@ -140,7 +144,7 @@
                             <span t-field="d.wh_lines.invoice_id.date_document" t-options='{"format": "MM/dd/yyyy"}'/>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
-                            <span t-esc="d.wh_lines.invoice_id.number"/>
+                            <span t-esc="d.wh_lines.invoice_id.number if 'out' in d.wh_lines.invoice_id.type else d.wh_lines.invoice_id.supplier_invoice_number"/>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <span t-esc="d.wh_lines.invoice_id.nro_ctrl"/>
