@@ -67,8 +67,8 @@
                             <thead class="text-left">
                                 <tr>
                                     <th colspan="2" style="width:40%; vertical-align: middle; border-bottom: 1px solid #000000;">Cuenta</th>
-                                    <!--th t-if="balance == True" style="width:10%; vertical-align: middle; border-bottom: 1px solid #000000;">Saldo inicial</th>
-                                    <th t-else="balance == False" style="width:10%; vertical-align: middle; border-bottom: 1px solid #000000;"></th-->
+                                    <th t-if="balance == True" style="width:10%; vertical-align: middle; border-bottom: 1px solid #000000;">Saldo inicial</th>
+                                    <th t-else="balance == False" style="width:10%; vertical-align: middle; border-bottom: 1px solid #000000;"></th>
                                     <th style="width:10%; vertical-align: middle; border-bottom: 1px solid #000000;">Débito</th>
                                     <th style="width:10%; vertical-align: middle; border-bottom: 1px solid #000000;">Crédito</th>
                                     <th style="width:10%; vertical-align: middle; border-bottom: 1px solid #000000;">Saldo</th>
@@ -80,8 +80,7 @@
                                     <tr>
                                         <td class="text-left" style=" vertical-align: middle; "><strong><span t-esc="o['code']"/></strong></td>
                                         <td class="text-left" style=" vertical-align: middle; "><strong><span t-esc="o['name']"/></strong></td>
-                                        <!--.td t-if="balance == True" class="text-right" style=" vertical-align: middle; "><span t-esc="'{0:,.2f}'.format(o['amount']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                                        <td t-else="balance == False"></td-->
+                                        <td t-if="balance == True" class="text-right" style=" vertical-align: middle; "></td>
                                         <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['debit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
                                         <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['credit']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
                                         <td class="text-right" style=" vertical-align: middle;"><strong><span t-esc="'{0:,.2f}'.format(o['balance']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
@@ -90,22 +89,23 @@
                                     <tr t-if="balance == True" t-foreach="o['move_lines']" t-as="line">
                                         <span t-if="line['lname'] == 'Initial Balance'">
                                             <td colspan="2">Balance Inicial</td>
+                                            <td class="text-right">
+                                                <span t-esc="'{0:,.2f}'.format(line['balance']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')" />
+                                            </td>
 
-                                        <td class="text-right">
-                                           <span t-esc="'{0:,.2f}'.format(line['debit']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-esc="'{0:,.2f}'.format(line['credit']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-esc="'{0:,.2f}'.format(line['balance']/tasa).replace(',', 'X').replace('.', ',').replace('X', '.')" />
-                                        </td>
+                                            <td class="text-right">
+
+                                            </td>
+                                            <td class="text-right">
+
+                                            </td>
+                                            <td class="text-right"></td>
                                         </span>
                                     </tr>
                                 </t>
 
                                 <tr style=" height: 25px;">
-                                    <td lass="text-left" colspan="2">Total</td>
+                                    <td lass="text-left" colspan="3">Total</td>
                                     <td class="text-right" style=" border-style: dashed; border-top: 2px dashed #000000; vertical-align: middle;"><span t-esc="'{0:,.2f}'.format(suma['debit_total']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                     <td class="text-right" style=" border-style: dashed; border-top: 2px dashed #000000; vertical-align: middle;"><span t-esc="'{0:,.2f}'.format(suma['credit_total']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                     <td class="text-right" style=" border-style: dashed; border-top: 2px dashed #000000; vertical-align: middle;"><span t-esc="'{0:,.2f}'.format(suma['balance_total']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>

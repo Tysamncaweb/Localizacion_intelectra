@@ -226,7 +226,13 @@ class hr_payslip(models.Model):
                     ps.struct_id = psr.struct_id.id
                     ps.with_context({'is_special': 1, 'special_id': psr.struct_id.id})
 
-        if len(contracts) == 1 and payslip.struct_id:
+
+
+        if self._context.get('is_payoff'):
+             structure_ids = list(set(self.structure._get_parent_structure().ids))
+
+
+        elif len(contracts) == 1 and payslip.struct_id:
             structure_ids = list(set(payslip.struct_id._get_parent_structure().ids))
         else:
             structure_ids = contracts.get_all_structures()

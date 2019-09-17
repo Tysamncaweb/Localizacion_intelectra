@@ -51,27 +51,23 @@ class hr__days_period(models.Model):
         cont_dias = 0
         worked_days = self.env['hr.payslip.worked_days']
 
+        #####se hara que la nomina siempre tome los sabados y los domingos#######3 dejando las horas laborales semanalmente########
+        for b in self:
+            for var4 in b.worked_days_line_ids:
+                if var4.code == 'WORK100':
+                    var4.write({'number_of_days': (var4.number_of_days + b.saturdays + b.sundays)})
+
+
         for a in self:
             payslip_run = worked_days.search([('payslip_id', '=', a.id)])
             check_struct = self[0].payslip_run_id.check_special_struct
+
             if check_struct == False:
                 for var in payslip_run:
                     if var.code == 'WORK100':
                         if var.number_of_days > 7:
                             raise exceptions.except_orm(_('Advertencia!'), (u'El Período seleccionado para la nómina que esta intentando generar es mayor al Período de una Semana.\n \
                                                 Por favor recuerde que las Reglas Salariales estan basadas Semanalmente.'))
-            #            if var.number_of_days > 7:
-            #                var.write({'number_of_days': '7'})
-            #            if var.number_of_days == 5:
-            #              #  if a.date_from[5:7] == '02':
-            #               #     if (a.date_from[8:10] == '16') and ((a.date_to[8:10]== '28')or (a.date_to[8:10]== '29')):
-            #         |       #        var.write({'number_of_days': '15'})
-            #              var.write({'number_of_days': '7'})
-            #            if var.number_of_days == 6:
-            #               var.write({'number_of_days': '7'})
-            #            if var.number_of_days == 5:
-            #                var.write({'number_of_days': '7'})
-            #codigo_vacaciones = self.env['hr.config.parameter']._hr_get_parameter('hr.payroll.codigos.nomina.vacaciones', True)
             if check_struct != False:
                if  a.payslip_run_id.struct_id.code == '7000':
                     for var2 in a.worked_days_line_ids:

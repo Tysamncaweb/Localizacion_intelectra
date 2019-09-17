@@ -128,8 +128,8 @@ class RetentionISLR(models.Model):
             res['name'] = account.name
             res['move_lines'] = move_lines[account.id]
             for line in res.get('move_lines'):
-                res['debit'] += line['debit'] / currency_line.rate_real
-                res['credit'] += line['credit'] / currency_line.rate_real
+                res['debit'] += line['debit'] / currency_line.rate_real if line['lname'] != 'Initial Balance' else False
+                res['credit'] += line['credit'] / currency_line.rate_real if line['lname'] != 'Initial Balance' else False
                 res['balance'] = line['balance'] / currency_line.rate_real
 
             if show_accounts == 0 and res.get('move_lines'):
@@ -249,7 +249,9 @@ class RetentionISLR(models.Model):
             row +=2
             col= 1
 
-            writer.write_merge(row, row, 1, 6, "Cuenta", sub_header_style)
+            writer.write_merge(row, row, 1, 4, "Cuenta", sub_header_style)
+            if self.balance == True:
+                writer.write_merge(row, row, 5, 6, "Saldo Inicial", sub_header_style)
             writer.write_merge(row, row, 7, 8, "Débito", sub_header_style)
             writer.write_merge(row, row, 9, 10, "Crédito", sub_header_style)
             writer.write_merge(row, row, 11, 12, "Saldo", sub_header_style)
@@ -282,7 +284,7 @@ class RetentionISLR(models.Model):
             for a in cuentas:
                 row += 1
                 writer.write_merge(row, row, 1, 1, a['code'],sub_header_style_bold)
-                writer.write_merge(row, row, 2, 4, a['name'], sub_header_style_bold)
+                writer.write_merge(row, row, 2, 6, a['name'], sub_header_style_bold)
                 writer.write_merge(row, row, 7, 8, a['debit'], sub_header_style_bold1)
                 writer.write_merge(row, row, 9, 10,a['credit'], sub_header_style_bold1)
                 writer.write_merge(row, row, 11, 12, a['balance'], sub_header_style_bold1)
@@ -292,10 +294,9 @@ class RetentionISLR(models.Model):
                     row += 1
                     for line in a['move_lines']:
                         if line['lname'] == 'Initial Balance' or line['lname'] == 'Balance Inicial':
-                            writer.write_merge(row, row, 1, 6, "Balance Inicial", sub_header_content_style)
-                            writer.write_merge(row, row, 7, 8, line['debit']/currency_line.rate_real,line_content_style)
-                            writer.write_merge(row, row, 9, 10, line['credit']/currency_line.rate_real,  line_content_style)
-                            writer.write_merge(row, row, 11, 12,line['balance']/currency_line.rate_real, line_content_style)
+                            writer.write_merge(row, row, 1, 4, "Balance Inicial", sub_header_content_style)
+                            writer.write_merge(row, row, 5, 6, line['balance'] / currency_line.rate_real,line_content_style)
+
 
 
             row +=1
@@ -397,6 +398,7 @@ class ReportRetentionISLR(models.AbstractModel):
     @api.multi
     def amount_initial(self, account_account,show_accounts, balance,date_start,end_date,company,currency, state, currency_id1, tasa):
         cuentas = []
+        cuentas1 =[]
         if currency_id1 == 4:
             currency_line = self.env['res.currency.rate'].search([('currency_id', '=', currency_id1)])
         else:
@@ -475,8 +477,8 @@ class ReportRetentionISLR(models.AbstractModel):
             res['name'] = account.name
             res['move_lines'] = move_lines[account.id]
             for line in res.get('move_lines'):
-                res['debit'] += line['debit']/currency_line.rate_real
-                res['credit'] += line['credit']/currency_line.rate_real
+                res['debit'] += line['debit']/currency_line.rate_real if line['lname'] != 'Initial Balance' else False
+                res['credit'] += line['credit']/currency_line.rate_real if line['lname'] != 'Initial Balance' else False
                 res['balance'] = line['balance']/currency_line.rate_real
 
 

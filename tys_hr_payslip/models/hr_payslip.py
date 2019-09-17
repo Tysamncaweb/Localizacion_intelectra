@@ -9,6 +9,7 @@ class hr_special_days(models.Model):
 
         slip_line_pool = self.env['hr.payslip.line']
         sequence_obj = self.env['ir.sequence']
+        struct = []
         for payslip in self.browse(self._ids):
             number = payslip.number or sequence_obj.next_by_code('salary.slip')
             # delete old payslip lines

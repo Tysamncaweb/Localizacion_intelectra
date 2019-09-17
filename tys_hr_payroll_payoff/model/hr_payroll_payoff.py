@@ -11,7 +11,7 @@ class hr_payslip(models.Model):
 
     ESTADOS = [
         ('draft', 'Borrador'),
-        ('verify', 'Verificado'),
+        ('verify', 'Calculado'),
         ('confirm', 'Confirmado'),
         ('done', 'Realizado'),
         ('cancel', 'Cancelado'),
@@ -55,6 +55,16 @@ class hr_payslip(models.Model):
                                  default=lambda self: self.env['account.journal'].search([('type', '=', 'general')],
                                                                                          limit=1))
     vacaciones_fracc = fields.Float('Vacaciones Fraccionadas')
+    dias_prestaciones_acum = fields.Integer('Dias Acumulados Prestaciones')
+    dias_prestaciones_adi = fields.Integer('Dias Adicionales Prestaciones')
+    monto_gps = fields.Float('Monto GPS Acumulado', digits=(10,2))
+    aporte_dias_adicionales = fields.Float('Aporte acumulado días adicionales', digits=(10,2))
+    interes_anual = fields.Float('Interes anual', digits=(10,2))
+    anticipo_prestaciones = fields.Float('Anticipo prestaciones', digits=(10,2))
+    fecha_anticipo = fields.Date('Fecha del Anticipo')
+    literal_c = fields.Float('Literal C')
+    structure = fields.Many2one('hr.payroll.structure', 'Estructura', states={'draft': [('readonly', False)]})
+
     @api.onchange('employee_id')
     def onchange_employee_dos(self):
         if self._context.get('is_payoff'):
@@ -74,9 +84,7 @@ class hr_payslip(models.Model):
                     date_end = contract_data.date_end
                     wage = contract_data.wage
                     state = contract_data.state
-                    #if state != 'cancel':
-                     #   raise exceptions.except_orm(('Advertencia!'),
-                      #                              ('El empleado no posee un contrato en estado "Cancelado"'))
+
                 else:
 
                     raise exceptions.except_orm(('Advertencia!'),
@@ -87,9 +95,10 @@ class hr_payslip(models.Model):
             self.job_id = job_id
             self.date_from = date_start
             self.date_to = date_end
+            self.structure = self.env['hr.payroll.structure'].search([('code', '=', 'ESP-05')])
 
     @api.onchange('date_to')
-    def onchange_date_end(self):
+    def onchange_dateee_end(self):
         if self._context.get('is_payoff'):
             config_obj = self.env['hr.config.parameter']
             tiempo_servicio = {
@@ -97,15 +106,10 @@ class hr_payslip(models.Model):
                 'meses': 0,
                 'anios': 0,
             }
-            #antiguedad_19061977 = {
-            #    'dias': 0,
-            #    'meses': 0,
-            #    'anios': 0,
-            #}
             months_worked_year = 0
             months_worked_year_int = 0
             ts = 0
-         #   ult_liqu_colectiva = config_obj._hr_get_parameter('hr.payslip.ultima.liquidacion.colectiva',True)
+
             if self.date_from and self.date_to:
                 # se le suma un dia a la fecha de finalizacion de la relacion laboral porque se considera que ese dia el empleado trabaja
                 fecha_temp = datetime.strptime(self.date_to, DEFAULT_SERVER_DATE_FORMAT)
@@ -118,21 +122,12 @@ class hr_payslip(models.Model):
                 if self.employee_id:
                     #employee = self.env['hr.employee'].search(['id', '=', self.employee_id.id])
 
-              #      if datetime.strptime(self.date_from, DEFAULT_SERVER_DATE_FORMAT) < datetime.strptime(ult_liqu_colectiva,
-               #                                                                            DEFAULT_SERVER_DATE_FORMAT):
-                #        antiguedad_19061977 = self.get_years_service(self.employee_id.fecha_inicio, date_end)
-                 #       ts = antiguedad_19061977['anios'] + 1 if antiguedad_19061977['meses'] >= 6 else antiguedad_19061977[
-                  #          'anios']
-
                     months_worked_year, months_worked_year_int = self.get_year_worked_time(self.date_from, date_end)
 
                     return {'value': {
                         'tiempo_servicio_dias': tiempo_servicio['dias'],
                         'tiempo_servicio_meses': tiempo_servicio['meses'],
                         'tiempo_servicio_year': tiempo_servicio['anios'],
-                #        'antiguedad_19061997_dias': antiguedad_19061977['dias'],
-                 #       'antiguedad_19061997_meses': antiguedad_19061977['meses'],
-                  #      'antiguedad_19061997_year': antiguedad_19061977['anios'],
                         'month_worked_year_str': months_worked_year,
                         'month_worked_year': months_worked_year_int,
                         'tiempo_servicio': ts,
@@ -174,29 +169,21 @@ class hr_payslip(models.Model):
         ' días' if months_worked_year['dias'] > 1 else ' dia') if months_worked_year['dias'] > 0 else '')
         return year_worked_time, months_worked_year_int
 
-    @api.onchange('struct_id')
-    def onchange_tipo_liquidacion(self):
-        struct_obj = self.env['hr.payroll.structure']
-        conceptos_ids = []
-
-        if self.struct_id:
-            liquidacion = []
-            conceptos_ids = [cs.id for tilio in struct_obj.browse(self.struct_id.id) for cs in tilio.rule_ids]
-        if conceptos_ids:
-            self.conceptos_salariales = [(6,0,conceptos_ids)]
-
     @api.multi
     def hr_verify_sheet(self):
         #self.compute_sheet()
         ctx = self._context.copy() or {}
         is_payoff = self.env.context.get('come_from', False)
         payoff_values = {}
+        prestaciones_values = {}
         if is_payoff:
             ctx.update({'slip_id': self.ids[0]})
             self.env.context = ctx
             payoff_values = self.get_payoff_values()
             payoff_values.update({'is_payoff': True})
+            prestaciones_values = self.get_history_fideicomiso()
             self.write(payoff_values)
+            self.write(prestaciones_values)
             self.compute_sheet_2()
 
         return self.write({'state': 'verify'})
@@ -207,6 +194,7 @@ class hr_payslip(models.Model):
         slip_line_pool = self.env['hr.payslip.line']
         sequence_obj = self.env['ir.sequence']
         for payslip in self.browse(self._ids):
+            struct= self.structure = self.env['hr.payroll.structure'].search([('code', '=', 'ESP-05')])
             number = payslip.number or sequence_obj.next_by_code('salary.slip')
             # delete old payslip lines
             old_slipline_ids = slip_line_pool.search([('slip_id', '=', payslip.id)])
@@ -222,13 +210,11 @@ class hr_payslip(models.Model):
                                                  )
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
+
+
             self.write({'line_ids': lines, 'number': number})
         return
-    #  @api.multi
-        #  def hr_verify_sheet(self):
 
-        #   res = super(hr_payslip, self).hr_verify_sheet()
-    #   return res
 
     @api.multi
     def hr_action_cancel(self):
@@ -254,11 +240,11 @@ class hr_payslip(models.Model):
             # slip.write({'number': number}) #ya venia comentado!!!
             self = self.with_context({'struct_id': slip.struct_id.id, 'payoff': 'payoff',
                                       'payoff_date': datetime.now().strftime('%Y-%m-%d')})
-            slip.action_payslip_done()
-
-     #       if slip.move_id:
-      #          slip.move_id.write(
-      #              {'name': '%s de %s' % (slip.struct_id.name, slip.employee_id.name)})
+            #slip.action_payslip_done()
+            #self.compute_sheet_2()
+            if slip.move_id:
+                slip.move_id.write(
+                    {'name': '%s de %s' % (slip.struct_id.name, slip.employee_id.name)})
             self.employee_id.write({'active': False})
         return self.write({'state': 'done'})
 
@@ -317,6 +303,7 @@ class hr_payslip(models.Model):
         #CALCULO DE ALICUOTAS
         vac_frac = 0
         if self.tiempo_servicio:
+            literal_c = self.tiempo_servicio*int(dias_str)
             min_days = int(config_obj._hr_get_parameter('hr.payroll.vacation.min'))
             max_days = int(config_obj._hr_get_parameter('hr.payroll.vacation.max'))
             pay_days = min_days + ((self.tiempo_servicio - 1) if self.tiempo_servicio > 0 else 0)  # * step_days
@@ -340,24 +327,47 @@ class hr_payslip(models.Model):
                 vac_frac2 = (float(self.month_worked_year_str[0:1]) / float(12)) * float(pay_days)
                 self.vacaciones_fracc = vac_frac2
 
-        alic_b_v = self.calculo_alic_bono_vac((sal_mensual+promedio), dias_bv)
-        alic_u =  self.calculo_alic_util(sal_mensual+promedio,alic_b_v)
+        alic_b_v = self.calculo_alic_bono_vac((sal_mensual+(promedio*4)), dias_bv)
+        alic_u =  self.calculo_alic_util((sal_mensual+(promedio*4)),alic_b_v)
 
-
+        sal_diar = (((sal_mensual+(promedio*4))/2)/float(dias_str) + alic_b_v + alic_u)
         values.update({'salario_basico':sal_mensual,
                        'salario_basico_diario':sal_mensual/float(dias_str),
-                       'salario_prom_mensual': sal_mensual + promedio,
-                       'salario_prom_diairo': (sal_mensual + promedio) / float(dias_str),
+                       'salario_prom_mensual': (sal_mensual + (promedio*4))/2,
+                       'salario_prom_diairo': ((sal_mensual + (promedio*4))/2) / float(dias_str),
                        'alic_bono_vac_liq': alic_b_v,
                        'alic_util_liq': alic_u,
-                       'salario_integral':(sal_mensual+promedio)/float(dias_str) + alic_b_v + alic_u})
+                       'salario_integral':sal_diar,
+                       'literal_c': (float(literal_c)*float(sal_diar))
+                       })
         return values
+
+    def get_history_fideicomiso(self):
+        fi_hist_obj = self.env['hr.historico.fideicomiso']
+        values = {}
+        history = fi_hist_obj.get_last_history_fi(self.employee_id.id, None)
+        if history:
+            values.update({'dias_prestaciones_acum': history.dias_acumuluados + history.dias_aporte - history.dias_adicionales,
+                           'dias_prestaciones_adi': history.dias_adicionales,
+                           'monto_gps': history.monto_acumulado - history.GPS_dias_adicionales,
+                           'aporte_dias_adicionales':history.GPS_dias_adicionales,
+                           'interes_anual': history.monto_total_intereses,
+                           'anticipo_prestaciones': history.total_anticipos,
+                           'fecha_anticipo': history.fecha_anticipo,
+                          })
+
+        else:
+            raise exceptions.except_orm(('Advertencia!'),
+                                        (u'El Empleado %s no posee Historico de Prestaciones Sociales, por favor verifique y genere el mismo para poder proceder con la liquidación.')%(self.employee_id.name))
+        return values
+
+
 
     def get_mondays(self,fecha):
         mondays = 0
         rango = self.rango_mes_anterior(fecha,0,'is_liq')
-        recursive_days = date_from = datetime.strptime(rango[0], DEFAULT_SERVER_DATE_FORMAT)
-        date_to = datetime.strptime(rango[1], DEFAULT_SERVER_DATE_FORMAT)
+        recursive_days = date_from = datetime.strptime(str(rango[0]), DEFAULT_SERVER_DATE_FORMAT)
+        date_to = datetime.strptime(str(rango[1]), DEFAULT_SERVER_DATE_FORMAT)
         date_end = date_to + relativedelta(days=+1)
         while recursive_days != date_end:
             if recursive_days.weekday() == 0:
@@ -365,29 +375,4 @@ class hr_payslip(models.Model):
             recursive_days += relativedelta(days=+1)
         return mondays
 
-
-
-
-
-
-
-'''
-class hr_payroll_structure(models.Model):
-        _inherit = 'hr.payroll.structure'
-
-        @api.multi
-        def get_all_rules(self):
-            all_rules = []
-            is_payoff = self._context.get('come_from', False)
-            if is_payoff and 'payoff' in is_payoff:
-                payslip_id = self._context.get('slip_id', False)
-                if payslip_id:
-                    concept_ids = self.env['hr.payslip'].browse([payslip_id])
-                    all_rules += self.env['hr.salary.rule']._recursive_search_of_rules()
-                pass
-            else:
-                for struct in self.structure_ids:
-                    all_rules += self.env['hr.salary.rule']._recursive_search_of_rules()
-            return all_rules
-'''
 

@@ -104,7 +104,10 @@ class hr_payslip(models.Model):
         if rango:
             if 'liquidacion' in tipo_nomina:
                 domain_ps.append(('date_from', '<=', fecha_desde))
-                payslip_ids = self.search( domain_ps, limit=limite)
+                domain_ps.append(('payslip_run_id.check_special_struct', '=', False))
+
+                payslip_ids_ids = self.search(domain_ps)
+                payslip_ids = payslip_ids_ids[-1]
             else:
                 domain_ps.append(('date_from', '>=', rango[0]))
                 domain_ps.append(('date_from', '<=', rango[1]))
@@ -135,6 +138,8 @@ class hr_payslip(models.Model):
         if payslip_line_ids:
             for i in payslip_line_ids:
                 amount = amount + i.amount
+
+
 
         return amount
 

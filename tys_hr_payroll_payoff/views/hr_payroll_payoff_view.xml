@@ -29,7 +29,7 @@
                 <form string="Liquidaciones" version="7.0">
                     <header>
                         <button string="Confirmar" name="hr_action_confirm" class="oe_highlight" type="object" confirm="Esta seguro que desea confirmar esta nomina?" attrs="{'invisible':['|',('general_state', '=', 'not_autorized' ),('state', 'not in', 'verify' )]}"/>
-                        <button string="Verificar" name="hr_verify_sheet" states="draft" type='object' class="oe_highlight" context="{'come_from':'payoff'}"/>
+                        <button string="Calcular" name="hr_verify_sheet" states="draft" type='object' class="oe_highlight" context="{'come_from':'payoff'}"/>
                         <button string="Volver a Borrador" name="hr_action_draft" states="verify" type="object" context="{'come_from':'hr_action_draft'}"/>
                         <button string="Realizado" name="hr_action_done" type="object" states="confirm" class="oe_highlight"/>
                         <button string="Cancelar" name="hr_action_cancel" states="draft,verify" type="object" />
@@ -58,16 +58,12 @@
                                 <field name="month_worked_year_str" readonly="1" force_save="1"/>
                                 <field name="month_worked_year" readonly="1" invisible="1" force_save="1"/>
                             </group>
-                            <!--group string="Antigüedad (19/06/1997)">
-                                <field name="antiguedad_19061997_year" string="Años" readonly="1" force_save="1"/>
-                                <field name="antiguedad_19061997_meses" string="Meses" readonly="1" force_save="1"/>
-                                <field name="antiguedad_19061997_dias" string="Días" readonly="1" force_save="1"/>
-                            </group-->
+
                         </group>
                         <notebook colspan="4">
                              <page string="Liquidación">
                                 <group col="2" name="datos_calculo">
-                                    <field name="struct_id" attrs="{'readonly':[('state','not in','draft')]}"/>
+                                    <field name="structure" readonly="1"/>
                                     <field name="conceptos_salariales" string="Conceptos Salariales" attrs="{'readonly':[('state','not in','draft')],'invisible':[('state','not in','draft')],'nolabel':[('state','not in','draft')]}"/>
                                     <field name="line_ids" string="Conceptos Salariales" attrs="{'readonly':[('state','!=','draft')],'invisible':[('state','in','draft')],'nolabel':[('state','in','draft')]}">
                                         <tree string="Salary Structure" editable="bottom">
@@ -128,7 +124,15 @@
                                                  <field name="salario_integral" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
                                              </div>
                                          </div>
+                                         <label for="literal_c" string="Cálculo Literal C Art. 142"/>
+                                         <div>
+                                             <div>
+                                                 <field name="literal_c" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+
+                                             </div>
+                                         </div>
                                      </group>
+
                                      <!--group>
                                          <label for="vacaciones_fracc" string="Vacaciones Fraccionadas"/>
                                          <div>
@@ -137,6 +141,44 @@
                                              </div>
                                          </div>
                                      </group-->
+                                     <group>
+                                         <label for="dias_prestaciones_acum" string="Días Acumulados de Prestaciones Sociales"/>
+                                         <div>
+                                             <div>
+                                                 <field name="dias_prestaciones_acum" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
+                                         <label for="dias_prestaciones_adi" string="Días Adicionales de Prestaciones Sociales"/>
+                                         <div>
+                                             <div>
+                                                 <field name="dias_prestaciones_adi" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
+                                         <label for="monto_gps" string="Garantía de Prestaciones Sociales"/>
+                                         <div>
+                                             <div>
+                                                 <field name="monto_gps" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
+                                         <label for="aporte_dias_adicionales" string="Días Adicionales de la Garantía de Prestaciones Sociales"/>
+                                         <div>
+                                             <div>
+                                                 <field name="aporte_dias_adicionales" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
+                                         <label for="interes_anual" string="Intereses sobre la Garantía de Prestaciones Sociales"/>
+                                         <div>
+                                             <div>
+                                                 <field name="interes_anual" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
+                                         <label for="anticipo_prestaciones" string="Anticipo de Prestaciones Sociales"/>
+                                         <div>
+                                             <div>
+                                                 <field name="anticipo_prestaciones" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
+                                     </group>
                                  </group>
                              </page>
                         </notebook>
@@ -155,7 +197,7 @@
 			<field name="arch" type="xml">
                 <search string="Liquidaciones">
 					<field name="employee_id"/>
-                    <filter name="payoff_true" string="Liquidaciones" icon="terp-stock_effects-object-colorize" domain="[('is_payoff','=','True')]" />
+                    <filter name="payoff_true" string="Liquidaciones" icon="terp-stock_effects-object-colorize" domain="[('is_payoff','=','True')]"/>
                 </search>
 			</field>
 		 </record>

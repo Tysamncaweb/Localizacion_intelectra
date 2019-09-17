@@ -36,7 +36,7 @@ class ReportAccountPayment_5(models.AbstractModel):
         docs2 = []
         date_from = data['date_from']
         date_to =  data['date_to']
-        slips = self.env['hr.payslip'].search([('employee_id','=',data['empleado']),('date_from','>=', date_from),('date_to','<=',date_to),('state','=','close')])
+        slips = self.env['hr.payslip'].search([('employee_id','=',data['empleado']),('date_from','>=', date_from),('date_to','<=',date_to),('state','=','done')])
         monto_islr_enero = monto_islr_febrero = monto_islr_marzo = monto_islr_abril = monto_islr_mayo = monto_islr_junio = monto_islr_julio = monto_islr_agosto = monto_islr_septiembre = monto_islr_octubre = monto_islr_noviembre = monto_islr_diciembre = 0.0
         salario_enero = salario_febrero =  salario_marzo = salario_abril = salario_mayo = salario_junio = salario_julio = salario_agosto = salario_septiembre = salario_octubre = salario_noviembre = salario_diciembre = 0.0
         porcentaje_enero = porcentaje_febrero = porcentaje_marzo = porcentaje_abril = porcentaje_mayo = porcentaje_junio = porcentaje_julio = porcentaje_agosto = porcentaje_septiembre = porcentaje_octubre = porcentaje_noviembre = porcentaje_diciembre = 0.0
@@ -54,9 +54,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '01':
                 mes = 'ENERO'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_enero += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_enero += regla.total
                 if salario_enero == 0:
                     porcentaje_enero = 0.0
@@ -66,9 +66,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '02':
                 mes = 'FEBRERO'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_febrero += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_febrero += regla.total
                 if salario_febrero == 0:
                     porcentaje_febrero = 0.0
@@ -78,9 +78,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '03':
                 mes = 'MARZO'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_marzo += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_marzo += regla.total
                 if salario_marzo == 0:
                     porcentaje_marzo = 0.0
@@ -90,9 +90,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '04':
                 mes = 'ABRIL'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_abril += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_abril += regla.total
                 if salario_abril == 0:
                     porcentaje_abril = 0.0
@@ -102,9 +102,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '05':
                 mes = 'MAYO'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_mayo += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_mayo += regla.total
                 if salario_mayo == 0:
                     porcentaje_mayo = 0.0
@@ -114,9 +114,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '06':
                 mes = 'JUNIO'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_junio += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_junio += regla.total
                 if salario_junio == 0:
                     porcentaje_junio = 0.0
@@ -126,9 +126,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '07':
                 mes = 'JULIO'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_julio += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_julio += regla.total
                 if salario_julio == 0:
                     porcentaje_julio = 0.0
@@ -138,9 +138,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '08':
                 mes = 'AGOSTO'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_agosto += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_agosto += regla.total
                 if salario_agosto == 0:
                     porcentaje_agosto = 0.0
@@ -150,9 +150,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '09':
                 mes = 'SEPTIEMBRE'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_septiembre += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_septiembre += regla.total
                 if salario_septiembre == 0:
                     porcentaje_septiembre = 0.0
@@ -162,9 +162,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '10':
                 mes = 'OCTUBRE'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_octubre += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_octubre += regla.total
                 if salario_octubre == 0:
                     porcentaje_octubre = 0.0
@@ -174,9 +174,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '11':
                 mes = 'NOVIEMBRE'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_noviembre += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_noviembre += regla.total
                 if salario_noviembre == 0:
                     porcentaje_noviembre = 0.0
@@ -186,9 +186,9 @@ class ReportAccountPayment_5(models.AbstractModel):
             if str(slip.date_to[5:7]) == '12':
                 mes = 'DICIEMBRE'
                 for regla in slip.line_ids:
-                    if regla.amount_python_compute.find("(((contract.islr_withholding_value/100)*contract.wage)/30)*(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("contract.islr_withholding_value/100") != -1:
                         monto_islr_diciembre += regla.total
-                    if regla.amount_python_compute.find("(contract.wage / 30) *(worked_days.WORK100.number_of_days)") != -1:
+                    if regla.amount_python_compute.find("((contract.wage / 4)/7)*(worked_days.WORK100.number_of_days)") != -1:
                         salario_diciembre += regla.total
                 if salario_diciembre == 0:
                     porcentaje_diciembre = 0.0

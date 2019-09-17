@@ -44,7 +44,8 @@
                                 <field name="monto_acumulado" string="Antiguedad Neto Acumulado" readonly="1"/>
                                 <field name="dias_acumuluados" string="Días Acumulados" readonly="1"/>
                                 <field name="dias_adicionales" string="Días Adicionales" readonly="1"/>
-                                <field name="aporte_dias_adic" string="Aporte Días Adicionales" readonly="1"/>
+                                <field name="aporte_dias_adic" string="Aporte de los Días Adicionales" readonly="1"/>
+                                <field name="GPS_dias_adicionales" string="Aporte Acumulado de los Días Adicionales" readonly="1"/>
                             </group>
                             <group name="grupo_2" >
                                 <h2><a><b>Anticipos</b></a></h2>
