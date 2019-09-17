@@ -36,7 +36,7 @@ class ReportAccountPayment_5(models.AbstractModel):
         docs2 = []
         date_from = data['date_from']
         date_to =  data['date_to']
-        slips = self.env['hr.payslip'].search([('employee_id','=',data['empleado']),('date_from','>=', date_from),('date_to','<=',date_to),('state','=','done')])
+        slips = self.env['hr.payslip'].search([('employee_id','=',data['empleado']),('date_from','>=', date_from),('date_to','<=',date_to),('state','=','close')])
         monto_islr_enero = monto_islr_febrero = monto_islr_marzo = monto_islr_abril = monto_islr_mayo = monto_islr_junio = monto_islr_julio = monto_islr_agosto = monto_islr_septiembre = monto_islr_octubre = monto_islr_noviembre = monto_islr_diciembre = 0.0
         salario_enero = salario_febrero =  salario_marzo = salario_abril = salario_mayo = salario_junio = salario_julio = salario_agosto = salario_septiembre = salario_octubre = salario_noviembre = salario_diciembre = 0.0
         porcentaje_enero = porcentaje_febrero = porcentaje_marzo = porcentaje_abril = porcentaje_mayo = porcentaje_junio = porcentaje_julio = porcentaje_agosto = porcentaje_septiembre = porcentaje_octubre = porcentaje_noviembre = porcentaje_diciembre = 0.0
