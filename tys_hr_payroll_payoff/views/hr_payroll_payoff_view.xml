@@ -77,6 +77,7 @@
                                             <field name="total"/>
                                         </tree>
                                     </field>
+                                    <field name="move_id" readonly="1"/>
                                 </group>
                              </page>
                              <page string="Datos de cálculo">
@@ -94,7 +95,7 @@
                                                  <field name="salario_basico_diario" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
                                              </div>
                                          </div>
-                                         <label for= "salario_prom_mensual" string="Salario promedio mensual" />
+                                         <!--label for= "salario_prom_mensual" string="Salario promedio mensual" />
                                          <div>
                                              <div class="address_format">
                                                  <field name="salario_prom_mensual" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
@@ -105,7 +106,7 @@
                                              <div class="address_format">
                                                  <field name="salario_prom_diairo" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
                                              </div>
-                                         </div>
+                                         </div-->
                                          <label for= "alic_bono_vac_liq" string="Alícuota de bono vacacional" />
                                          <div>
                                              <div class="address_format">
@@ -118,7 +119,7 @@
                                                  <field name="alic_util_liq" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
                                              </div>
                                          </div>
-                                         <label for= "salario_integral" string="Salario integral"/>
+                                         <label for= "salario_integral" string="Salario integral Diario"/>
                                          <div>
                                              <div class="address_format">
                                                  <field name="salario_integral" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
