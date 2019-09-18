@@ -2,7 +2,10 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 from datetime import datetime, timedelta
+from datetime import date
+
 from odoo import models, api, fields,_, exceptions
+
 from logging import getLogger
 
 class hr_payslip_run_total(models.Model):
@@ -52,10 +55,16 @@ class hr__days_period(models.Model):
         worked_days = self.env['hr.payslip.worked_days']
 
         #####se hara que la nomina siempre tome los sabados y los domingos#######3 dejando las horas laborales semanalmente########
+
+
         for b in self:
+            date_to = datetime.strptime(b.date_to, '%Y-%m-%d')
+            date_from = datetime.strptime(b.date_from, '%Y-%m-%d')
+            difb = date_to - date_from
+            diferencia = difb.days + 1
             for var4 in b.worked_days_line_ids:
                 if var4.code == 'WORK100':
-                    var4.write({'number_of_days': (var4.number_of_days + b.saturdays + b.sundays)})
+                    var4.write({'number_of_days': (diferencia)})
 
 
         for a in self:
