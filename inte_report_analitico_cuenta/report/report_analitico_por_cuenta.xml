@@ -125,8 +125,6 @@
                                                 <th>Balance_eur</th>
                                             </span>
                                         </t>
-                                        <!--span t-if="move_dest == 'all'">Todos los asientos</span-->
-
                                 </tr>
                             </thead>
                             <tbody>

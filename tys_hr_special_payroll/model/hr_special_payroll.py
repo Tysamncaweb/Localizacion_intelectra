@@ -81,6 +81,7 @@ class hr_payslip(models.Model):
         # ultimo_sueldo = self.get_amount(cr, uid, code, employee_id.id, fecha_desde, 0)     #para tomar la fecha maxima del rango en que se genera la nomina
         return ultimo_sueldo
 
+
     # @api.v7
     def get_amount(self, code=None, employee_id=None, fecha_desde=None, meses=0, tipo_nomina=None, limite=None):
         amount = 0.0
