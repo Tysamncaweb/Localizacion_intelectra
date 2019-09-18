@@ -148,18 +148,19 @@
                                                  <field name="dias_prestaciones_acum" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
                                              </div>
                                          </div>
+                                          <label for="monto_gps" string="Garantía de Prestaciones Sociales"/>
+                                         <div>
+                                             <div>
+                                                 <field name="monto_gps" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
+                                             </div>
+                                         </div>
                                          <label for="dias_prestaciones_adi" string="Días Adicionales de Prestaciones Sociales"/>
                                          <div>
                                              <div>
                                                  <field name="dias_prestaciones_adi" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
                                              </div>
                                          </div>
-                                         <label for="monto_gps" string="Garantía de Prestaciones Sociales"/>
-                                         <div>
-                                             <div>
-                                                 <field name="monto_gps" class="oe_no_button" style="width: 65%%" attrs="{'invisible':[('state','in','draft')], 'readonly':[('state','not in','draft')]}"/>
-                                             </div>
-                                         </div>
+
                                          <label for="aporte_dias_adicionales" string="Días Adicionales de la Garantía de Prestaciones Sociales"/>
                                          <div>
                                              <div>

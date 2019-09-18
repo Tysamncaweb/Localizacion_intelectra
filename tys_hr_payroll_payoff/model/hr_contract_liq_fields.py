@@ -32,19 +32,22 @@ class hr_contract(models.Model):
     _name = 'hr.contract'
     _inherit = 'hr.contract'
 
-    dias_acum_fideicomiso = fields.Integer('Dias acumulados fideicomiso')
-    dias_adic_fideicomiso = fields.Integer('Dias adicionales fideicomiso')
-    total_acum_anticipo_ps = fields.Float('Total Anticipos pretacioens sociales')
-    total_acum_ps = fields.Float('Total cumulado prestaciones sociales')
-    vacaciones_vencidas_check = fields.Boolean('Vacaciones vencidas')
-    vacaciones_vencidas_value = fields.Float('Vacaciones vencidas')
+
+    utilidades_fraccionadas_check = fields.Boolean('check utilidades fraccionadas')
+    utilidades_fraccionadas_value = fields.Float('value utilidades fraccionadas')
     vacaciones_fraccionadas_check = fields.Boolean('Vacaciones fraccionadas')
-    literal_a =  fields.Boolean('Literal A')
-    literal_b =  fields.Boolean('Literal B')
-    literal_c =  fields.Boolean('Literal C')
+    vacaciones_fraccionadas_value = fields.Float('Vacaciones Fraccionadas')
+    bono_vac_fraccionado_check = fields.Boolean('check bono vac fraccionado')
+    bono_vac_fraccionado_value = fields.Float('value bono vac fraccionado')
+    indemnizacion_check = fields.Boolean('Indemnizacion check')
+    indemnizacion_value = fields.Float('Indemnizacion value')
+
+ #   literal_a =  fields.Boolean('Literal A')
+  #  literal_b =  fields.Boolean('Literal B')
+  #  literal_c =  fields.Boolean('Literal C')
 
 hr_contract()
-
+'''
 class hr_payslip_run(models.Model):
     _name = 'hr.payslip.run'
     _inherit = 'hr.payslip.run'
@@ -111,7 +114,7 @@ class hr_payslip_run(models.Model):
             contract_obj.write({
                     'dias_acum_fideicomiso': acumulado,
                     'dias_adic_fideicomiso': adicionales})
-
+'''
 '''
 @api.multi
     def close_payslip_run(self):

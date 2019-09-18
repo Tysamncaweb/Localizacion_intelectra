@@ -148,10 +148,10 @@ class hr_historico_fideicomiso(models.Model):
         mes_hoy = int(fecha_inicio.split('-')[1])
         if (mes_hoy - offset)%3 == 0:
             #ULTIMO MES DEL TRIMESTRE:
-            acumulado = payslip_values.monto_incremento
+            acumulado = payslip_values.get('monto_incremento')
         elif historico:
             #CUALQUIR OTRO MES DEL TRIMESTRE:
-            acumulado = historico.monto_tri_ant
+            acumulado = historico.get('monto_tri_ant')
         else:
             acumulado = payslip_values.get('monto_incremento')
         tasa1 = tasa2 =0.0
