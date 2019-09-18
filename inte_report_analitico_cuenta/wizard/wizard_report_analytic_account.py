@@ -772,9 +772,12 @@ class ReportAnalyticForAccount(models.AbstractModel):
             res['name'] = account.name
             res['move_lines'] = move_lines[account.id]
             for line in res.get('move_lines'):
-                res['debit'] += line['debit']
-                res['credit'] += line['credit']
-                res['balance'] = line['balance']
+                if line.get('lname') == 'Initial Balance' or line.get('lname') == 'Balance Inicial':
+                    pass
+                else:
+                    res['debit'] += line['debit']
+                    res['credit'] += line['credit']
+                    res['balance'] = line['balance']
 
             if display_account == 'all':
                 account_res.append(res)
