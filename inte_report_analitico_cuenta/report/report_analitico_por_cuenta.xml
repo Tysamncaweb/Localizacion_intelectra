@@ -185,7 +185,7 @@
                                         <td groups="base.group_multi_currency"/>
                                     </tr>
                                     <tr t-foreach="account['move_lines']" t-as="line">
-                                        <td><span t-esc="line['ldate']"/></td>
+                                        <td><span t-esc="line['ldate']" t-options="{'widget': 'date'}"/></td>
                                         <td><span t-esc="line['lcode']"/></td>
                                         <td><span t-esc="line['partner_name']"/></td>
                                         <td><span t-if="line['lref']" t-esc="line['lref']"/></td>

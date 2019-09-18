@@ -126,7 +126,7 @@ class hr_payslip(models.Model):
                                 p_ids.append(ps_id.id)
                 domain_psl.append(('slip_id', 'in', p_ids))
             else:
-                if (tipo_nomina != 'normal') and (self.payslip_run_id.struct_id.code != '7000'):
+                if (tipo_nomina != 'normal') and (self[0].payslip_run_id.struct_id.code != '7000'):
                     raise exceptions.except_orm(('Advertencia!', u'No se han confirmado las nóminas correspondientes al mes anterior.\n \
                                                     Por favor verifique y proceda a realizar la confirmación requerida.'))
         if code:
