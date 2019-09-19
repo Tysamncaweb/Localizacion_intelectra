@@ -20,11 +20,8 @@ Adecuaciones al modulo de ventas del Cliente Intelectra\n
     #data, es una lista donde se agregan todas las vistas del módulo, es decir los archivos.xml y archivos.csv.
     'data': [
             'views/sale_order.xml',
-            'views/sale_report_templates.xml',
             'views/res_users.xml',
-            #'views/product_views.xml',
-            #'report/report.xml',
-
+            'report/sale_report_templates.xml',
             ],
     #depends,  es una lista donde se agregan los módulos que deberían estar instalados (Módulos dependencia) para que el modulo pueda ser instalado en Odoo.
     'depends': ['base','sale','project'],

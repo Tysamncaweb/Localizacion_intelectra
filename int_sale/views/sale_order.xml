@@ -7,7 +7,8 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="type_of_sale" string="Type of Sales"/>
+                    <field name="type_of_sale" string="Type of Sales" widget="selection"/>
+                    <field name="type_of_other" string="" attrs="{'invisible': [('type_of_sale', '!=','otra')]}"/>
                     <field name="rif" string='Rif'/>
                     <field name="direction" string="Direction Fiscal"/>
                     <field name="contact" string="Contact" domain="[('parent_id', '=',partner_id)]" options="{'no_create': True}"/>
