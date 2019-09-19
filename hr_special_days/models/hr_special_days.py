@@ -8,7 +8,7 @@ import calendar
 class hr_special_days(models.Model):
     _inherit = 'hr.payslip'
 
-    cestaticket = fields.Float('Cestaticket', compute='_compute_days')
+    cestaticket = fields.Float('Cestaticket')
 
     @api.multi
     @api.depends('date_from', 'date_to')
@@ -37,9 +37,10 @@ class hr_special_days(models.Model):
                 hollyday_id = hr_payroll_hollydays.search(
                     [('date_from', '<=', str(recursive_days)[:10]), ('date_to', '>=', str(recursive_days)[:10])])
                 if hollyday_id:
-                    holydays += 1
-                    holyday_obj = hr_payroll_hollydays.browse(hollyday_id.id)
-                    hollydays_str += str(recursive_days)[:10] + ': ' + holyday_obj[0].nombre + '\n'
+                    for holy in hollyday_id:
+                        holydays += 1
+                        holyday_obj = hr_payroll_hollydays.browse(holy.id)
+                        hollydays_str += str(recursive_days)[:10] + ': ' + holyday_obj[0].nombre + '\n'
 
                 elif recursive_days.weekday() == 5:
                     saturdays += 1

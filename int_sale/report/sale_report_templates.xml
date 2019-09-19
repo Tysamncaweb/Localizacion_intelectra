@@ -489,7 +489,8 @@
                             <tr class="border-black" style="border-bottom:1px solid #dddddd;">
                                 <td><strong>Total</strong></td>
                                 <td class="text-right">
-                                    <strong><span t-esc="'{0:,.2f}'.format(doc.amount_untaxed).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
+                                    <strong><span t-field="doc.amount_untaxed"
+                                            t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/></strong>
                                 </td>
                             </tr>
                         </table>
@@ -738,10 +739,10 @@
                                         <span t-field="l.product_uom" groups="product.group_uom"/>
                                     </td>
                                     <td class="text-right">
-                                        <span t-esc="'{0:,.2f}'.format(l.price_unit).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
+                                        <span t-field="l.price_unit" t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"/>
                                     </td>
                                     <td class="text-right">
-                                        <span t-esc="'{0:,.2f}'.format(l.price_subtotal).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
+                                        <span t-field="l.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"/>
                                     </td>
 
                                 </tr>
@@ -774,7 +775,7 @@
                             <tr class="border-black" style="border-bottom:1px solid #dddddd;">
                                 <td><strong>Total</strong></td>
                                 <td class="text-right">
-                                    <strong><span t-esc="'{0:,.2f}'.format(doc.amount_untaxed).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
+                                    <strong><span t-field="doc.amount_total" t-options="{'widget': 'monetary','display_currency': doc.pricelist_id.currency_id}"/></strong>
                                 </td>
                             </tr>
                             <!--t t-foreach="doc._get_tax_amount_by_group()" t-as="amount_by_group">
