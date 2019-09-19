@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<odoo>
+
+        <record model="report.paperformat" id="paperformat_liquidacion_trabajo">
+
+        <field name="name">paperformat.liquidacion.trabajo</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_right">10</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+
+    </record>
+
+    <template id="template_liquidacion_trabajo" >
+        <div class="page">
+                <div class="article">
+                    <h4 class="text-center">Liquidación de Prestaciones Sociales</h4>
+                    <t t-foreach="docs" t-as="doc">
+
+                        <br/><br/><br/>
+                        <table style="width:100%;">
+                                 <tr>
+                                    <td style="width:30%;"><p  class="text-left">Nombre empleador: </p></td>
+                                    <td style="width:20%;"><p  class="text-left"><span t-esc="doc['nombre_empleador']"/></p></td>
+                                    <td style="width:30%;"><p  class="text-left">RIF:</p></td>
+                                    <td style="width:20%;"><p  class="text-left"><span t-esc="doc['rif_empleador']"/></p></td>
+                                </tr>
+                                 <tr>
+                                    <td style="width:25%;"><p  class="text-left">Nombre trabajador: </p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['nombre_empleado']"/></p></td>
+                                    <td style="width:25%;"><p  class="text-left">Cédula de Identidad::</p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['ci_empleado']"/></p></td>
+                                </tr>
+                            <tr>
+                                    <td style="width:25%;"><p  class="text-left">Fecha de Ingreso: </p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['fecha_ingreso']"/></p></td>
+                                    <td style="width:25%;"><p  class="text-left">Cargo:</p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['cargo']"/></p></td>
+                                </tr>
+                            <tr>
+                                    <td style="width:25%;"><p  class="text-left">Fecha de Egreso: </p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['fecha_egreso']"/></p></td>
+                                    <td style="width:25%;"><p  class="text-left">Salario Mensual:</p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['salario_mensual']"/></p></td>
+                                </tr>
+                            <tr>
+                                    <td style="width:25%;"><p  class="text-left">Motivo: </p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['motivo']"/></p></td>
+                                    <td style="width:25%;"><p  class="text-left">Salario Diario:</p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['salario_diario']"/></p></td>
+                                </tr>
+                            <tr>
+                                    <td style="width:25%;"><p  class="text-left">Tiempo de servicios: </p></td>
+                                    <td style="width:25%;"><p  class="text-left">&amp;nbsp;</p></td>
+                                    <td style="width:25%;"><p  class="text-left">Salario Integral Diario:</p></td>
+                                    <td style="width:25%;"><p  class="text-left"><span t-esc="doc['salario_integral']"/></p></td>
+                                </tr>
+                        </table>
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="width:16%;"><p class="text-left">Años</p></td>
+                                <td style="width:16%;"><p class="text-left">Meses</p></td>
+                                <td style="width:16%;"><p class="text-left">Días</p></td>
+                                <td><p>&amp;nbsp;</p></td><td><p>&amp;nbsp;</p></td><td><p>&amp;nbsp;</p></td>
+                            </tr>
+                            <tr>
+                                <td style="width:16%;"><p class="text-right"><span t-esc="doc['años_servicio']"/></p></td>
+                                <td style="width:16%;"><p class="text-right"><span t-esc="doc['meses_servicio']"/></p></td>
+                                <td style="width:16%;"><p class="text-right"><span t-esc="doc['dias_servicio']"/></p></td>
+                                <td><p>&amp;nbsp;</p></td><td><p>&amp;nbsp;</p></td><td><p>&amp;nbsp;</p></td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                         <table   style="width:100%; border:1px solid">
+                                 <tr>
+                                     <td style="width:50%; border:1px solid"><p class="text-center"><b>Asignaciones</b></p></td>
+                                     <td style="border:1px solid"><p class="text-center"><b>Días / %</b></p></td>
+                                     <td style="border:1px solid"><p class="text-center"><b>Salario</b></p></td>
+                                     <td style="border:1px solid"><p class="text-center"><b>Monto</b></p></td>
+                                 </tr>
+                                 <t t-foreach="asignaciones" t-as="asig">
+                                    <tr>
+                                     <td style="width:50%; border:1px solid"><p class="text-left">&amp;nbsp;&amp;nbsp;<span t-esc="asig['nombre']"/></p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="asig['dias_porcentaje']"/>&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="asig['salario']"/>&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="asig['monto']"/>&amp;nbsp;</p></td>
+                                     </tr>
+                                 </t>
+                                 <tr>
+                                     <td><p class="text-center">&amp;nbsp;</p></td>
+                                     <td><p class="text-center">&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-center">Total Asignaciones</p></td>
+                                     <td ><p class="text-right"><span t-esc="doc['total_asignaciones']"/></p></td>
+                                 </tr>
+                                <tr>
+                                     <td style="width:50%; border:1px solid"><p class="text-center"><b>Deducciones</b></p></td>
+                                     <td style="border:1px solid"><p class="text-right">&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-right">&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-right">&amp;nbsp;</p></td>
+                                 </tr>
+                                <t t-foreach="deducciones" t-as="ded">
+                                 <tr>
+                                     <td style="width:50%; border:1px solid"><p class="text-left">&amp;nbsp;&amp;nbsp;<span t-esc="ded['nombre']"/></p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="ded['dias_porcentaje']"/>&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="ded['salario']"/>&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="ded['monto']"/>&amp;nbsp;</p></td>
+                                 </tr>
+                                </t>
+                                 <tr>
+                                     <td><p class="text-right">&amp;nbsp;</p></td>
+                                     <td ><p class="text-right">&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-center">Total Deducciones</p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="doc['total_deducciones']"/>&amp;nbsp;</p></td>
+                                 </tr>
+                                    <tr>
+                                     <td><p class="text-center">&amp;nbsp;</p></td>
+                                     <td><p class="text-center">&amp;nbsp;</p></td>
+                                     <td style="border:1px solid"><p class="text-center">Suma Neta</p></td>
+                                     <td style="border:1px solid"><p class="text-right"><span t-esc="doc['neto_pagar']"/>&amp;nbsp;</p></td>
+                                 </tr>
+
+                         </table>
+                        <br/><br/><br/><br/>
+                        <h4 class="text-center"><b>_______________________</b></h4>
+                        <h4 class="text-center"><b>Firma</b></h4>
+                        <br/>
+                        <h4 class="text-left">Fecha: &amp;nbsp;&amp;nbsp; <span t-esc="doc['fecha_actual']"/></h4>
+                        <h4 class="text-left">Nombre: &amp;nbsp;&amp;nbsp; <span t-esc="doc['nombre_gerente']"/></h4>
+
+                    </t>
+                </div>
+         </div>
+    </template>
+    <report
+            id="action_hr_report_liquidacion_reporte"
+            string="Reporte de Liquidación"
+            model="hr.liquidacion"
+            report_type="qweb-pdf"
+            name="int_hr_reporte_liquidacion.template_liquidacion_trabajo"
+            file="int_hr_reporte_liquidacion.template_liquidacion_trabajo"
+            paperformat="paperformat_liquidacion_trabajo"
+    />
+</odoo>

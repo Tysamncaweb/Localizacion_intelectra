@@ -58,7 +58,7 @@
                 <xpath expr="//field[@name='coach_id']" position="replace">
                     <label for="coach_id" string="Empleador"/>
                     <div>
-                        <field name="coach_id" required="1"/>
+                        <field name="coach_id" attrs="{'required': [('manager','!=',True)]}"/>
                     </div>
                 </xpath>
                 <xpath expr="//field[@name='job_id']" position="replace">
