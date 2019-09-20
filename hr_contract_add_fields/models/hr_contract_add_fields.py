@@ -196,8 +196,8 @@ class Contract(models.Model):
                 contract_fields.update({'cuenta_seguro_medico_check': False, 'cuenta_seguro_medico_value': 0.0})
             if contract.anticipo_extra_check:
                 contract_fields.update({'anticipo_extra_check': False, 'anticipo_extra_value': 0.0})
-            if contract.dias_reposo_check:
-                contract_fields.update({'dias_reposo_check': False, 'dias_reposo_value': '0'})
+       #     if contract.dias_reposo_check:
+        #        contract_fields.update({'dias_reposo_check': False, 'dias_reposo_value': '0'})
 
 
         if contract_fields:

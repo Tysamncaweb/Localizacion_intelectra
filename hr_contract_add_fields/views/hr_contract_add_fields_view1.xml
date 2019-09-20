@@ -37,13 +37,13 @@
                                         <field name="anticipo_extra_value" class="oe_no_button" style="width: 65%%" attrs="{'invisible': [('anticipo_extra_check', '!=', True)]}"/>
                                     </div>
                                 </div>
-                                 <label for= "dias_reposo_check" string="Días de Reposo"/>
+                                 <!--label for= "dias_reposo_check" string="Días de Reposo"/>
                                 <div>
                                     <div class="address_format">
                                         <field name="dias_reposo_check" style="width: 15%%"/>
                                         <field name="dias_reposo_value" class="oe_no_button" style="width: 65%%" attrs="{'invisible': [('dias_reposo_check', '!=', True)]}"/>
                                     </div>
-                                </div>
+                                </div-->
                                  <label for= "salary_retroactive_check" string="Préstamo Personal"/>
                                 <div>
                                     <div class="address_format">

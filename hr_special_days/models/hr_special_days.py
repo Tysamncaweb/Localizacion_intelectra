@@ -8,7 +8,7 @@ import calendar
 class hr_special_days(models.Model):
     _inherit = 'hr.payslip'
 
-    cestaticket = fields.Float('Cestaticket')
+    cestaticket = fields.Float('Cestaticket',compute='_compute_days')
 
     @api.multi
     @api.depends('date_from', 'date_to')

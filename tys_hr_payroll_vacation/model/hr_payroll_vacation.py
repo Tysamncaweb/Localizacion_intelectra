@@ -1,9 +1,10 @@
 # coding: utf-8
 # from openerp import fields, models, api
-from odoo import fields, models, api
+from odoo import fields, models, api, _,exceptions
 from dateutil import relativedelta
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+from odoo.exceptions import ValidationError, UserError
 
 class hr_payslip(models.Model):
     _inherit ='hr.payslip'
@@ -32,6 +33,7 @@ class hr_payslip(models.Model):
         payslip_values = {}
         dias_x_periodo = {}
         tipo_nomina = config_obj._hr_get_parameter('hr.payroll.codigos.nomina.vacaciones', True)
+        dias_disfrutar = 0
 
         special_fields = run_obj.search([('id', '=', active_id)])
         is_special = special_fields.check_special_struct
@@ -43,20 +45,34 @@ class hr_payslip(models.Model):
             psr = run_obj.browse(active_id)
         if is_special and structure_ids:
             if tipo_nomina in psr.struct_id.code:
-                for payslip_id in self.ids:
-                    payslip = self.search([('id', '=', payslip_id)])
+                for payslip_id in self:
+              #      payslip = self.search([('id', '=', payslip_id)])
                     special_obj = special_struct_obj.browse(structure_ids)
                     if 'code' in special_obj:
     #                if  special_obj.code in tipo_nomina:
-                        dias_x_periodo = self.calcula_dias_x_periodo(payslip.date_from, payslip.date_to)
-                        feriados = self.get_feriados_2(payslip.date_from, payslip.date_to)
-                        tiempo_servicio = self.get_years_service(payslip.contract_id.date_start, payslip.date_to)
+                        dias_x_periodo = self.calcula_dias_x_periodo(payslip_id.date_from, payslip_id.date_to)
+                        feriados = self.get_feriados_2(payslip_id.date_from, payslip_id.date_to)
+                        tiempo_servicio = self.get_years_service(payslip_id.contract_id.date_start, payslip_id.date_to)
                         vacaciones = self.get_dias_bono_vacacional(tiempo_servicio)
-                        sueldo_promedio = self.calculo_sueldo_promedio(payslip.employee_id, payslip.date_from, 1, 'vacaciones')
+                        sueldo_promedio = self.calculo_sueldo_promedio(payslip_id.employee_id, payslip_id.date_from, 1, 'vacaciones')
 
-                        if payslip.date_from < payslip.date_to:
-                            diferencia = int(payslip.date_to[8:10]) - int(payslip.date_from[8:10])
-                    #,('date_from', '<=',payslip.date_from),('date_to','>=',payslip.date_to)
+
+                        holidays = self.env['hr.holidays'].search([('employee_id', '=', payslip_id.employee_id.id)])
+                        holidays_employee = holidays.search([('date_from', '>=', payslip_id.date_from),('date_to','<=', payslip_id.date_to)])
+                        if holidays_employee:
+                            for holy in holidays_employee:
+                                if holy.vacation == True:
+                                    dias_disfrutar = holy.number_of_days_temp
+                                else:
+                                    dias_disfrutar = 0
+                            if dias_disfrutar == 0:
+                                raise ValidationError(_(
+                                    "No se Posee ningun registro de Tipo de Ausencias: VACACIONES. \n Inicialmente se debe cargar en el Módulo de Ausencias el registro de los Dias de Vacaciones para poder realizar el Pago de la Nómina."))
+
+                        else:
+                            raise ValidationError(_("No posee Vacaciones en el periodo seleccionado. \n  Por Favor Verifique el Periodo de la Nómina debe coincidir con el periodo de Vacaciones configurado en el Módulo de Ausencias."))
+
+                    #,('date_from', '<=',payslip_id.date_from),('date_to','>=',payslip_id.date_to)
                     payslip_values.update({
                         'salario_mensual_va':  sueldo_promedio,
                         'domingos': dias_x_periodo.get('domingos',False),
@@ -64,7 +80,7 @@ class hr_payslip(models.Model):
                         'dias_porcion': vacaciones.get('asignacion',False),
                         'dias_a_pagar_va':vacaciones.get('asignacion',False),
                         'tiempo_servicio_va':tiempo_servicio.get('anios',False),
-                        'dias_a_disfrutar' : diferencia,
+                        'dias_a_disfrutar' : dias_disfrutar,
                     })
                     self.write(payslip_values)
         res = super(hr_payslip, self).compute_sheet()
