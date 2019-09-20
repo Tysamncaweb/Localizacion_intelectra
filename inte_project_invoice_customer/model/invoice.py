@@ -17,7 +17,7 @@ class AccountInvoice(models.Model):
     def _get_account_analytic(self):
         account_analytic= []
         for invoice in self:
-            if invoice.type == 'out_invoice':
+            if invoice.type == 'out_invoice' or invoice.type == 'out_refund':
                 invoice_lines = invoice.env['account.invoice.line'].search([('invoice_id', '=', invoice.id)])
                 project_repetidos = []
                 project_unicos = []
@@ -34,7 +34,6 @@ class AccountInvoice(models.Model):
                             project_repetidos.append(line)
 
                 invoice.account_analytic_name = ",".join(project_unicos)
-
         return
 
 

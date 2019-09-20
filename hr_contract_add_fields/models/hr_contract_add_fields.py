@@ -73,6 +73,9 @@ class Contract(models.Model):
     cuenta_seguro_medico_value = fields.Float(string='Cuenta de Seguro Medico Colectivo de Familiares')
     anticipo_extra_check = fields.Boolean('Anticipo Extraordinario')
     anticipo_extra_value = fields.Float(string='Anticipo extraordinaro')
+    dias_reposo_check= fields.Boolean('Dias de reposo')
+    dias_reposo_value = fields.Integer('Dias de Reposo')
+
     # @api.onchange('sundays_value','holidays_value','night_bonus_value','days_of_salary_pending_value','salary_assignment_value','non_salary_deduction_value','deduction_bono_vac_value')
     @api.multi
     def _validate_value_digits(self, values):
@@ -105,7 +108,6 @@ class Contract(models.Model):
             raise exceptions.except_orm(('Advertencia!'),
                                         ('Ingrese un porcentaje (%) de I.S.L.R valido'))
 
-
     @api.multi
     def write(self, values):
         self._validate_changed_fields(values, 'write')
@@ -114,13 +116,6 @@ class Contract(models.Model):
         res = super(Contract, self).write(values)
         return res
 
-    #def write(self, cr, uid, ids, values, context=None):
-    #    if context is None: context = {}
-    #    if not hasattr(ids, '__iter__'): ids = [ids]
-    #    self.validate_changed_fields(cr, uid, ids, values, 'write', context)
-    #    res = super(hr_contract, self).write(cr, uid, ids, values, context)
-    #    return res
-
     @api.model
     def create(self, values):
         self._validate_changed_fields(values, 'create')
@@ -128,14 +123,6 @@ class Contract(models.Model):
         self._validate_value_nigth_bonus_value(values)
         res = super(Contract, self).create(values)
         return res
-
-    #def create(self, cr, uid, values, context=None):
-    #    if context is None: context = {}
-    #    res = {}
-    #    self.validate_changed_fields(cr, uid, None, values, 'create', context)
-    #    res = super(hr_contract, self).create(cr, uid, values, context)
-    #    return res
-
 
     def _validate_changed_fields(self, values, come_from):
         valid_value = False
@@ -209,6 +196,8 @@ class Contract(models.Model):
                 contract_fields.update({'cuenta_seguro_medico_check': False, 'cuenta_seguro_medico_value': 0.0})
             if contract.anticipo_extra_check:
                 contract_fields.update({'anticipo_extra_check': False, 'anticipo_extra_value': 0.0})
+            if contract.dias_reposo_check:
+                contract_fields.update({'dias_reposo_check': False, 'dias_reposo_value': '0'})
 
 
         if contract_fields:
@@ -293,7 +282,7 @@ class Contract(models.Model):
         return result
 
 Contract()
-
+'''
 class HrPayslip(models.Model):
     _name = 'hr.payslip'
     _inherit = 'hr.payslip'
@@ -310,6 +299,7 @@ class HrPayslip(models.Model):
             contract_obj.restore_all_fields(contract_id[0])
         return res
 HrPayslip()
+'''
 
 class HrPayslipRun(models.Model):
     _name = 'hr.payslip.run'

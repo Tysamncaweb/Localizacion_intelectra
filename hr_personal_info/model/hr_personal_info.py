@@ -63,7 +63,11 @@ class HrEmployee(models.Model):
         ('V','Venezolano'),
         ('E','Extranjero')]
 
-
+    gender = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+       # ('other', 'Other')
+    ])
     identification_id_2 = fields.Char('Cedula de Identidad', size=8)
     nationality = fields.Selection(NACIONALIDAD, string="Tipo Documento", required=True)
     rif = fields.Char('Rif', size=12, required=True)
