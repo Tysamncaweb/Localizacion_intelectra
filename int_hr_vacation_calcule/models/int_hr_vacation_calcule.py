@@ -6,9 +6,8 @@ from odoo import models, api, _, fields
 from odoo.exceptions import ValidationError
 from odoo.tools.misc import formatLang
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
-import xlwt
-import base64
-import urllib
+from dateutil.relativedelta import relativedelta
+
 
 from logging import getLogger
 
@@ -20,6 +19,36 @@ class Holidays(models.Model):
     _inherit = "hr.holidays"
     vacation = fields.Boolean('Vacaciones')
 
+    @api.onchange('date_to')
+    def dias_no_feriados(self):
+        number_of_days_temp = self.number_of_days_temp
+        number_of_days = self.number_of_days
+        if self.vacation == True:
+            holydays = 0
+            hollydays_str = ''
+            hr_payroll_hollydays = self.env['hr.payroll.hollydays']
+            fecha_desde = None
+            fecha_hasta = None
+            if self.date_from and self.date_to:
+                fecha_desde = self.date_from[:10]
+                fecha_hasta = self.date_to[:10]
+            else:
+                return
+
+            recursive_days = date_from = datetime.strptime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT)
+            date_to = datetime.strptime(fecha_hasta, DEFAULT_SERVER_DATE_FORMAT)
+            date_end = date_to + relativedelta(days=+1)
+            while recursive_days != date_end:
+                if 0 <= recursive_days.weekday() <= 4:
+                    hollyday_id = hr_payroll_hollydays.search(
+                        [('date_from', '<=', str(recursive_days)[:10]), ('date_to', '>=', str(recursive_days)[:10])])
+                    if hollyday_id:
+                        for holy in hollyday_id:
+                            holydays += 1
+                recursive_days += relativedelta(days=+1)
+
+            self.number_of_days_temp = number_of_days_temp - holydays
+            self.number_of_days = number_of_days + holydays
 class hr_contract(models.Model):
     _inherit = 'hr.contract'
     acumulado =  fields.Integer('Dias acumulados')
