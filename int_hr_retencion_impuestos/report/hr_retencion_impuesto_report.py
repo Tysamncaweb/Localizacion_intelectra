@@ -244,87 +244,89 @@ class ReportAccountPayment_5(models.AbstractModel):
         porcentaje_noviembre = round(porcentaje_noviembre, 2)
         porcentaje_diciembre = round(porcentaje_diciembre, 2)
         docs2.append({
-            'salario_enero' : salario_enero,
-            'porcentaje_enero': porcentaje_enero,
-            'impuesto_enero': monto_islr_enero,
-            'acumulado_enero':impuesto_enero,
-            'remuneracion_enero': remuneracion_enero,
+            'salario_enero' : self.separador_cifra(salario_enero),
+            'porcentaje_enero': self.separador_cifra(porcentaje_enero),
+            'impuesto_enero': self.separador_cifra(monto_islr_enero),
+            'acumulado_enero':self.separador_cifra(impuesto_enero),
+            'remuneracion_enero': self.separador_cifra(remuneracion_enero),
 
-            'salario_febrero': salario_febrero,
-            'porcentaje_febrero': porcentaje_febrero,
-            'impuesto_febrero': monto_islr_febrero,
-            'acumulado_febrero': impuesto_febrero,
-            'remuneracion_febrero': remuneracion_febrero,
+            'salario_febrero': self.separador_cifra(salario_febrero),
+            'porcentaje_febrero': self.separador_cifra(porcentaje_febrero),
+            'impuesto_febrero': self.separador_cifra(monto_islr_febrero),
+            'acumulado_febrero': self.separador_cifra(impuesto_febrero),
+            'remuneracion_febrero': self.separador_cifra(remuneracion_febrero),
 
-            'salario_marzo': salario_marzo,
-            'porcentaje_marzo': porcentaje_marzo,
-            'impuesto_marzo': monto_islr_marzo,
-            'acumulado_marzo': impuesto_marzo,
-            'remuneracion_marzo': remuneracion_marzo,
+            'salario_marzo': self.separador_cifra(salario_marzo),
+            'porcentaje_marzo': self.separador_cifra(porcentaje_marzo),
+            'impuesto_marzo': self.separador_cifra(monto_islr_marzo),
+            'acumulado_marzo': self.separador_cifra(impuesto_marzo),
+            'remuneracion_marzo': self.separador_cifra(remuneracion_marzo),
 
-            'salario_abril': salario_abril,
-            'porcentaje_abril': porcentaje_abril,
-            'impuesto_abril': monto_islr_abril,
-            'acumulado_abril': impuesto_abril,
-            'remuneracion_abril': remuneracion_abril,
+            'salario_abril': self.separador_cifra(salario_abril),
+            'porcentaje_abril': self.separador_cifra(porcentaje_abril),
+            'impuesto_abril': self.separador_cifra(monto_islr_abril),
+            'acumulado_abril': self.separador_cifra(impuesto_abril),
+            'remuneracion_abril': self.separador_cifra(remuneracion_abril),
 
-            'salario_mayo': salario_mayo,
-            'porcentaje_mayo': porcentaje_mayo,
-            'impuesto_mayo': monto_islr_mayo,
-            'acumulado_mayo': impuesto_mayo,
-            'remuneracion_mayo': remuneracion_mayo,
+            'salario_mayo': self.separador_cifra(salario_mayo),
+            'porcentaje_mayo': self.separador_cifra(porcentaje_mayo),
+            'impuesto_mayo': self.separador_cifra(monto_islr_mayo),
+            'acumulado_mayo': self.separador_cifra(impuesto_mayo),
+            'remuneracion_mayo': self.separador_cifra(remuneracion_mayo),
 
-            'salario_junio': salario_junio,
-            'porcentaje_junio': porcentaje_junio,
-            'impuesto_junio': monto_islr_junio,
-            'acumulado_junio': impuesto_junio,
-            'remuneracion_junio': remuneracion_junio,
+            'salario_junio': self.separador_cifra(salario_junio),
+            'porcentaje_junio': self.separador_cifra(porcentaje_junio),
+            'impuesto_junio': self.separador_cifra(monto_islr_junio),
+            'acumulado_junio': self.separador_cifra(impuesto_junio),
+            'remuneracion_junio': self.separador_cifra(remuneracion_junio),
 
-            'salario_julio': salario_julio,
-            'porcentaje_julio': porcentaje_julio,
-            'impuesto_julio': monto_islr_julio,
-            'acumulado_julio': impuesto_julio,
-            'remuneracion_julio': remuneracion_julio,
+            'salario_julio': self.separador_cifra(salario_julio),
+            'porcentaje_julio': self.separador_cifra(porcentaje_julio),
+            'impuesto_julio': self.separador_cifra(monto_islr_julio),
+            'acumulado_julio': self.separador_cifra(impuesto_julio),
+            'remuneracion_julio': self.separador_cifra(remuneracion_julio),
 
-            'salario_agosto': salario_agosto,
-            'porcentaje_agosto': porcentaje_agosto,
-            'impuesto_agosto': monto_islr_agosto,
-            'acumulado_agosto': impuesto_agosto,
-            'remuneracion_agosto': remuneracion_agosto,
+            'salario_agosto': self.separador_cifra(salario_agosto),
+            'porcentaje_agosto': self.separador_cifra(porcentaje_agosto),
+            'impuesto_agosto': self.separador_cifra(monto_islr_agosto),
+            'acumulado_agosto': self.separador_cifra(impuesto_agosto),
+            'remuneracion_agosto': self.separador_cifra(remuneracion_agosto),
 
-            'salario_septiembre': salario_septiembre,
-            'porcentaje_septiembre': porcentaje_septiembre,
-            'impuesto_septiembre': monto_islr_septiembre,
-            'acumulado_septiembre': impuesto_septiembre,
-            'remuneracion_septiembre': remuneracion_septiembre,
+            'salario_septiembre': self.separador_cifra(salario_septiembre),
+            'porcentaje_septiembre': self.separador_cifra(porcentaje_septiembre),
+            'impuesto_septiembre': self.separador_cifra(monto_islr_septiembre),
+            'acumulado_septiembre': self.separador_cifra(impuesto_septiembre),
+            'remuneracion_septiembre': self.separador_cifra(remuneracion_septiembre),
 
-            'salario_octubre': salario_octubre,
-            'porcentaje_octubre': porcentaje_octubre,
-            'impuesto_octubre': monto_islr_octubre,
-            'acumulado_octubre': impuesto_octubre,
-            'remuneracion_octubre': remuneracion_octubre,
+            'salario_octubre': self.separador_cifra(salario_octubre),
+            'porcentaje_octubre': self.separador_cifra(porcentaje_octubre),
+            'impuesto_octubre': self.separador_cifra(monto_islr_octubre),
+            'acumulado_octubre': self.separador_cifra(impuesto_octubre),
+            'remuneracion_octubre': self.separador_cifra(remuneracion_octubre),
 
-            'salario_noviembre': salario_noviembre,
-            'porcentaje_noviembre': porcentaje_noviembre,
-            'impuesto_noviembre': monto_islr_noviembre,
-            'acumulado_noviembre': impuesto_noviembre,
-            'remuneracion_noviembre': remuneracion_noviembre,
+            'salario_noviembre': self.separador_cifra(salario_noviembre),
+            'porcentaje_noviembre': self.separador_cifra(porcentaje_noviembre),
+            'impuesto_noviembre': self.separador_cifra(monto_islr_noviembre),
+            'acumulado_noviembre': self.separador_cifra(impuesto_noviembre),
+            'remuneracion_noviembre': self.separador_cifra(remuneracion_noviembre),
 
-            'salario_diciembre': salario_diciembre,
-            'porcentaje_diciembre': porcentaje_diciembre,
-            'impuesto_diciembre': monto_islr_diciembre,
-            'acumulado_diciembre': impuesto_diciembre,
-            'remuneracion_diciembre': remuneracion_diciembre,
+            'salario_diciembre': self.separador_cifra(salario_diciembre),
+            'porcentaje_diciembre': self.separador_cifra(porcentaje_diciembre),
+            'impuesto_diciembre': self.separador_cifra(monto_islr_diciembre),
+            'acumulado_diciembre': self.separador_cifra(impuesto_diciembre),
+            'remuneracion_diciembre': self.separador_cifra(remuneracion_diciembre),
         })
-
+        rif = empleado.rif[3:11]
+        rif2 = empleado.rif[-1]
+        imp_rif = 'V'+'-'+ str(rif)+'-'+str(rif2)
         docs.append({
             'date_from': date_from,
             'date_to': date_to,
             'agente_razon': 'SOLUCIONES INTELECTRA, C.A.',
             'agente_rif': 'J-29472987-8',
             'agente_direccion': 'CALLE PROVIDENCIA, ENTRE AV. SAN SEBASTIAN Y CALLE BOLÍVAR, LOCAL GALPON NRO 34, URB LA TRINIDAD, CARACAS, MIRANDA, ZONA POSTAL 1080',
-            'beneficiario_nombre': empleado.name,
-            'beneficiario_rif': empleado.rif,
+            'beneficiario_nombre': empleado.name.title(),
+            'beneficiario_rif': imp_rif,
             'beneficiario_cedula': empleado.identification_id_2,
             'beneficiario_direccion': beneficiario_direccion,
 
@@ -411,3 +413,9 @@ class ReportAccountPayment_5(models.AbstractModel):
                 texto_unidad = texto_unidad[sw]
 
         return "%s %s %s" % (texto_centena, texto_decena, texto_unidad)
+
+    def separador_cifra(self,valor):
+        monto = '{0:,.2f}'.format(valor).replace('.', '-')
+        monto = monto.replace(',', '.')
+        monto = monto.replace('-', ',')
+        return  monto
