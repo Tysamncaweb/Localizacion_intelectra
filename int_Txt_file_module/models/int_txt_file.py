@@ -71,7 +71,11 @@ class bono(models.TransientModel):
             file.write('\n')
         file.close()
         #Nombre del txt
-        nombre_txt = 'ABONOS'+'4946'+ str(self.correlativo)+ d+m+a+'.txt'
+        if self.correlativo < 10:
+            imp_correlativo = '0'+str(self.correlativo)
+        else:
+            imp_correlativo = str(self.correlativo)
+        nombre_txt = 'ABONOS'+'4946'+ imp_correlativo + d+m+a+'.txt'
         modelo = 'account.wizard.generacion.txtfile'
         return self.imprimir_txt(nombre_txt,modelo)
     @api.multi

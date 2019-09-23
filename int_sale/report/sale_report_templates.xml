@@ -170,7 +170,7 @@
                     <thead>
                         <tr>
                             <th>CÓDIGO DE PRODUCTO / DESCRIPCIÓN</th>
-                            <th class="text-right">CANT.</th>
+                            <th class="text-center">CANT.</th>
                             <th class="text-right">UNID.</th>
                             <th class="text-right">PRECIO UNIT</th>
                             <th class="text-right" groups="sale.group_show_price_subtotal">SUB-TOTAL</th>
@@ -201,7 +201,7 @@
                             <t t-foreach="layout_category['lines']" t-as="l">
                                 <tr>
                                     <td><span t-field="l.product_id"/></td>
-                                    <td>
+                                    <td class="text-center">
                                         &amp;nbsp;&amp;nbsp;&amp;nbsp;<span t-field="l.product_uom_qty"/>
                                     </td>
                                     <td class="text-right">

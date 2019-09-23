@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
             <field name="arch" type="xml">
                <xpath expr="//field[@name='holiday_status_id']" position="after">
-                           <field name="vacation" string="¿Ausencia Vacaciones?"/>
+                           <field name="vacation" string="¿Ausencia Vacaciones?" widget="toggle_button"/>
                 </xpath>
             </field>
         </record>
