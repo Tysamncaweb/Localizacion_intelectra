@@ -61,7 +61,7 @@ class hr_payslip(models.Model):
                         holidays_employee = holidays.search([('date_from', '>=', payslip_id.date_from),('date_to','<=', payslip_id.date_to)])
                         if holidays_employee:
                             for holy in holidays_employee:
-                                if holy.vacation == True:
+                                if holy.bono_vacacional == True:
                                     dias_disfrutar = holy.number_of_days_temp
                                 else:
                                     dias_disfrutar = 0

@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                <xpath expr="//field[@name='holiday_status_id']" position="after">
                            <field name="vacation" string="¿Ausencia Vacaciones?" widget="toggle_button"/>
+                           <field name="bono_vacacional" string="Anticipo Bono Vacacional" widget="toggle_button"/>
                 </xpath>
             </field>
         </record>

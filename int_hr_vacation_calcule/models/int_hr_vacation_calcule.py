@@ -18,6 +18,7 @@ _logger = getLogger(__name__)
 class Holidays(models.Model):
     _inherit = "hr.holidays"
     vacation = fields.Boolean('Vacaciones')
+    bono_vacacional = fields.Boolean('Anticipo Bono Vacacional')
 
     @api.onchange('date_to')
     def dias_no_feriados(self):
