@@ -82,9 +82,16 @@
                                 <td style=" border: 1px solid #000000; vertical-align: middle;">
                                     <span t-esc="a['proveedor']"/>
                                 </td>
-                                <td style=" border: 1px solid #000000; vertical-align: middle;">
-                                    <span t-esc="a['invoice']"/>
-                                </td>
+                                <t t-if="a['type'] == 'out_invoice' or a['type'] == 'out_refund'">
+                                    <td style=" border: 1px solid #000000; vertical-align: middle;">
+                                        <span t-esc="a['invoice']"/>
+                                    </td>
+                                </t>
+                                <t t-if="a['type'] == 'in_invoice' or a['type'] == 'in_refund'">
+                                    <td style=" border: 1px solid #000000; vertical-align: middle;">
+                                        <span t-esc="a['number']"/>
+                                    </td>
+                                </t>
                                 <td class="text-right" style=" border: 1px solid #000000; vertical-align: middle;">
                                     <span t-esc="'{0:,.2f}'.format(a['amount']).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                 </td>

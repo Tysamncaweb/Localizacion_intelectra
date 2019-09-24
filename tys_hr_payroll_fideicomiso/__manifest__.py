@@ -59,7 +59,8 @@ Permite:
              'views/hr_payroll_fideicomiso_view.xml',
              'views/hr_payroll_fideicomiso_intereses_view.xml',
              # 'data/hr_payroll_fideicomiso_data.xml',
-             'views/hr_contract_view.xml'
+             'views/hr_contract_view.xml',
+             'views/hr_wizard_primeracarga.xml'
         ],
     #'demo': [],
     #'test': [],

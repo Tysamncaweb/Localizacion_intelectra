@@ -373,6 +373,15 @@ class ReportRetentionISLR(models.AbstractModel):
                                                               ('date_ret', '>=', date_start),
                                                               ('date_ret', '<=', end_date)])
 
+        if supplier == True and customer == True:
+            type = ['out_invoice', 'in_invoice']
+            islr_concept_id = self.env['islr.wh.doc'].search([('company_id', '=', company_id),
+                                                              ('partner_id', 'in', [clientes, partner_id]),
+                                                              ('type', '=', type),
+                                                              ('state', '=', 'done'),
+                                                              ('date_ret', '>=', date_start),
+                                                              ('date_ret', '<=', end_date)])
+
         if supplier == False and customer == False:
             todo_supplier = self.env['res.partner'].search([('supplier', '=', True)])
             todo_customer = self.env['res.partner'].search([('customer', '=', True)])
@@ -447,7 +456,9 @@ class ReportRetentionISLR(models.AbstractModel):
                     'concept': concept_line.concept_id.name,
                     'people_type': var,
                     'date': concept_line.invoice_id.date_invoice,
+                    'type': concept_line.invoice_id.type,
                     'invoice': concept_line.invoice_id.number,
+                    'number': concept_line.invoice_id.supplier_invoice_number,
                     'rif': concept_line.invoice_id.partner_id.vat,
                     'proveedor': concept_line.invoice_id.partner_id.name,
                     'amount': concept_line.base_amount,

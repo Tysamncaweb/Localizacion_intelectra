@@ -149,15 +149,18 @@ class hr_historico_fideicomiso(models.Model):
         if (mes_hoy - offset)%3 == 0:
             #ULTIMO MES DEL TRIMESTRE:
             acumulado = payslip_values.get('monto_incremento')
-        elif historico:
-            #CUALQUIR OTRO MES DEL TRIMESTRE:
-            acumulado = historico.get('monto_tri_ant')
+     #   elif historico:
+      #      #CUALQUIR OTRO MES DEL TRIMESTRE:
+       #     acumulado = historico.monto_tri_ant
         else:
-            acumulado = payslip_values.get('monto_incremento')
+            acumulado = sal_diario * (payslip_values.get('dias_aporte'))
         tasa1 = tasa2 =0.0
         monto = 0.0
-        if fecha_inicio and fecha_fin:
-            cant_meses = int(fecha_fin[5:7]) - int(fecha_inicio[5:7])
+        if fecha_inicio and fecha_fin :
+            if  fecha_inicio[0:4] <= fecha_fin[0:4]:
+                cant_meses = 12 - int(fecha_inicio[5:7]) +  int(fecha_fin[5:7])
+            else:
+                cant_meses = int(fecha_fin[5:7]) - int(fecha_inicio[5:7])
             for a in range(cant_meses):
               #  fecha_inicio_inc = datetime(fecha_inicio) + datetime(fecha_inicio).month + 1
                 mes_posterior = datetime.strptime(fecha_inicio, DEFAULT_SERVER_DATE_FORMAT) + relativedelta.relativedelta(
@@ -327,7 +330,7 @@ class hr_payslip_run(models.Model):
                 # REGISTRO DEL HISTORICO DE PRESTACIONES SOCIALES
                 history = fi_hist_obj.get_last_history_fi(p.employee_id.id, None)
                 history_new_values.update({'monto_acum_tri_ant':history.monto_acumulado})
-                payslip_values.update({'monto_incremento':sal_int_diario*p.dias_acumulados,'dias_acumulados':p.dias_acumulados,'dias_adicionales':p.dias_adicionales})
+                payslip_values.update({'monto_incremento':sal_int_diario*p.dias_acumulados,'dias_acumulados':p.dias_acumulados,'dias_adicionales':p.dias_adicionales , 'dias_aporte':p.dias_acumulados })
                 history_new_values = fi_hist_obj.calculate_acum(history, payslip_values)
 
                 if history.aporte_dias_adic:
@@ -345,7 +348,7 @@ class hr_payslip_run(models.Model):
                                            'dias_acumulados': history.dias_acumuluados + history.dias_aporte + p.dias_adicionales,
                                            'dias_adicionales': history.dias_adicionales + (p.dias_adicionales if p.dias_adicionales else 0),
                                            'aporte_dias_adic': (sal_int_diario * p.dias_adicionales) if p.dias_adicionales else 0.0,
-                                           'GPS_dias_adicionales': GPS_dias_adicionales,
+                                           'GPS_dias_adicionales': GPS_dias_adicionales + history.GPS_dias_adicionales,
                                            'monto_tri_ant': history.monto_incremento if history.monto_incremento else sal_int_diario*float(dias_str),
                                            'total_anticipos': history.total_anticipos,
                                            'anticipo':history.anticipo,

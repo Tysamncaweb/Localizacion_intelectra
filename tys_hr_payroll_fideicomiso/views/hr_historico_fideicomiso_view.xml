@@ -124,11 +124,17 @@
         </record>
         <!--menu item-->
         <!--<menuitem action="action_hr_payslip_run_tree" id="menu_hr_payslip_run" parent="menu_hr_root_payroll"/>-->
-          <menuitem action="action_hr_historico_fideicomiso"
+          <menuitem
                     id="menu_hr_historico_fideicomiso"
                     parent="hr_payroll.menu_hr_payroll_root"
                     name="Historico de Prestaciones"
                     sequence="99"/>
+
+            <menuitem action="action_hr_historico_fideicomiso"
+                    id="menu_hr_historico_fideicomiso_real"
+                    parent="menu_hr_historico_fideicomiso"
+                    name="Historico de Prestaciones"
+                    sequence="33"/>
 
         <!--menuitem id="menu_hr_historico_fideicomiso" name="Historico de Prestaciones" action="action_hr_historico_fideicomiso" parent="hr_payroll.menu_hr_root_payroll"/-->
     </data>

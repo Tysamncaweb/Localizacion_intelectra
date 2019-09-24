@@ -35,3 +35,4 @@ from . import hr_historico_fideicomiso
 from . import hr_payroll_fideicomiso
 from . import hr_payroll_fideicomiso_intereses
 from . import hr_contract
+from . import primera_carga_historico
