@@ -257,7 +257,7 @@ class hr_historico_fideicomiso(models.Model):
                                            'cedula_identidad': cedula,
                                            'type_record': 'intereses',
                                            'fecha_anticipo_intereses': ahora,
-                                           'monto_acumulado': history.monto_acumulado,
+                                           'monto_acumulado': history.monto_acumulado - valor_interes ,
                                            'monto_total_intereses': history.monto_total_intereses - valor_interes,
                                            'fecha_anticipo': history.fecha_anticipo,
                                            'anticipo': anticipo_ultimo,
@@ -334,7 +334,7 @@ class hr_payslip_run(models.Model):
                 history_new_values = fi_hist_obj.calculate_acum(history, payslip_values)
 
                 if history.aporte_dias_adic:
-                    GPS_dias_adicionales = history.aporte_dias_adic + (sal_int_diario * p.dias_adicionales)
+                    GPS_dias_adicionales = history.GPS_dias_adicionales + (sal_int_diario * p.dias_adicionales)
                 else:
                     GPS_dias_adicionales = (sal_int_diario * p.dias_adicionales)
                 history_new_values.update({'employee_id':p.employee_id.id,
@@ -348,7 +348,7 @@ class hr_payslip_run(models.Model):
                                            'dias_acumulados': history.dias_acumuluados + history.dias_aporte + p.dias_adicionales,
                                            'dias_adicionales': history.dias_adicionales + (p.dias_adicionales if p.dias_adicionales else 0),
                                            'aporte_dias_adic': (sal_int_diario * p.dias_adicionales) if p.dias_adicionales else 0.0,
-                                           'GPS_dias_adicionales': GPS_dias_adicionales + history.GPS_dias_adicionales,
+                                           'GPS_dias_adicionales': GPS_dias_adicionales ,
                                            'monto_tri_ant': history.monto_incremento if history.monto_incremento else sal_int_diario*float(dias_str),
                                            'total_anticipos': history.total_anticipos,
                                            'anticipo':history.anticipo,

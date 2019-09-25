@@ -139,8 +139,11 @@
                                 </tr>
                             </tbody>
                         </table>
-                            <p t-if="o.type == 'out_refund' or o.type == 'in_refund'" style="font-family:Helvetica,Futura,Arial,Verdana,sans-serif; font-size:14px;">
+                            <p t-if="o.type == 'out_refund'" style="font-family:Helvetica,Futura,Arial,Verdana,sans-serif; font-size:14px;">
                                 <strong><h5>NOTA DE CRÉDITO AFECTA A LA FACTURA N° <span t-field="o.origin"/></h5></strong>
+                            </p>
+                            <p t-if="o.type == 'in_refund'" style="font-family:Helvetica,Futura,Arial,Verdana,sans-serif; font-size:14px;">
+                                <strong><h5>NOTA DE CRÉDITO AFECTA A LA FACTURA N° <span t-field="o.parent_id.supplier_invoice_number"/></h5></strong>
                             </p>
                             <p t-if="o.comment">
                                 <strong><p style="font-family:Helvetica,Futura,Arial,Verdana,sans-serif; font-size:12px;">CONDICIONES GENERALES</p></strong>

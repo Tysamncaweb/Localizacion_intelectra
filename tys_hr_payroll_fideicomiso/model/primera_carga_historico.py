@@ -33,7 +33,7 @@ class primera_carga_historico(models.TransientModel):
 
         contract_obj = self.env['hr.contract']
         values = {self.neto_acumulado: 'Antiguedad Neto Acumulado de las GPS', self.dias_acumulados: ' Días Acumulados de las GPS',
-                  self.dias_adicionales: 'Días Adicionales de las GPS', self.acumulado_dias_adic: 'Monto Acumulado de los Días Adicionales de las GPS'}
+                 }
 
 
         for a,b in values.items():
@@ -57,8 +57,8 @@ class primera_carga_historico(models.TransientModel):
                                'monto_incremento': 0.0,
                                'fecha_aporte': hoy,
                                'dias_aporte': 0,
-                               'monto_acumulado': self.neto_acumulado + self.acumulado_dias_adic,
-                               'dias_acumuluados': self.dias_acumulados,
+                               'monto_acumulado': self.neto_acumulado + self.acumulado_dias_adic - self.total_anticipo,
+                               'dias_acumuluados': self.dias_acumulados + self.dias_adicionales ,
                                'dias_adicionales': self.dias_adicionales,
                                'aporte_dias_adic': 0.0,
                                'GPS_dias_adicionales': self.acumulado_dias_adic,
