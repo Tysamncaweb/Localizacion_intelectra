@@ -44,7 +44,8 @@ class ReportAccountPayment(models.AbstractModel):
                         monto = a.total
                         salario = a.total/n_dias
                         salario = float("{0:.2f}".format(salario))
-
+                monto = self.separador_cifra(monto)
+                salario = self.separador_cifra(salario)
                 docs.append({
                     'name': name.upper(),
                     'fecha_ingreso':fecha_ingreso,
@@ -79,3 +80,8 @@ class ReportAccountPayment(models.AbstractModel):
 
         }
 
+    def separador_cifra(self,valor):
+        monto = '{0:,.2f}'.format(valor).replace('.', '-')
+        monto = monto.replace(',', '.')
+        monto = monto.replace('-', ',')
+        return  monto

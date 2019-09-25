@@ -55,7 +55,7 @@ class hr_payslip(models.Model):
                 asignacionR = asignacion
         else:
             raise exceptions.except_orm((u'No se han calculado los días de bono vacacional, debido a que\n'
-                           u' no se ha cargado la lista de días a pagar por años de servicio.\n'
+                           u' el Contrato se encuentra en otro estado que no es en "Proceso" o Verificar la Fecha de Ingreso del mismo.\n'
                            u' Por favor consulte con el administrador!'))
         res = {
             'asignacion': asignacion,
