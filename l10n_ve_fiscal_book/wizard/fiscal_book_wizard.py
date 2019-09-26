@@ -269,7 +269,7 @@ class PurchaseBook(models.AbstractModel):
                 compras_credit = h.invoice_id.amount_untaxed
 
             if h.doc_type == 'N/DB':
-                origin = h.invoice_id.origin
+                origin = h.invoice_id.parent_id.supplier_invoice_number
                 number = h.invoice_id.number
 
             sum_compras_credit += compras_credit
@@ -290,6 +290,7 @@ class PurchaseBook(models.AbstractModel):
                 'people_type': h.people_type,
                 'wh_number': h.wh_number,
                 'invoice_number': h.invoice_number,
+                'affected_invoice': h.affected_invoice,
                 'ctrl_number': h.ctrl_number,
                 'debit_affected': h.debit_affected,
                 'credit_affected': h.credit_affected,
@@ -388,11 +389,11 @@ class FiscalBookSaleReport(models.AbstractModel):
                 'invoice_number': line.invoice_number,
                 'ctrl_number': line.ctrl_number,
                 'debit_note': '',
-                'credit_note': line.wh_number if line.doc_type == 'N/CR' else '',
+                'credit_note': line.invoice_number if line.doc_type == 'N/CR' else '',
                 'type': line.void_form,
                 'affected_invoice': line.affected_invoice,
                 'total_w_iva': line.total_with_iva,
-                'no_taxe_sale': no_taxe_sale,
+                'no_taxe_sale': line.vat_exempt,
                 'export_sale': '',
                 'vat_general_base': line.vat_general_base,
                 'vat_general_rate': int(line.vat_general_base and line.vat_general_tax * 100 / line.vat_general_base),
@@ -407,7 +408,7 @@ class FiscalBookSaleReport(models.AbstractModel):
             })
 
             suma_total_w_iva += line.total_with_iva
-            suma_no_taxe_sale += no_taxe_sale
+            suma_no_taxe_sale += line.vat_exempt
             suma_vat_general_base += line.vat_general_base
             suma_vat_general_tax += line.vat_general_tax
             suma_vat_reduced_base += line.vat_reduced_base

@@ -88,25 +88,26 @@
                                 <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['people_type']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['export_form']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['wh_number']"/></td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['invoice_number']"/></td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['ctrl_number']"/></td>
+        	                    <td t-if="not doc['credit_note']" style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['invoice_number']"/></td>
+                                <td t-if="doc['credit_note']" style=" border: 1px solid #000000;" class="text-center table-bordered"></td>
+                                <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['ctrl_number']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['debit_note']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['credit_note']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['type']"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['affected_invoice']"/></td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['total_w_iva']"/></td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['no_taxe_sale']"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['total_w_iva']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['no_taxe_sale']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['export_sale']"/></td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_general_base']"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['vat_general_base']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_general_rate']"/>%</td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_general_tax']"/></td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_reduced_base']"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['vat_general_tax']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['vat_reduced_base']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_reduced_rate']"/>%</td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_reduced_tax']"/></td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_additional_base']"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['vat_reduced_tax']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['vat_additional_base']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
         	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_additional_rate']"/>%</td>
-        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['vat_additional_tax']"/></td>
-                                <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="doc['get_wh_vat']"/></td>
+        	                    <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['vat_additional_tax']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                                <td style=" border: 1px solid #000000;" class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['get_wh_vat']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
       			        </tr>
                             <t t-set="contador" t-value="contador+1"/>
                         </t>
@@ -114,44 +115,44 @@
                           <td rowspan="1"><p> &amp;nbsp;</p></td>
                       </tr>
                       <tr>
-                          <td colspan="11"></td>
+                          <td colspan="12"></td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                               <p>TOTALES:</p>
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                <span t-esc="suma_total_w_iva"/>
+                                <span t-esc="'{0:,.2f}'.format(suma_total_w_iva).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                <span t-esc="suma_no_taxe_sale"/>
-                          </td>
-                          <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                          </td>
-                          <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                <span t-esc="suma_vat_general_base"/>
+                                <span t-esc="'{0:,.2f}'.format(suma_no_taxe_sale).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                <span t-esc="suma_vat_general_tax"/>
-                          </td>
-                          <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                <span t-esc="suma_vat_reduced_base"/>
+                                <span t-esc="'{0:,.2f}'.format(suma_vat_general_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                <span t-esc="suma_vat_reduced_tax"/>
+                                <span t-esc="'{0:,.2f}'.format(suma_vat_general_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                              <span t-esc="suma_vat_additional_base"/>
+                                <span t-esc="'{0:,.2f}'.format(suma_vat_reduced_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                              <span t-esc="suma_vat_additional_tax"/>
+                                <span t-esc="'{0:,.2f}'.format(suma_vat_reduced_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                           </td>
                           <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                              <span t-esc="suma_get_wh_vat"/>
+                              <span t-esc="'{0:,.2f}'.format(suma_vat_additional_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
+                          </td>
+                          <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                          </td>
+                          <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                              <span t-esc="'{0:,.2f}'.format(suma_vat_additional_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
+                          </td>
+                          <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                              <span t-esc="'{0:,.2f}'.format(suma_get_wh_vat).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                           </td>
                       </tr>
                   </tbody>
@@ -169,69 +170,39 @@
                     <tbody>
                     <tr>
                         <td style="border: 1px solid #000000; ">Ventas Internas no Gravadas</td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_no_taxe_sale"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_no_taxe_sale).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #000000; ">Ventas de Exportación</td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #000000; ">Ventas Internas gravadas por Alicuota General</td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_vat_general_base"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_vat_general_tax"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_get_wh_vat"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_vat_general_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_vat_general_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_get_wh_vat).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #000000; ">Ventas Internas gravadas por Alicuota General mas Alicuota Adicional</td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_ali_gene_addi"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_ali_gene_addi_debit"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_ali_gene_addi).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_ali_gene_addi_debit).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #000000; ">Ventas Internas gravadas por Alicuota Reducida</td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_vat_reduced_base"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_vat_reduced_tax"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_vat_reduced_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_vat_reduced_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                     </tr>
                     <tr class="" style="background-color:#A4A4A4; color:#000000;font-weight: bold; ">
                         <td style="border: 1px solid #000000; ">Total Ventas y Debitos Fiscales</td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="total_ventas_base_imponible"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="total_ventas_debit_fiscal"/></td>
-                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="suma_get_wh_vat"/></td>
-                    </tr>
-                    <tr class="" style="background-color:#A4A4A4; color:#000000; font-weight: bold;">
-                        <td style="border: 1px solid #000000; ">Ajuste a los Debitos Fiscales de períodos anteriores</td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid #000000; ">- Notas de Débito</td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                    </tr>
-                    <tr>
-                        <td  style="border: 1px solid #000000; ">- Notas de Crédito</td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                    </tr>
-                    <tr class="" style="background-color:#A4A4A4; color:#000000; font-weight: bold; ">
-                        <td style="border: 1px solid #000000; ">Total Ajustes a los Debitos Fiscales de Períodos Anteriores</td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                    </tr>
-                    <tr class="" style="background-color:#A4A4A4; color:#000000; font-weight: bold;">
-                        <td style="border: 1px solid #000000; ">TOTAL DE DEBITOS FISCALES</td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
-                        <td class="text-center" style="border: 1px solid #000000; "></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(total_ventas_base_imponible).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(total_ventas_debit_fiscal).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_get_wh_vat).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                     </tr>
                   </tbody>
                 </table>

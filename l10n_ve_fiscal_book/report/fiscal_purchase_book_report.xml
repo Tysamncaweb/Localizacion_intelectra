@@ -58,6 +58,7 @@
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Planilla de Importación</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Expediente de Importación</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Documento o Factura</th>
+                                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Factura Afectada</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de Control</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Nota de Débito</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Nota de Crédito</th>
@@ -110,21 +111,31 @@
                                   <p></p> <!-- Nro. expediente de importación-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <!--t t-if="o['doc_type'] == 'N/DB'">
-                                            <span t-esc="o['origin']"/>
+                                    <t t-if="o['doc_type'] == 'N/DB'">
+
                                     </t>
-                                    <t t-if="o['doc_type'] != 'N/DB'"-->
+                                    <t t-if="o['doc_type'] != 'N/DB'">
                                         <span t-esc="o['invoice_number']"/><!--Nro. documento o factura-->
-                                    <!--/t-->
+                                    </t>
+                                </td>
+                                  <td class="text-center table-bordered" style=" border: 1px solid #000000;">
+                                    <t t-if="o['doc_type'] == 'N/DB'">
+                                            <span t-esc="o['affected_invoice']"/>
+                                    </t>
+                                    <t t-if="o['doc_type'] != 'N/DB'">
+                                        <!--Nro. factura afectada-->
+                                    </t>
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['ctrl_number']"/><!-- Nro. de control-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <t t-if="o['doc_type'] == 'N/DB'">
-                                            <span t-esc="o['number']"/>
+                                            <span t-esc="o['invoice_number']"/>
                                     </t>
-                                    <!--span t-esc="o['debit_affected']"/--><!-- Nro. de Nota de Débito-->
+                                    <t t-if="o['doc_type'] != 'N/DB'">
+
+                                    </t><!-- Nro. de Nota de Débito-->
                                 </td>
                                  <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                   <span t-esc="o['credit_affected']"/><!-- Nro. de Nota de Crédito-->
@@ -133,49 +144,49 @@
                                     <span t-esc="o['type']"/><!-- Tipo de Transacción-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['total_with_iva']"/><!--Total compras con IVA-->
+                                    <span t-esc="'{0:,.2f}'.format(o['total_with_iva']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!--Total compras con IVA-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['compras_credit']"/><!-- Compras sin Derecho a Crédito-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="a"/><!-- base Imponible Alicuota General IMPORTACIONES-->
+                                    <span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- base Imponible Alicuota General IMPORTACIONES-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="0"/><!-- % Alicuota General IMPORTACIONES-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="a"/><!-- Impuesto(IVA) Alicuota General IMPORTACIONES-->
+                                    <span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- Impuesto(IVA) Alicuota General IMPORTACIONES-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                  <span t-esc="o['vat_general_base']"/><!-- base Imponible Alicuota General COMPRAS INTERNAS-->
+                                  <span t-esc="'{0:,.2f}'.format(o['vat_general_base']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- base Imponible Alicuota General COMPRAS INTERNAS-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['vat_general_rate']"/>%<!-- % Alicuota General COMPRAS INTERNAS-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['vat_general_tax']"/><!-- Impuesto(IVA) Alicuota General COMPRAS INTERNAS-->
+                                    <span t-esc="'{0:,.2f}'.format(o['vat_general_tax']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- Impuesto(IVA) Alicuota General COMPRAS INTERNAS-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['vat_reduced_base']"/><!-- base Imponible Alicuota Reducida-->
+                                    <span t-esc="'{0:,.2f}'.format(o['vat_reduced_base']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- base Imponible Alicuota Reducida-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['vat_reduced_rate']"/>%<!-- % Alicuota Reducida-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['vat_reduced_tax']"/><!-- Impuesto(IVA) Alicuota reducida-->
+                                    <span t-esc="'{0:,.2f}'.format(o['vat_reduced_tax']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- Impuesto(IVA) Alicuota reducida-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['vat_additional_base']"/><!-- base Imponible Alicuota Adicional-->
+                                    <span t-esc="'{0:,.2f}'.format(o['vat_additional_base']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- base Imponible Alicuota Adicional-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['vat_additional_rate']"/>%<!-- % Alicuota Adicional-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['vat_additional_tax']"/><!-- Impuesto(IVA) Alicuota Adicional-->
+                                    <span t-esc="'{0:,.2f}'.format(o['vat_additional_tax']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- Impuesto(IVA) Alicuota Adicional-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['get_wh_vat']"/><!-- IVA Retenido dl Vendedor-->
+                                    <span t-esc="'{0:,.2f}'.format(o['get_wh_vat']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- IVA Retenido dl Vendedor-->
                                 </td>
                               </tr>
                                    <t t-set="contador" t-value="contador+1"/>
@@ -185,48 +196,48 @@
                                   <td rowspan="1"><p> &amp;nbsp;</p></td>
                               </tr>
                               <tr>
-                                  <td colspan="11"></td>
+                                  <td colspan="13"></td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                                       <p>TOTALES:</p>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_total_with_iva"/>
+                                        <span t-esc="'{0:,.2f}'.format(sum_total_with_iva).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_compras_credit"/>
-                                  </td>
-                                  <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                  </td>
-                                  <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                                        <span t-esc="'{0:,.2f}'.format(sum_compras_credit).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_vat_general_base"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_vat_general_tax"/>
-                                  </td>
-                                  <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_vat_reduced_base"/>
+                                        <span t-esc="'{0:,.2f}'.format(sum_vat_general_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_vat_reduced_tax"/>
+                                        <span t-esc="'{0:,.2f}'.format(sum_vat_general_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_vat_additional_base"/>
+                                        <span t-esc="'{0:,.2f}'.format(sum_vat_reduced_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                        <span t-esc="sum_vat_additional_tax"/>
+                                        <span t-esc="'{0:,.2f}'.format(sum_vat_reduced_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
-                                     <span t-esc="sum_get_wh_vat"/>
+                                        <span t-esc="'{0:,.2f}'.format(sum_vat_additional_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
+                                  </td>
+                                  <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                                  </td>
+                                  <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                                        <span t-esc="'{0:,.2f}'.format(sum_vat_additional_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
+                                  </td>
+                                  <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                                     <span t-esc="'{0:,.2f}'.format(sum_get_wh_vat).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                               </tr>
                           </tbody>
@@ -243,83 +254,43 @@
                         <tbody>
                           <tr>
                           <td style="border: 1px solid #000000; ">Compras Internas no Gravadas y/o Sin Derecho a Crédito Fiscal</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="sum_compras_credit"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_compras_credit).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr>
                           <td style="border: 1px solid #000000; ">Importaciones gravadas Alícuota General</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr>
                           <td style="border: 1px solid #000000; ">Importaciones gravadas por Alícuota General mas Adicional</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr>
                           <td style="border: 1px solid #000000; ">Importaciones gravadas por Alicuota Reducida</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr>
                           <td style="border: 1px solid #000000; ">Compras Internas gravadas por Alicuota General</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="sum_vat_general_base"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="sum_vat_general_tax"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_vat_general_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_vat_general_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr>
                           <td style="border: 1px solid #000000; ">Compras Internas gravadas por Alicuota General mas Alicuota Adicional</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="sum_ali_gene_addi"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="sum_ali_gene_addi_credit"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_ali_gene_addi).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_ali_gene_addi_credit).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr>
                           <td style="border: 1px solid #000000; ">Compras Internas gravadas por Alicuota Reducida</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="sum_vat_reduced_base"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="sum_vat_reduced_tax"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_vat_reduced_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_vat_reduced_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr class="" style="background-color:#A4A4A4; color:#000000;font-weight: bold; ">
                             <td style="border: 1px solid #000000; ">Total Compras y Créditos Fiscales</td>
-                            <td class="text-center" style="border: 1px solid #000000; "><span t-esc="total_compras_base_imponible"/></td>
-                            <td class="text-center" style="border: 1px solid #000000; "><span t-esc="total_compras_credit_fiscal"/></td>
-                        </tr>
-                        <tr>
-                          <td style="border: 1px solid #000000; ">Créditos Fiscales totalmente Deducibles</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                        </tr>
-                        <tr>
-                          <td style="border: 1px solid #000000; ">Créditos Fiscales producto de la aplicación de porcentajes de prorrata</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                        </tr>
-                        <tr class="" style="background-color:#A4A4A4; color:#000000; font-weight: bold; border: 1px solid #000000; ">
-                            <td style="border: 1px solid #000000; ">Total Créditos Fiscales Deducibles</td>
-                            <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                            <td class="text-center" style="border: 1px solid #000000; "><span t-esc="a"/></td>
-                        </tr>
-                        <tr class="" style="background-color:#A4A4A4; color:#000000; font-weight: bold;">
-                            <td style="border: 1px solid #000000; ">Ajuste a los Créditos Fiscales de períodos anteriores</td>
-                            <td class="text-center" style="border: 1px solid #000000; "></td>
-                            <td class="text-center" style="border: 1px solid #000000; "></td>
-                        </tr>
-                        <tr>
-                          <td style="border: 1px solid #000000; ">- Notas de Débito</td>
-                          <td class="text-center" style="border: 1px solid #000000; "></td>
-                          <td class="text-center" style="border: 1px solid #000000; "></td>
-                        </tr>
-                        <tr>
-                          <td  style="border: 1px solid #000000; ">- Notas de Crédito</td>
-                          <td class="text-center" style="border: 1px solid #000000; "></td>
-                          <td class="text-center" style="border: 1px solid #000000; "></td>
-                        </tr>
-                        <tr class="" style="background-color:#A4A4A4; color:#000000; font-weight: bold; ">
-                          <td style="border: 1px solid #000000; ">Total Ajustes a los Créditos Fiscales de Períodos Anteriores</td>
-                          <td class="text-center" style="border: 1px solid #000000; "></td>
-                          <td class="text-center" style="border: 1px solid #000000; "></td>
-                        </tr>
-                        <tr class="" style="background-color:#A4A4A4; color:#000000; font-weight: bold;">
-                            <td style="border: 1px solid #000000; ">TOTAL DE CRÉDITOS FISCALES</td>
-                            <td class="text-center" style="border: 1px solid #000000; "></td>
-                            <td class="text-center" style="border: 1px solid #000000; "></td>
+                            <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(total_compras_base_imponible).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                            <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(total_compras_credit_fiscal).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                       </tbody>
                     </table>

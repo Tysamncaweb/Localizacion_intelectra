@@ -997,7 +997,7 @@ class FiscalBook(models.Model):
                               iwdl_brw.invoice_id.fiscal_printer and
                               iwdl_brw.invoice_id.invoice_printer or
                               (fb_brw.type == 'sale' and
-                               iwdl_brw.invoice_id.number or
+                               iwdl_brw.invoice_id.supplier_invoice_number or
                                iwdl_brw.invoice_id.supplier_invoice_number),
                           'affected_invoice_date':
                               iwdl_brw.invoice_id.date_document or
@@ -1571,7 +1571,10 @@ class FiscalBook(models.Model):
                     fbl.invoice_id.currency_id.id,
                     fbl.invoice_id.company_id.currency_id.id,
                     fbl.invoice_id.date_invoice)
-                sign = 1 if fbl.doc_type != 'N/CR' else -1
+                if fbl.doc_type == 'N/CR' or fbl.doc_type == 'N/DB':
+                    sign = -1
+                else:
+                    sign = 1
                 amount_field_data = {'total_with_iva':
                                          f_xc(fbl.invoice_id.amount_untaxed) * sign,
                                      'vat_sdcf': 0.0, 'vat_exempt': 0.0, 'vat_general_base': 0.0,}
@@ -1653,7 +1656,10 @@ class FiscalBook(models.Model):
         tax_type = {'reduced': 'reducido', 'general': 'general',
                     'additional': 'adicional'}
         for fbl_brw in self.fbl_ids:
-            sign = 1 if fbl_brw.doc_type != 'N/CR' else -1
+            if fbl_brw.doc_type == 'N/CR' or fbl_brw.doc_type == 'N/DB':
+                sign = -1
+            else:
+                sign = 1
             data = {}.fromkeys(field_names, 0.0)
             for fbt_brw in fbl_brw.fbt_ids:
                 for field_name in field_names:
