@@ -149,26 +149,34 @@ class hr_historico_fideicomiso(models.Model):
         if (mes_hoy - offset)%3 == 0:
             #ULTIMO MES DEL TRIMESTRE:
             acumulado = payslip_values.get('monto_incremento')
+            acumulado_ant = historico.monto_acumulado
      #   elif historico:
       #      #CUALQUIR OTRO MES DEL TRIMESTRE:
        #     acumulado = historico.monto_tri_ant
         else:
             acumulado = sal_diario * (payslip_values.get('dias_aporte'))
+            acumulado_ant = historico.monto_acumulado
         tasa1 = tasa2 =0.0
         monto = 0.0
         if fecha_inicio and fecha_fin :
-            if  fecha_inicio[0:4] <= fecha_fin[0:4]:
+            cont= 0
+            if  fecha_inicio[0:4] < fecha_fin[0:4]:
                 cant_meses = 12 - int(fecha_inicio[5:7]) +  int(fecha_fin[5:7])
             else:
                 cant_meses = int(fecha_fin[5:7]) - int(fecha_inicio[5:7])
+
             for a in range(cant_meses):
+                cont += 1
               #  fecha_inicio_inc = datetime(fecha_inicio) + datetime(fecha_inicio).month + 1
                 mes_posterior = datetime.strptime(fecha_inicio, DEFAULT_SERVER_DATE_FORMAT) + relativedelta.relativedelta(
                     months=a)
                 tasa1 = intereses_obj.get_tasa(str(mes_posterior)[0:10])
                 tasa2 += tasa1
-                monto += acumulado*tasa1/1200
-        #REGISTRO DE LOS INTERESES CALCULADOS EN EL HISTORICO PARA EL MES EN CURSO
+                if cont != 3:
+                     monto += acumulado_ant*tasa1/1200
+                else:
+                     monto += acumulado*tasa1/1200
+                  #REGISTRO DE LOS INTERESES CALCULADOS EN EL HISTORICO PARA EL MES EN CURSO
         contract_id = contract_obj.search([('employee_id','=',employee_id)])
         contract = contract_obj.browse(contract_id.id)
         history_new_values.update({'monto_intereses':monto,
