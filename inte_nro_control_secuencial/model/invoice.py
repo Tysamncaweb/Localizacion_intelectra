@@ -24,8 +24,9 @@ class AccountInvoice(models.Model):
     def action_invoice_open(self):
         var = super(AccountInvoice, self).action_invoice_open()
         if self.type in ('out_invoice', 'out_refund'):
-            self.nro_ctrl = self._get_sequence_code()
-            self.write({'nro_ctrl_sale': self.nro_ctrl})
+            if not self.nro_ctrl:
+                self.nro_ctrl = self._get_sequence_code()
+                self.write({'nro_ctrl_sale': self.nro_ctrl})
 
         return var
 

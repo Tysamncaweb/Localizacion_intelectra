@@ -1066,7 +1066,7 @@ class FiscalBook(models.Model):
                     (doc_type == "N/DB" or doc_type == "N/CR") and local_inv_affected,
                 'partner_name': rp_brw.name or 'N/A',
                 'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
-                'partner_vat': rp_brw.vat and rp_brw.vat[2:] or 'N/A',  #TODO Revisar validación de rif en el partner. Esta guardando los partner sin rif
+                'partner_vat': rp_brw.vat and rp_brw.vat or 'N/A',  #TODO Revisar validación de rif en el partner. Esta guardando los partner sin rif
                 'invoice_number':local_inv_nbr,
                 'doc_type': doc_type,
                 #'void_form':
