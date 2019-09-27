@@ -62,7 +62,7 @@ class hr_payslip(models.Model):
                             # factor = self.get_days_utilidades(cr, uid) / float(12)
                             salario_integral, factor_x_dias_x_mes, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
                                  sueldo_promedio,
-                                vacaciones.get('asignacion') if int(dias_str) == 0 else int(dias_str),
+                                vacaciones.get('asignacionR') if int(dias_str) == 0 else int(dias_str),
                                 payslip.contract_id.date_start, payslip.date_to)
 
                             dias_adic = self.get_fi_dias_adicionales( payslip.contract_id.date_start, payslip.date_to,

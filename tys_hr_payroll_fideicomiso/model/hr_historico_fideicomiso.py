@@ -175,7 +175,7 @@ class hr_historico_fideicomiso(models.Model):
                 if cont != 3:
                      monto += acumulado_ant*tasa1/1200
                 else:
-                     monto += acumulado*tasa1/1200
+                     monto += (acumulado + acumulado_ant)*tasa1/1200
                   #REGISTRO DE LOS INTERESES CALCULADOS EN EL HISTORICO PARA EL MES EN CURSO
         contract_id = contract_obj.search([('employee_id','=',employee_id)])
         contract = contract_obj.browse(contract_id.id)
@@ -363,7 +363,6 @@ class hr_payslip_run(models.Model):
                                            'fecha_anticipo':history.fecha_anticipo,
                                            'anticipo_intereses':history.anticipo_intereses,
                                            'fecha_anticipo_intereses': history.fecha_anticipo_intereses,
-                                           'monto_total_intereses': history.monto_total_intereses,
                                            'interes_a_pagar': 0.0,
                                            'type_record':'fideicomiso',})
                 history_new_values.update(fi_hist_obj.calcula_intereses(p.employee_id.id, p.date_from, p.date_to, history, sal_int_diario, payslip_values
