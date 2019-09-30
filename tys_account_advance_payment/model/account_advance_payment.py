@@ -53,12 +53,6 @@ class AccountAdvancePayment(models.Model):
     is_customer = fields.Boolean("Is customer", default= True)
     is_supplier = fields.Boolean("Is Supplier", default=True)
 
-    @api.model
-    def _get_view(self):
-        '''Obtener la vista actual'''
-        view_obj = self.env['ir.ui.view']
-        #view_obj.search([('name','=','account.advance.receivable.form')])
-
     @api.multi
     def validate_amount_advance(self):
         if self.amount_advance <= 0:

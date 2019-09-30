@@ -18,11 +18,11 @@ class AccountInvoice(models.Model):
 
     @api.onchange('partner_id')
     def _onchange_amount_available(self):
+        '''Muestra el saldo disponible en los anticipos para clientes y proveedores'''
         self.sum_amount_available = 0
         advance_obj = self.env['account.advanced.payment']
 
         if self.type == 'out_invoice' or self.type == 'out_refund':
-
             advance_bw = advance_obj.search([('partner_id', '=', self.partner_id.id),
                                          ('state', '=', 'available'),
                                          ('is_customer','=',True)])
