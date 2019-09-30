@@ -274,6 +274,7 @@ class AccountInvoiceRefund(osv.osv_memory):
                 #    "update account_invoice set date_due='%s',nro_ctrl='%s',"
                 #    " check_total='%s', parent_id=%s where id =%s" % (
                 #        date, nroctrl, inv.check_total, inv.id, refund.id))
+                nroctrl = self.update_ret_number()
                 self._cr.execute(
                     "update account_invoice set date_due='%s',nro_ctrl='%s',"
                     " parent_id=%s where id =%s" % (
@@ -485,4 +486,15 @@ class AccountInvoiceRefund(osv.osv_memory):
         data_refund = self.browse(self._ids)[0].filter_refund
         return self.compute_refund(data_refund)
 
+    def _get_company(self):
+        uid = self._uid
+        res_company = self.env['res.company'].search([('id', '=', uid)])
+        return res_company
+    def update_ret_number(self):
+        self.ensure_one()
+        SEQUENCE_CODE = 'l10n_nro_control_sale'
+        company_id = self._get_company()
+        IrSequence = self.env['ir.sequence'].with_context(force_company=company_id.id)
+        local_number = IrSequence.next_by_code(SEQUENCE_CODE)
+        return local_number
 AccountInvoiceRefund()
