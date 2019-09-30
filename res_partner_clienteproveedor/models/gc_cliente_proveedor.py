@@ -74,7 +74,7 @@ class gc_cliente_proveedor(models.Model):
                 if partner and (partner.customer or partner.supplier):
                     found = False
             elif partner and (self.customer or self.supplier):
-                found = False
+                found = True
 
             return found
 
