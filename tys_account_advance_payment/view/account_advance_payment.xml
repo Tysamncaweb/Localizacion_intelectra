@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <tree decoration-muted="state=='cancel'">
                     <field name="name"/>
-                    <field name="partner_id" domain="[('supplier','=',True)]"/>
+                    <field name="partner_id" domain="[('is_supplier','=',True)]"/>
                     <field name="journal_id"/>
                     <field name="ref"/>
                     <field name="bank_account_id"/>
@@ -26,7 +26,7 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
-                    <field name="partner_id" domain="[('customer','=',True)]"/>
+                    <field name="partner_id" domain="[('is_customer','=',True)]"/>
                     <field name="journal_id"/>
                     <field name="ref"/>
                     <field name="bank_account_id"/>
@@ -45,7 +45,7 @@
             <field name="arch" type="xml">
                 <tree default_order="date_advance" create="false">
                     <field name="name"/>
-                    <field name="partner_id" domain="[('supplier','=',True)]"/>
+                    <field name="partner_id" domain="[('is_supplier','=',True)]"/>
                     <field name="journal_id"/>
                     <field name="ref"/>
                     <field name="bank_account_id"/>
@@ -66,7 +66,7 @@
             <field name="arch" type="xml">
                 <tree default_order="date_advance" create="false">
                     <field name="name"/>
-                    <field name="partner_id" domain="[('customer','=',True)]"/>
+                    <field name="partner_id" domain="[('is_customer','=',True)]"/>
                     <field name="journal_id"/>
                     <field name="ref"/>
                     <field name="bank_account_id"/>
@@ -99,6 +99,7 @@
                                 <group >
                                     <field name="name" readonly="1" attrs="{'invisible':[('state', 'in', ('draft',('cancel')))]}"/>
                                     <field name="partner_id" placeholder="proveedor ..."  required="1" domain="[('supplier', '=', True)]" attrs="{'readonly': [('state', '=', 'available')]}"/>
+                                    <field name="is_supplier" attrs="{'readonly': [('state', '=','available')]}"/>
                                     <field name="journal_id" placeholder="anticipo proveedor ..." attrs="{'readonly': [('state', '=', 'available')]}"/>
                                     <field name="bank_account_id" placeholder="Por ejemplo, Banesco ..."  required="1" attrs="{'readonly': [('state', '=', 'available')]}"/>
                                     <field name="move_id" attrs="{'readonly': [('state', '=', 'available')],'invisible': [('state','!=','available')]}" />
@@ -152,6 +153,7 @@
                                 <group >
                                     <field name="name" readonly="1" attrs="{'invisible':[('state', 'in', ('draft',('cancel')))]}"/>
                                     <field name="partner_id" placeholder="cliente ..."  required="1" domain="[('customer', '=', True)]" attrs="{'readonly': [('state', '=','available')]}"/>
+                                    <field name="is_customer" attrs="{'readonly': [('state', '=','available')]}"/>
                                     <field name="journal_id" placeholder="anticipo cliente ..." attrs="{'readonly': [('state', '=', 'available')]}"/>
                                     <field name="bank_account_id" placeholder="Por ejemplo, Banesco ..." required="1" attrs="{'readonly': [('state', '=','available')]}"/>
                                 </group>
@@ -205,6 +207,7 @@
                                     <field name="name" readonly="1"/>
                                     <field name="date_apply"/>
                                     <field name="partner_id" required="1" domain="[('supplier', '=', True)]" attrs="{'readonly': [('state', '=', 'available')]}"/>
+                                    <field name="is_supplier" attrs="{'readonly': [('state', '=','available')]}"/>
                                     <field name="amount_advance" attrs="{'readonly': [('state', '=', 'available')]}"/>
                                     <field name="journal_id" attrs="{'invisible': [('state', '=', 'available')]}"/>
                                     <field name="apply_journal_id" attrs="{'invisible': [('state', '!=', 'available')]}"/>
@@ -261,6 +264,7 @@
                                     <field name="name" readonly="1"/>
                                     <field name="date_apply"/>
                                     <field name="partner_id" required="1" domain="[('customer', '=', True)]" attrs="{'readonly': [('state', '=', 'available')]}"/>
+                                    <field name="is_customer" attrs="{'readonly': [('state', '=','available')]}"/>
                                     <field name="amount_advance" attrs="{'readonly': [('state', '=', 'available')]}"/>
                                     <field name="journal_id" attrs="{'invisible': [('state', '=', 'available')]}"/>
                                     <field name="apply_journal_id" attrs="{'invisible': [('state', '!=', 'available')]}"/>

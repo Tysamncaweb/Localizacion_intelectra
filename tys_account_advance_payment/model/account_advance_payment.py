@@ -50,6 +50,14 @@ class AccountAdvancePayment(models.Model):
     invoice_id = fields.Many2one('account.invoice',string='Invoice')
     amount_invoice = fields.Monetary(string='Amount Invoice',compute='_compute_amount_invoice')
     amount_apply = fields.Monetary(string='Amount Apply')
+    is_customer = fields.Boolean("Is customer", default= True)
+    is_supplier = fields.Boolean("Is Supplier", default=True)
+
+    @api.model
+    def _get_view(self):
+        '''Obtener la vista actual'''
+        view_obj = self.env['ir.ui.view']
+        #view_obj.search([('name','=','account.advance.receivable.form')])
 
     @api.multi
     def validate_amount_advance(self):
@@ -59,7 +67,6 @@ class AccountAdvancePayment(models.Model):
         return True
 
     @api.multi
-
     def validate_amount_apply(self):
         if self.amount_apply <= 0:
             raise Warning(_('El monto a aplicar debe ser mayor que cero'))
@@ -178,43 +185,54 @@ class AccountAdvancePayment(models.Model):
 
     @api.model
     def create(self, vals):
-        vals.update({'supplier': self.env['res.partner'].browse(vals['partner_id']).supplier})
-        vals.update({'customer': self.env['res.partner'].browse(vals['partner_id']).customer})
+        if vals.get('is_supplier') == True:
+            vals.update({'supplier': self.env['res.partner'].browse(vals['partner_id']).supplier, 'is_customer': False})
+            #self.is_customer == False
+        else:
+            vals.update({'customer': self.env['res.partner'].browse(vals['partner_id']).customer, 'is_supplier': False})
+            #self.is_supplier == False
         res = super(AccountAdvancePayment, self).create(vals)
         return res
 
+    @api.model
     def get_account_advance(self):
         '''obtiene la cuentas contables segun el proveedor o cliente, para el registro de los anticipos'''
         cuenta_acreedora = None
         cuenta_deudora = None
         partner_id = None
         sequence_code = None
+        is_customer = None
+        is_supplier = None
 
-        if self.partner_id.customer and self.state == 'draft':
+        #if self.partner_id.customer and self.state == 'draft':
+        if self.is_customer and self.state == 'draft':
             cuenta_deudora = self.bank_account_id.default_debit_account_id.id
             cuenta_acreedora = self.partner_id.account_advance_payment_sales_id.id
             partner_id = self.partner_id.id
             sequence_code = 'register.receivable.advance.customer'
+            is_customer = True
 
-        elif self.partner_id.supplier and self.state == 'draft':
+        #elif self.partner_id.supplier and self.state == 'draft':
+        elif self.is_supplier and self.state == 'draft':
             cuenta_deudora = self.partner_id.account_advance_payment_purchase_id.id
             cuenta_acreedora = self.bank_account_id.default_debit_account_id.id
             partner_id = self.partner_id.id
             sequence_code = 'register.payment.advance.supplier'
+            is_supplier = True
 
-        return cuenta_deudora,cuenta_acreedora,partner_id,sequence_code
+        return cuenta_deudora,cuenta_acreedora,partner_id,sequence_code,is_supplier,is_customer
 
     def get_account_apply(self):
         '''obtiene la cuentas contables segun el proveedor o cliente, para la aplicacion de los anticipos'''
         cuenta_acreedora = None
         cuenta_deudora = None
 
-        if self.partner_id.customer and self.state in ['posted', 'available', 'paid']:
+        if self.partner_id.customer and self.state in ['posted', 'available', 'paid'] and self.is_customer == True:
             cuenta_deudora = self.partner_id.property_account_receivable_id.id
             cuenta_acreedora = self.partner_id.account_advance_payment_sales_id.id
 
 
-        elif self.partner_id.supplier and self.state in ['posted', 'available', 'paid']:
+        elif self.partner_id.supplier and self.state in ['posted', 'available', 'paid'] and self.is_supplier == True:
             cuenta_deudora = self.partner_id.account_advance_payment_purchase_id.id
             cuenta_acreedora = self.partner_id.property_account_payable_id.id
 
@@ -245,7 +263,7 @@ class AccountAdvancePayment(models.Model):
         '''se crea el asiento contable para el registro'''
         name = None
 
-        cuenta_deudora, cuenta_acreedora,partner_id,sequence_code = self.get_account_advance()
+        cuenta_deudora, cuenta_acreedora,partner_id,sequence_code,is_supplier,is_customer = self.get_account_advance()
         #busca la secuencia del diario y se lo asigno a name
         if self.partner_id.customer and not cuenta_acreedora:
                 raise exceptions.Warning(_('El cliente no tiene configurado la cuenta contable de anticipo'))
@@ -291,10 +309,17 @@ class AccountAdvancePayment(models.Model):
             move_line_id2 = move_line_obj.create(asiento)
 
             if move_line_id1 and move_line_id2:
-                if self.partner_id.supplier == True:
-                    res = {'state': 'available', 'move_id': move_id.id, 'supplier':True, 'amount_available':self.amount_advance,'name':name}
+                #if self.partner_id.supplier == True:
+                    #res = {'state': 'available', 'move_id': move_id.id, 'supplier':True, 'amount_available':self.amount_advance,'name':name}
+                #else:
+                    #res = {'state': 'available', 'move_id': move_id.id, 'customer':True, 'amount_available':self.amount_advance,'name':name}
+
+                #return super(AccountAdvancePayment, self).write(res)
+
+                if self.is_supplier == True:
+                    res = {'state': 'available', 'move_id': move_id.id, 'supplier':True, 'amount_available':self.amount_advance,'name':name, 'is_supplier':True}
                 else:
-                    res = {'state': 'available', 'move_id': move_id.id, 'customer':True, 'amount_available':self.amount_advance,'name':name}
+                    res = {'state': 'available', 'move_id': move_id.id, 'customer':True, 'amount_available':self.amount_advance,'name':name, 'is_customer':True}
 
                 return super(AccountAdvancePayment, self).write(res)
         return True
@@ -395,8 +420,6 @@ class AccountAdvancePayment(models.Model):
                        'invoice_id':''}
                 self.write(res)
             return True
-
-
 
     @api.multi
     def action_cancel(self):

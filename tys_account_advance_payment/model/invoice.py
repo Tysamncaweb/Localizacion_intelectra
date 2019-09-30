@@ -20,10 +20,19 @@ class AccountInvoice(models.Model):
     def _onchange_amount_available(self):
         self.sum_amount_available = 0
         advance_obj = self.env['account.advanced.payment']
-        advance_bw = advance_obj.search([('partner_id', '=', self.partner_id.id),
-                                         ('state', '=', 'available')])
 
-        for advance in advance_bw:
-            self.sum_amount_available += advance.amount_available
+        if self.type == 'out_invoice' or self.type == 'out_refund':
 
+            advance_bw = advance_obj.search([('partner_id', '=', self.partner_id.id),
+                                         ('state', '=', 'available'),
+                                         ('is_customer','=',True)])
+
+            for advance in advance_bw:
+                self.sum_amount_available += advance.amount_available
+        else:
+            advance_bw = advance_obj.search([('partner_id', '=', self.partner_id.id),
+                                             ('state', '=', 'available'),
+                                             ('is_supplier', '=', True)])
+            for advance in advance_bw:
+                self.sum_amount_available += advance.amount_available
         return
