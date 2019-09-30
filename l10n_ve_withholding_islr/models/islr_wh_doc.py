@@ -1431,7 +1431,7 @@ class IslrWhDocInvoices(models.Model):
                 _("Impossible income withholding, because the partner '%s' has"
                   " not vat associated!") % (acc_part_id.name))
         else:
-            if acc_part_id.vat[2:3] in 'VvEe' or acc_part_id.spn:
+            if acc_part_id.vat[0] in 'VvEe' or acc_part_id.spn:
                 return True
             else:
                 return False

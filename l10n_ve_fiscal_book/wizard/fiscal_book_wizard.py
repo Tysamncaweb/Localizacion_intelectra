@@ -31,7 +31,7 @@ from odoo import fields, models, api, exceptions, _
 from odoo.exceptions import ValidationError
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
 from datetime import datetime, date, timedelta
-
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 class FiscalBookWizard(models.TransientModel):
 
@@ -240,9 +240,7 @@ class PurchaseBook(models.AbstractModel):
 
     @api.model
     def get_report_values(self, docids, data=None):
-
-
-
+        format_new = "%d/%m/%Y"
         date_start = datetime.strptime(data['form']['date_from'], DATE_FORMAT)
         date_end = datetime.strptime(data['form']['date_to'], DATE_FORMAT)
         datos_compras = []
@@ -284,7 +282,7 @@ class PurchaseBook(models.AbstractModel):
 
             datos_compras.append({
 
-                'emission_date': h.emission_date,
+                'emission_date': datetime.strftime(datetime.strptime(h.emission_date, DEFAULT_SERVER_DATE_FORMAT), format_new),
                 'partner_vat': h.partner_vat,
                 'partner_name': h.partner_name,
                 'people_type': h.people_type,
@@ -318,11 +316,13 @@ class PurchaseBook(models.AbstractModel):
         total_compras_credit_fiscal = sum_vat_general_tax + sum_ali_gene_addi_credit + sum_vat_reduced_tax
 
 
+        date_start = datetime.strftime(datetime.strptime(data['form']['date_from'], DEFAULT_SERVER_DATE_FORMAT), format_new)
+        date_end = datetime.strftime(datetime.strptime(data['form']['date_to'], DEFAULT_SERVER_DATE_FORMAT), format_new)
         return {
             'doc_ids': data['ids'],
             'doc_model': data['model'],
-            'date_start': date_start.strftime(DATE_FORMAT),
-            'date_end': date_end.strftime(DATE_FORMAT),
+            'date_start': date_start,
+            'date_end': date_end,
             'a': 0.00,
             'datos_compras': datos_compras,
             'sum_compras_credit': sum_compras_credit,
@@ -346,7 +346,7 @@ class FiscalBookSaleReport(models.AbstractModel):
 
     @api.model
     def get_report_values(self, docids, data=None):
-
+        format_new = "%d/%m/%Y"
 
         date_start = datetime.strptime(data['form']['date_from'], DATE_FORMAT)
         date_end = datetime.strptime(data['form']['date_to'], DATE_FORMAT)
@@ -380,7 +380,7 @@ class FiscalBookSaleReport(models.AbstractModel):
 
             docs.append({
                 'rannk': line.rank,
-                'emission_date': line.emission_date,
+                'emission_date': datetime.strftime(datetime.strptime(line.emission_date, DEFAULT_SERVER_DATE_FORMAT), format_new),
                 'partner_vat': line.partner_vat,
                 'partner_name': line.partner_name,
                 'people_type': line.people_type,
@@ -423,12 +423,14 @@ class FiscalBookSaleReport(models.AbstractModel):
             total_ventas_base_imponible = suma_vat_general_base + suma_ali_gene_addi + suma_vat_reduced_base
             total_ventas_debit_fiscal = suma_vat_general_tax + suma_ali_gene_addi_debit + suma_vat_reduced_tax
 
-
+        date_start = datetime.strftime(datetime.strptime(data['form']['date_from'], DEFAULT_SERVER_DATE_FORMAT),
+                                       format_new)
+        date_end = datetime.strftime(datetime.strptime(data['form']['date_to'], DEFAULT_SERVER_DATE_FORMAT), format_new)
         return {
             'doc_ids': data['ids'],
             'doc_model': data['model'],
-            'date_start':date_start.strftime(DATE_FORMAT),
-            'date_end': date_end.strftime(DATE_FORMAT),
+            'date_start':date_start,
+            'date_end': date_end,
             'docs': docs,
             'a': 0.00,
             'suma_total_w_iva': suma_total_w_iva,

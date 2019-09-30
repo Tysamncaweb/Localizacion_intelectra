@@ -206,7 +206,7 @@ class AccountWhIvaLine(models.Model):
 class AccountWhIva(models.Model):
     _name = "account.wh.iva"
     _description = "Withholding Vat"
-    number_2 =fields.Char('numero respaldo')
+
 
     @api.model
     def create(self, values):
@@ -520,7 +520,7 @@ class AccountWhIva(models.Model):
                         _('The partner must be withholding vat agent .'))
 
     _sql_constraints = [
-        ('ret_num_uniq', 'unique (type,partner_id,company_id)',
+        ('ret_num_uniq', 'unique (number,type,partner_id,company_id)',
          'number must be unique by partner and document type!')
     ]
 
@@ -755,16 +755,11 @@ class AccountWhIva(models.Model):
                 not self._dummy_confirm_check()):
             return False
         else:
-            consulta = self.env['account.wh.iva'].search([('name', '=', self.name),('number_2','!=',False)])
-            if not consulta:
-                if self.type in ['in_invoice', 'in_refund']:
-                    self.number = self.update_ret_number()
-                    self.number_2 = self.number
-                else:
-                    self.number
+            if self.type in ['in_invoice', 'in_refund']:
+                self.number = self.update_ret_number()
             else:
-                if self.type in ['in_invoice', 'in_refund']:
-                    self.number = consulta[-1].number_2
+                self.number
+
             dt = time.strftime('%Y-%m-%d')
             self.write({'date_ret': dt})
             self.action_move_create()

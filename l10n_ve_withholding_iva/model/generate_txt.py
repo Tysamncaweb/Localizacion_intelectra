@@ -314,8 +314,6 @@ class TxtIva(models.Model):
             vat = vat
             for txt_line in txt.txt_ids:
                 vendor, buyer = self.get_buyer_vendor(txt, txt_line)
-                vendor = vendor.replace("-","")
-                buyer = buyer.replace("-","")
                 period = self.get_period(txt.date_start)
                 # TODO: use the start date of the period to get the period2
                 # with the 'YYYYmm'
@@ -336,21 +334,16 @@ class TxtIva(models.Model):
                 amount_total, amount_exempt = self.get_amount_line(
                     txt_line, amount_exempt)
 
-                amount_total2 = str(round(amount_total, 2))
-                txt_line.untaxed2 = str(round(txt_line.untaxed, 2))
-                txt_line.amount_withheld2 = str(round(txt_line.amount_withheld, 2))
-                amount_exempt2 = str(round(amount_exempt, 2))
-                alicuota2 = alicuota /100
                 txt_string = (
                     txt_string + buyer + '\t' + period + '\t'
                     +txt_line.invoice_id.date_invoice + '\t' + operation_type +
                     '\t' + document_type + '\t' + vendor + '\t' +
                     document_number + '\t' + control_number + '\t' +
-                    self.formato_cifras(amount_total2) + '\t' +
-                    self.formato_cifras(txt_line.untaxed2) + '\t' +
-                    self.formato_cifras(txt_line.amount_withheld2) + '\t' +
+                    str(round(amount_total, 2)) + '\t' +
+                    str(round(txt_line.untaxed, 2)) + '\t' +
+                    str(round(txt_line.amount_withheld, 2)) + '\t' +
                     document_affected + '\t' + voucher_number + '\t' +
-                    self.formato_cifras(amount_exempt2) + '\t' + self.formato_cifras(alicuota2) +
+                    str(round(amount_exempt, 2)) + '\t' + str(alicuota) +
                     '\t' + '0' + '\n')
         return txt_string
 
@@ -386,19 +379,6 @@ class TxtIva(models.Model):
 
         return True
 
-    def formato_cifras(self,monto):
-        monto = str(monto)
-        if monto =='0':
-            monto = '0.00'
-        for i in range(0, len(monto)):
-            if (monto[i] == '.'):
-                cds = monto[i + 1:]
-        if len(cds) == 2:
-            imprimir0 = ''
-        else:
-            imprimir0 = '0'
-        montofinal = monto + imprimir0
-        return montofinal
 
 class TxtIvaLine(models.Model):
     _name = "txt.iva.line"

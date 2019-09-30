@@ -1026,7 +1026,7 @@ class FiscalBook(models.Model):
                         local_inv_affected = inv_brw.parent_id and inv_brw.parent_id.number or ''
                 else:
                     local_inv_affected = inv_brw.refund_invoice_id and inv_brw.refund_invoice_id.supplier_invoice_number or ''
-
+            sign = 1 if doc_type != 'N/DB' else -1
             values = {
                 'invoice_id': inv_brw.id,
                 'emission_date':
@@ -1082,7 +1082,7 @@ class FiscalBook(models.Model):
             # inv_brw.customs_form_id.name or False,# TODO VALOR RELACIONADO CON MODULO l10n_ve_imex (importaciones)
                 'iwdl_id': iwdl_brw and iwdl_brw.id,
                 'wh_number': iwdl_brw and iwdl_brw.retention_id.number or '',
-                'get_wh_vat': iwdl_brw and iwdl_brw.amount_tax_ret or 0.0,
+                'get_wh_vat': iwdl_brw  and iwdl_brw.amount_tax_ret * sign or 0.0,
                 'wh_rate': iwdl_brw and iwdl_brw.wh_iva_rate or 0.0,
             }
             data.append((0, 0, values))
