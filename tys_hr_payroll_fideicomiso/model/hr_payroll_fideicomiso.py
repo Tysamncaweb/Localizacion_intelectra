@@ -73,13 +73,6 @@ class hr_payslip(models.Model):
                                 raise Warning((u'La fecha de ingreso del empleado %s es posterior al período seleccionado.\n'
                                                u' Por favor consulte con su supervisor inmediato!') % payslip.employee_id.name)
                             elif dias_adic > 0:
-                                if history and history.dias_adicionales:
-                                    dias_adic = dias_adic - history.dias_adicionales
-                            if dias_adic == 0 and not history:
-                                dias_adic = self.get_fi_dias_adicionales_inicio(payslip.contract_id.date_start,
-                                                                                    payslip.date_to,
-                                                                                    payslip.date_from, history)
-
                                 salario_integral_dias_adic, factor_x_dias_x_mes_adic, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
                                      sueldo_promedio, vacaciones.get('asignacionR'),
                                     payslip.contract_id.date_start, payslip.date_to,
@@ -165,12 +158,13 @@ class hr_payslip(models.Model):
         diferencia2 = datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT)
 
         if int(date_start.split('-')[0]) <= int(fecha_desde.split('-')[0]) <= int(fecha_hasta.split('-')[0]):
-            if int(fecha_desde.split('-')[1]) <= int(date_start.split('-')[1]) <= int(fecha_hasta.split('-')[1]):
+            if int(date_start.split('-')[0]) <= int(fecha_desde.split('-')[0]) <= int(fecha_hasta.split('-')[0]):
                 factor_str = config_obj._hr_get_parameter('hr.fi.factor.dias.adicionales')
+
                 if anios == int(anios_ley_str):
-                    anios = 0
-                elif anios > 0 and anios > int(anios_ley_str) :
-                    anios = anios - 2
+                    anios = 1
+                elif anios > 0:
+                    anios = anios - 1
                 if anios != 1:
                     dias = int(factor_str) * anios
                 if dias > int(maximo_str): dias = int(maximo_str)
@@ -191,12 +185,13 @@ class hr_payslip(models.Model):
         factor_str = config_obj._hr_get_parameter('hr.fi.factor.dias.adicionales')
 
         if int(date_start.split('-')[0]) <= int(fecha_desde.split('-')[0]) <= int(fecha_hasta.split('-')[0]):
-            if not history:
+                if anios == 1:
+                    dias = 0
                 if anios == int(anios_ley_str):
-                    anios = 0
+                    anios = 1
                 elif anios > 0 and anios > int(anios_ley_str):
                     anios = anios - 2
-                if anios != 1:
+                if anios == 1:
                     dias = int(factor_str) * anios
                 if dias > int(maximo_str): dias = int(maximo_str)
                
