@@ -223,7 +223,7 @@ class hr_historico_fideicomiso(models.Model):
                                        'fecha_fin': values.get('fech_fin', False),
                                        'fecha_aporte': history.fecha_aporte,
                                        'dias_aporte': 0,
-                                       'dias_acumuluados': history.dias_acumuluados + history.dias_aporte,
+                                       'dias_acumuluados': history.dias_acumuluados,
                                        'dias_adicionales': history.dias_adicionales,
                                        'aporte_dias_adic': 0.0,
                                        'GPS_dias_adicionales': history.GPS_dias_adicionales,

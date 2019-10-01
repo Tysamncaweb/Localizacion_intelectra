@@ -6,7 +6,7 @@ from datetime import timedelta, date, datetime
 class CurrencyRate(models.Model):
     _inherit = "res.currency.rate"
 
-    hora = fields.Datetime('Fecha y Hora', default=datetime.today(), required=True)
+    hora = fields.Datetime('Fecha y Hora', default=datetime.now(), required=True)
     rate_real = fields.Float(digits=(12, 2), help='se introduce la tasa real del mercado')
     rate = fields.Float(digits=(12, 9), help='The rate of the currency to the currency of rate 1')
     _sql_constraints = [('unique_name_per_day', 'CHECK(1=1)', 'Only one currency rate per day allowed!')]
