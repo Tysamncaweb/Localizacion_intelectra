@@ -81,7 +81,7 @@ class hr_payslip(models.Model):
                                                                                     payslip.date_from, history)
 
                                 salario_integral_dias_adic, factor_x_dias_x_mes_adic, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
-                                     sueldo_promedio, vacaciones.get('asignacion'),
+                                     sueldo_promedio, vacaciones.get('asignacionR'),
                                     payslip.contract_id.date_start, payslip.date_to,
                                     dias_adic)
                             # dias_acum = fi_hist_obj.get_last_history_fi(cr, uid,payslip.employee_id.id, None, context=context).dias_acumuluados
