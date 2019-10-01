@@ -352,7 +352,7 @@ class hr_payslip_run(models.Model):
                                            'fecha_fin': p.date_to,
                                            'fecha_aporte': datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT),
                                            'dias_aporte': p.dias_acumulados,
-                                           'monto_acumulado': history.monto_acumulado + sal_int_diario*(p.dias_acumulados + p.dias_adicionales),
+                                           'monto_acumulado': history.monto_acumulado + sal_int_diario*(p.dias_acumulados),
                                            'dias_acumulados': history.dias_acumuluados + history.dias_aporte + p.dias_adicionales,
                                            'dias_adicionales': history.dias_adicionales + (p.dias_adicionales if p.dias_adicionales else 0),
                                            'aporte_dias_adic': (sal_int_diario * p.dias_adicionales) if p.dias_adicionales else 0.0,
