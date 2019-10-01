@@ -395,7 +395,7 @@ class hr_payslip_run(models.Model):
                 #ld = p.line_ids
                 for lds in p.line_ids:
                     if lds.code == code_anticipo:
-                        monto_anticipo1 = fi_hist_obj.procesar_anticipo(lds, p.employee_id, p.employee_id.id, values)
+                        monto_anticipo1 = fi_hist_obj.procesar_anticipo(lds, p.employee_id.id, values)
                     elif lds.code == code_intereses:
                         if monto_anticipo1 != 0:
                             fi_hist_obj.procesar_interes_anticipo(lds,p.employee_id, values, p.date_from, monto_anticipo1)
