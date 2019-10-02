@@ -163,10 +163,10 @@ class hr_payslip(models.Model):
 
                 if anios == int(anios_ley_str):
                     anios = 1
-                elif anios > 0:
-                    anios = anios - 1
-                if anios != 1:
-                    dias = int(factor_str) * anios
+  #              elif anios > 0 :
+   #                 anios = anios - 2
+
+                dias = int(factor_str) * anios
                 if dias > int(maximo_str): dias = int(maximo_str)
 
             elif diferencia.days < 0:

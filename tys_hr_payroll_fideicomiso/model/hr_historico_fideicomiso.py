@@ -150,12 +150,14 @@ class hr_historico_fideicomiso(models.Model):
             #ULTIMO MES DEL TRIMESTRE:
             acumulado = payslip_values.get('monto_incremento')
             acumulado_ant = historico.monto_acumulado
+            calculo_dias_adic = sal_diario * (payslip_values.get('dias_adicionales'))
      #   elif historico:
       #      #CUALQUIR OTRO MES DEL TRIMESTRE:
        #     acumulado = historico.monto_tri_ant
         else:
             acumulado = sal_diario * (payslip_values.get('dias_aporte'))
             acumulado_ant = historico.monto_acumulado
+            calculo_dias_adic= sal_diario *(payslip_values.get('dias_adicionales'))
         tasa1 = tasa2 =0.0
         monto = 0.0
         if fecha_inicio and fecha_fin :
@@ -175,7 +177,7 @@ class hr_historico_fideicomiso(models.Model):
                 if cont != 3:
                      monto += acumulado_ant*tasa1/1200
                 else:
-                     monto += (acumulado + acumulado_ant)*tasa1/1200
+                     monto += (acumulado + acumulado_ant + calculo_dias_adic)*tasa1/1200
                   #REGISTRO DE LOS INTERESES CALCULADOS EN EL HISTORICO PARA EL MES EN CURSO
         contract_id = contract_obj.search([('employee_id','=',employee_id)])
         contract = contract_obj.browse(contract_id.id)
