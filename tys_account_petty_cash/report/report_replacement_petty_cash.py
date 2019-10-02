@@ -2,6 +2,7 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError, Warning
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
 from datetime import datetime, date, timedelta
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 from odoo.exceptions import ValidationError
 import urllib
@@ -24,6 +25,8 @@ class report_replacement_petty_cash(models.Model):
         debe = 0
         haber = 0
 
+        format_new = "%d/%m/%Y"
+
         fecha_actual0 = str(date.today())
         fecha_actual = fecha_actual0[8:10] + "/" + fecha_actual0[5:7] + "/" + fecha_actual0[0:4]
 
@@ -36,37 +39,18 @@ class report_replacement_petty_cash(models.Model):
             debe += transitoria.debit
             haber += transitoria.credit
         saldo_trans1 = debe - haber
-        saldo_trans1 = round(saldo_trans1,2)
-        saldo_trans = str(saldo_trans1).split('.')
-        saldo_trans = ",".join(saldo_trans)
+        saldo_trans = round(saldo_trans1,2)
 
         code = replacement_number.code.name
-        disponible_petty_cash0 = replacement_number.apertura - replacement_number.amount_total
-        disponible_petty_cash = str(disponible_petty_cash0).split('.')
-        disponible_petty_cash = ",".join(disponible_petty_cash)
+        disponible_petty_cash = replacement_number.apertura - replacement_number.amount_total
 
         responsible = replacement_number.responsable
         number = replacement_number.name
 
-        total_exento = str(replacement_number.amount_exento).split('.')
-        total_exento = ",".join(total_exento)
-
-        total_iva = str(replacement_number.amount_tax).split('.')
-        total_iva = ",".join(total_iva)
-        total_gravable = str(replacement_number.amount_gravable).split('.')
-        total_gravable = ",".join(total_gravable)
-        total = str(replacement_number.amount_total).split('.')
-        total = ",".join(total)
-        apertura = str(replacement_number.apertura).split('.')
-        apertura = ",".join(apertura)
-        consumido = str(replacement_number.consumido).split('.')
-        consumido = ",".join(consumido)
         disponible = str(replacement_number.disponible).split('.')
         disponible = ",".join(disponible)
 
-        liq_pendiente = saldo_trans1 - replacement_number.amount_total
-        liq_pendiente = str(liq_pendiente).split('.')
-        liq_pendiente = ",".join(liq_pendiente)
+        liq_pendiente = saldo_trans - replacement_number.amount_total
 
 
         self.env.cr.execute(
@@ -88,18 +72,9 @@ class report_replacement_petty_cash(models.Model):
             if invoice_petty_cash.type_petty_cash == 'nota':
                 type_document = 'NOTA_ENTREGA'
 
-            amount_exento = str(invoice_petty_cash.amount_exento).split('.')
-            amount_exento = ",".join(amount_exento)
-            amount_gravable = str(invoice_petty_cash.amount_gravable).split('.')
-            amount_gravable = ",".join(amount_gravable)
-            iva = str(invoice_petty_cash.iva).split('.')
-            iva = ",".join(iva)
-            amount_total = str(invoice_petty_cash.amount_total).split('.')
-            amount_total = ",".join(amount_total)
-
 
             docs.append({
-                'date_invoice': invoice_petty_cash.date_petty_cash,
+                'date_invoice': datetime.strftime(datetime.strptime(invoice_petty_cash.date_petty_cash, DEFAULT_SERVER_DATE_FORMAT), format_new),
                 'responsible': invoice_petty_cash.petty_cash_partner.name,
                 'rif': invoice_petty_cash.petty_cash_partner.vat,
                 'type_document': type_document,
@@ -107,10 +82,10 @@ class report_replacement_petty_cash(models.Model):
                 'concepto': invoice_petty_cash.razon_gasto,
                 'cta_analitica': invoice_petty_cash.cuenta_analitica.name,
                 'et_analitica': invoice_petty_cash.etiqueta_analitica.name,
-                'amount_exento': amount_exento,
-                'amount_gravable': amount_gravable,
-                'iva': iva,
-                'amount_total': amount_total,
+                'amount_exento': invoice_petty_cash.amount_exento,
+                'amount_gravable': invoice_petty_cash.amount_gravable,
+                'iva': invoice_petty_cash.iva,
+                'amount_total': invoice_petty_cash.amount_total,
             })
 
 
@@ -123,13 +98,13 @@ class report_replacement_petty_cash(models.Model):
             'code': code,
             'fecha_actual': fecha_actual,
             'number': number,
-            'total_exento': total_exento,
-            'total_gravable': total_gravable,
-            'total_iva': total_iva,
-            'total': total,
-            'apertura': apertura,
+            'total_exento': replacement_number.amount_exento,
+            'total_gravable': replacement_number.amount_gravable,
+            'total_iva': replacement_number.amount_tax,
+            'total': replacement_number.amount_total,
+            'apertura': replacement_number.apertura,
             'disponible': disponible_petty_cash,
-            'consumido': consumido,
+            'consumido': replacement_number.consumido,
             'responsible': responsible,
             'liq_pendiente': liq_pendiente,
             'saldo_trans': saldo_trans,

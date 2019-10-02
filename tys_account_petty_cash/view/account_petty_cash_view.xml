@@ -162,7 +162,7 @@
             <field name="name">Registro de Caja Chica</field>
             <field name="res_model">account.petty.cash</field>
             <field name="view_mode">tree,form</field>
-            <field name="domain">['|',('petty_cash_status','in',('approved','validate')),('petty_cash_responsible_id', '=', uid)]</field>
+            <field name="domain">[('petty_cash_responsible_id', '=', uid)]</field>
          </record>
         <record id="action_validate_petty_cash_tree" model="ir.actions.act_window.view">
             <field name="view_mode">tree</field>

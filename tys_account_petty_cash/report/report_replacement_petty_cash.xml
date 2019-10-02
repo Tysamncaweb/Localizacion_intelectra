@@ -7,12 +7,12 @@
         <field name="default" eval="True"/>
         <field name="format">custom</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">0</field>
+        <field name="margin_top">2</field>
         <field name="margin_bottom">0</field>
         <field name="margin_left">5</field>
         <field name="margin_right">5</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">210</field>
+        <field name="header_spacing">212</field>
         <field name="page_height">220</field>
         <field name="page_width">340</field>
 
@@ -82,10 +82,10 @@
                                                 <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="doc['concepto']"/></td>
                                                 <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="doc['cta_analitica']"/></td>
                                                 <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="doc['et_analitica']"/></td>
-                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="doc['amount_exento']"/></td>
-                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="doc['amount_gravable']"/></td>
-                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="doc['iva']"/></td>
-                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="doc['amount_total']"/></td>
+                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['amount_exento']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['amount_gravable']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['iva']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                                                <td style=" border: 1px solid #000000; vertical-align: middle; " class="text-center table-bordered"><span t-esc="'{0:,.2f}'.format(doc['amount_total']).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                         </tr>
                                         <t t-set="contador" t-value="contador+1"/>
                                     </t>
@@ -96,16 +96,16 @@
                                   <td colspan="8"></td>
                                   <td style="background-color:#A4A4A4;color:#000000; vertical-align: middle; border: 1px solid #000000;"><strong>Totales</strong></td>
                                   <td style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000; vertical-align: middle;">
-                                      <strong><span t-esc="total_exento"/></strong>
+                                      <strong><span t-esc="'{0:,.2f}'.format(total_exento).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
                                   </td>
                                   <td style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000; vertical-align: middle;">
-                                      <strong><span t-esc="total_gravable"/></strong>
+                                      <strong><span t-esc="'{0:,.2f}'.format(total_gravable).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
                                   </td>
                                   <td style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000; vertical-align: middle;">
-                                      <strong><span t-esc="total_iva"/></strong>
+                                      <strong><span t-esc="'{0:,.2f}'.format(total_iva).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
                                   </td>
                                   <td style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000; vertical-align: middle;">
-                                      <strong><span t-esc="total"/></strong>
+                                      <strong><span t-esc="'{0:,.2f}'.format(total).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong>
                                   </td>
                               </tr>
                           </tbody>
@@ -118,27 +118,27 @@
                                         <tr style="height:10px;">
                                             <td style="border: 1px solid #000000; width:30%; height:20px;">FONDO CAJA CHICA</td>
                                             <td class="text-center" style="border: 1px solid #000000; width:10%; height:20px;"></td>
-                                            <td class="text-center" style="border: 1px solid #000000; width:10%; height:20px;"><span t-esc="apertura"/></td>
+                                            <td class="text-center" style="border: 1px solid #000000; width:10%; height:20px;"><span t-esc="'{0:,.2f}'.format(apertura).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                         </tr>
                                         <tr style="height:10px;">
                                             <td style="border: 1px solid #000000; width:30%;">Saldo Cta Tansitoria</td>
-                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><span t-esc="saldo_trans"/></td>
+                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><span t-esc="'{0:,.2f}'.format(saldo_trans).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                             <td class="text-center" style="border: 1px solid #000000; width:10%;"></td>
                                         </tr>
                                         <tr style="height:10px;">
                                             <td style="border: 1px solid #000000; width:30%;">Total Gasto Relacionado</td>
-                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><span t-esc="total"/></td>
+                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><span t-esc="'{0:,.2f}'.format(total).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                             <td class="text-center" style="border: 1px solid #000000; width:10%;"></td>
                                         </tr>
                                          <tr style="height:10px;">
                                             <td style="border: 1px solid #000000; width:30%;">Liquidaciones Pendientes</td>
-                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><span t-esc="liq_pendiente"/></td>
+                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><span t-esc="'{0:,.2f}'.format(liq_pendiente).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                                             <td class="text-center" style="border: 1px solid #000000; width:10%;"></td>
                                         </tr>
                                         <tr style="height:10px;">
                                             <td style="border: 1px solid #000000; width:30%;">DISPONIBLE</td>
                                             <td class="text-center" style="border: 1px solid #000000; width:10%;"></td>
-                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><strong><span t-esc="disponible"/></strong></td>
+                                            <td class="text-center" style="border: 1px solid #000000; width:10%;"><strong><span t-esc="'{0:,.2f}'.format(disponible).replace(',', 'X').replace('.', ',').replace('X', '.')"/></strong></td>
                                         </tr>
                                     </table>
                                 </td>

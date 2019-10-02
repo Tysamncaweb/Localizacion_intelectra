@@ -18,7 +18,7 @@ class Replacement_petty_cash(models.Model):
     code = fields.Many2one('account.petty.cash','petty cash', ondelete='cascade', required=True,
                                     help="tildar la opcion para asignar la factura a una caja chica específica")
     petty_cash_bank_id = fields.Many2one('account.journal', string='Banco')
-    date = fields.Date('Fecha de Apertura', required=True)
+    date = fields.Date('Fecha Contable', required=True)
     description = fields.Text('Descripción')
     responsable = fields.Char('Responsable')
     apertura = fields.Monetary('Monto de Apertura')
