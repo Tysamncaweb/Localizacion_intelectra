@@ -158,7 +158,7 @@ class hr_payslip(models.Model):
         diferencia2 = datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT)
 
         if int(date_start.split('-')[0]) <= int(fecha_desde.split('-')[0]) <= int(fecha_hasta.split('-')[0]):
-            if int(date_start.split('-')[0]) <= int(fecha_desde.split('-')[0]) <= int(fecha_hasta.split('-')[0]):
+            if  int(fecha_desde.split('-')[1])  <= int(date_start.split('-')[1]) <= int(fecha_hasta.split('-')[1]):
                 factor_str = config_obj._hr_get_parameter('hr.fi.factor.dias.adicionales')
 
                 if anios == int(anios_ley_str):
