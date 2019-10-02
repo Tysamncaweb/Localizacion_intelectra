@@ -1,6 +1,6 @@
 # coding: utf-8
 # from openerp import fields, models, api
-from odoo import fields, models, api
+from odoo import fields, models, api, exceptions, _
 from dateutil import relativedelta
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
@@ -30,6 +30,26 @@ class hr_payslip(models.Model):
         #is_special = context.get('is_special', False) ###########se comento
         #special_id = context.get('special_id', False) ########## se comento
 
+        for b in self:
+
+            date_to = datetime.strptime(b.date_to, '%Y-%m-%d')
+            date_from = datetime.strptime(b.date_from, '%Y-%m-%d')
+            mes_date_to = str(date_to).split('-')[1]
+            mes_date_from = str(date_from).split('-')[1]
+            ano_date_to = str(date_to).split('-')[0]
+            ano_date_from =str(date_from).split('-')[0]
+            total_ano = int(ano_date_to) - int(ano_date_from)
+            total_mes = int(mes_date_to) - int(mes_date_from)
+            if total_ano > 0 :
+                raise exceptions.except_orm(
+                    _('Error!'),
+                    _('Por favor Verifique el Periodo Seleccionado en la Nómina.\n'
+                      ' El periodo se encuentra mal configurado por favor corregir para que pueda continuar.'))
+            elif total_mes > 3:
+                raise Warning((u'El periodo debe ser trimestral por favor verifique.\n'
+                                  u' Corrija para poder continuar!'))
+            
+
         special_struvct_obj = self.env['hr.payroll.structure']
         config_obj = self.env['hr.config.parameter']
         run_obj = self.env['hr.payslip.run']
@@ -57,7 +77,7 @@ class hr_payslip(models.Model):
                                                                            'fideicomiso')
                             if not payslip.contract_id:
                                 raise Warning((
-                                                  u'El emleado %s no tiene contrato o la fecha de ingreso es posterior al período seleccionado.\n'
+                                                  u'El Empleado %s no tiene contrato o la fecha de ingreso es posterior al período seleccionado.\n'
                                                   u' Por favor consulte con su supervisor inmediato!') % payslip.employee_id.name)
                             # factor = self.get_days_utilidades(cr, uid) / float(12)
                             salario_integral, factor_x_dias_x_mes, salario_integral_diario, alic_b_v, alic_util = self.calculo_fideicomiso(
