@@ -442,7 +442,7 @@ class hr_payslip(models.Model):
         values = {}
         history = fi_hist_obj.get_last_history_fi(self.employee_id.id, None)
         if history:
-            values.update({'dias_prestaciones_acum': history.dias_acumuluados + history.dias_aporte - history.dias_adicionales,
+            values.update({'dias_prestaciones_acum': history.dias_acumuluados - history.dias_adicionales,
                            'dias_prestaciones_adi': history.dias_adicionales,
                            'monto_gps': history.monto_acumulado - history.GPS_dias_adicionales,
                            'aporte_dias_adicionales':history.GPS_dias_adicionales,
