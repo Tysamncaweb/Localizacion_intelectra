@@ -30,26 +30,6 @@ class hr_payslip(models.Model):
         #is_special = context.get('is_special', False) ###########se comento
         #special_id = context.get('special_id', False) ########## se comento
 
-        for b in self:
-
-            date_to = datetime.strptime(b.date_to, '%Y-%m-%d')
-            date_from = datetime.strptime(b.date_from, '%Y-%m-%d')
-            mes_date_to = str(date_to).split('-')[1]
-            mes_date_from = str(date_from).split('-')[1]
-            ano_date_to = str(date_to).split('-')[0]
-            ano_date_from =str(date_from).split('-')[0]
-            total_ano = int(ano_date_to) - int(ano_date_from)
-            total_mes = int(mes_date_to) - int(mes_date_from)
-            if total_ano > 0 :
-                raise exceptions.except_orm(
-                    _('Error!'),
-                    _('Por favor Verifique el Periodo Seleccionado en la Nómina.\n'
-                      ' El periodo se encuentra mal configurado por favor corregir para que pueda continuar.'))
-            elif total_mes > 3:
-                raise Warning((u'El periodo debe ser trimestral por favor verifique.\n'
-                                  u' Corrija para poder continuar!'))
-            
-
         special_struvct_obj = self.env['hr.payroll.structure']
         config_obj = self.env['hr.config.parameter']
         run_obj = self.env['hr.payslip.run']
@@ -67,6 +47,25 @@ class hr_payslip(models.Model):
             if tipo_nomina in psr.struct_id.code:
                 for payslip_id in self.ids:
                     payslip = self.search([('id', '=', payslip_id)])
+
+                    date_to = datetime.strptime(payslip.date_to, '%Y-%m-%d')
+                    date_from = datetime.strptime(payslip.date_from, '%Y-%m-%d')
+                    mes_date_to = str(date_to).split('-')[1]
+                    mes_date_from = str(date_from).split('-')[1]
+                    ano_date_to = str(date_to).split('-')[0]
+                    ano_date_from = str(date_from).split('-')[0]
+                    total_ano = int(ano_date_to) - int(ano_date_from)
+                    total_mes = int(mes_date_to) - int(mes_date_from)
+                    if total_ano > 0:
+                        raise exceptions.except_orm(
+                            _('Error!'),
+                            _('Por favor Verifique el Periodo Seleccionado en la Nómina.\n'
+                              ' El periodo se encuentra mal configurado por favor corregir para que pueda continuar.'))
+                    elif total_mes > 3:
+                        raise Warning((u'El periodo debe ser trimestral por favor verifique.\n'
+                                       u' Corrija para poder continuar!'))
+
+
                     special_obj = special_struvct_obj.browse(structure_ids)
                     if 'code' in special_obj:
                         if psr.anticipo_check1 == False:
