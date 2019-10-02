@@ -61,6 +61,7 @@ class hr_payslip(models.Model):
                             _('Error!'),
                             _('Por favor Verifique el Periodo Seleccionado en la Nómina.\n'
                               ' El periodo se encuentra mal configurado por favor corregir para que pueda continuar.'))
+
                     elif total_mes > 3:
                         raise Warning((u'El periodo debe ser trimestral por favor verifique.\n'
                                        u' Corrija para poder continuar!'))

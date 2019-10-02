@@ -34,7 +34,7 @@
                     </group>
 
                     <footer >
-                        <button name="carga_data" string="Cargar Data"  confirm="Esta seguro de la Data que desea ingresar?" type="object" class="oe_highlight" />
+                        <button name="carga_data" string="Cargar Data"  confirm="Esta seguro de la Data que desea ingresar?"  type="object" class="oe_highlight" />
                         <button special="cancel" string="Cancel" class="oe_highlight" />
                     </footer>
                    
