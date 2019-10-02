@@ -146,7 +146,7 @@ class RetentionISLR(models.Model):
         var_concept = concept_id[0]
         for concept_line in islr_concept_line:
             if concept_line.invoice_id:
-                if concept_line.invoice_id.partner_id.vat[2:3] in 'VvEe':
+                if concept_line.invoice_id.partner_id.vat[0] in 'VvEe':
                     if concept_line.partner_id.country_id == self.company.country_id:
                         var = 'PNRE'
                         nature = True
@@ -155,7 +155,7 @@ class RetentionISLR(models.Model):
                         var = 'PNNR'
                         nature = True
                         residence = False
-                elif concept_line.invoice_id.partner_id.vat[2:3] in 'GgJj':
+                elif concept_line.invoice_id.partner_id.vat[0] in 'GgJj':
                     if concept_line.invoice_id.partner_id.country_id == self.company.country_id:
                         var = 'PJDO'
                         nature = False
@@ -430,7 +430,7 @@ class ReportRetentionISLR(models.AbstractModel):
 
         for concept_line in islr_concept_line:
             if concept_line.invoice_id:
-                if concept_line.invoice_id.partner_id.vat[2:3] in 'VvEe':
+                if concept_line.invoice_id.partner_id.vat[0] in 'VvEe':
                     if concept_line.partner_id.country_id == company.country_id:
                         var = 'PNRE'
                         nature = True
@@ -439,7 +439,7 @@ class ReportRetentionISLR(models.AbstractModel):
                         var = 'PNNR'
                         nature = True
                         residence = False
-                elif concept_line.invoice_id.partner_id.vat[2:3] in 'GgJj':
+                elif concept_line.invoice_id.partner_id.vat[0] in 'GgJj':
                     if concept_line.invoice_id.partner_id.country_id == company.country_id:
                         var = 'PJDO'
                         nature = False

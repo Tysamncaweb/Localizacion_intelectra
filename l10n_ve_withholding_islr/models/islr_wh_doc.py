@@ -1028,7 +1028,7 @@ class IslrWhDocInvoices(models.Model):
             #    res[ret_line.id]['currency_base_ret'] += f_xc(line.base_amount)
             iwdl_local = self.env['islr.wh.doc.line'].search([('islr_wh_doc_id', '=', ret_line.islr_wh_doc_id.id)])
             for line in iwdl_local:
-                res[ret_line.id]['amount_islr_ret'] += line.base_amount * line.retencion_islr / 100
+                res[ret_line.id]['amount_islr_ret'] += (line.base_amount * line.retencion_islr / 100) - line.subtract
                 res[ret_line.id]['base_ret'] += line.base_amount
                 res[ret_line.id]['currency_amount_islr_ret'] += \
                     f_xc(line.base_amount * line.retencion_islr / 100)
@@ -1089,7 +1089,7 @@ class IslrWhDocInvoices(models.Model):
             }
             iwdl_local = self.env['islr.wh.doc.line'].search([('islr_wh_doc_id', '=', ret_line.islr_wh_doc_id.id)])
             for line in iwdl_local:
-                res[ret_line.id]['amount_islr_ret'] += line.base_amount * line.retencion_islr / 100
+                res[ret_line.id]['amount_islr_ret'] += (line.base_amount * line.retencion_islr / 100) - line.subtract
                 res[ret_line.id]['base_ret'] += line.base_amount
                 res[ret_line.id]['currency_amount_islr_ret'] += \
                     f_xc(line.base_amount * line.retencion_islr / 100)

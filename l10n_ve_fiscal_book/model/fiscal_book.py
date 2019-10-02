@@ -1027,6 +1027,7 @@ class FiscalBook(models.Model):
                 else:
                     local_inv_affected = inv_brw.refund_invoice_id and inv_brw.refund_invoice_id.supplier_invoice_number or ''
             sign = 1 if doc_type != 'N/DB' else -1
+            sign = 1 if doc_type != 'N/CR' else -1
             values = {
                 'invoice_id': inv_brw.id,
                 'emission_date':
