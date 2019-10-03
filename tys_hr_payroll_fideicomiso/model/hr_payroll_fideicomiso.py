@@ -56,7 +56,7 @@ class hr_payslip(models.Model):
                     ano_date_from = str(date_from).split('-')[0]
                     total_ano = int(ano_date_to) - int(ano_date_from)
                     total_mes = int(mes_date_to) - int(mes_date_from)
-                    if total_ano > 0:
+                    if total_ano > 0 and total_mes > 3:
                         raise exceptions.except_orm(
                             _('Error!'),
                             _('Por favor Verifique el Periodo Seleccionado en la Nómina.\n'
