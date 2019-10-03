@@ -444,7 +444,7 @@ class hr_payslip(models.Model):
         if history:
             values.update({'dias_prestaciones_acum': history.dias_acumuluados - history.dias_adicionales,
                            'dias_prestaciones_adi': history.dias_adicionales,
-                           'monto_gps': history.monto_acumulado - history.GPS_dias_adicionales,
+                           'monto_gps': history.monto_acumulado,
                            'aporte_dias_adicionales':history.GPS_dias_adicionales,
                            'interes_anual': history.monto_total_intereses,
                            'anticipo_prestaciones': history.total_anticipos,
