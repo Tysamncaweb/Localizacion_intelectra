@@ -84,10 +84,10 @@ class hr_payslip(models.Model):
                                  sueldo_promedio,
                                 vacaciones.get('asignacionR') if int(dias_str) == 0 else int(dias_str),
                                 payslip.contract_id.date_start, payslip.date_to)
+                            history = fi_hist_obj.get_last_history_fi(payslip.employee_id.id, None)
 
                             dias_adic = self.get_fi_dias_adicionales( payslip.contract_id.date_start, payslip.date_to,
-                                                                     payslip.date_from)
-                            history = fi_hist_obj.get_last_history_fi(payslip.employee_id.id, None)
+                                                                     payslip.date_from, history)
 
                             if dias_adic < 0:
                                 raise Warning((u'La fecha de ingreso del empleado %s es posterior al período seleccionado.\n'
@@ -97,6 +97,7 @@ class hr_payslip(models.Model):
                                      sueldo_promedio, vacaciones.get('asignacionR'),
                                     payslip.contract_id.date_start, payslip.date_to,
                                     dias_adic)
+
                             # dias_acum = fi_hist_obj.get_last_history_fi(cr, uid,payslip.employee_id.id, None, context=context).dias_acumuluados
                             payslip_values.update({
                                 'salario_mensual_fi': sueldo_promedio,
@@ -152,7 +153,7 @@ class hr_payslip(models.Model):
                            u' Por favor consulte con su supervisor inmediato!'))
         return factor
 
-    def get_fi_dias_adicionales(self,date_start, fecha_hasta, fecha_desde):
+    def get_fi_dias_adicionales(self,date_start, fecha_hasta, fecha_desde, history =False):
         config_obj = self.env['hr.config.parameter']
         fecha = None
         dias = 0
@@ -173,6 +174,7 @@ class hr_payslip(models.Model):
             fecha = date_start
         # años de servicio desde la fecha de ingreso
         anios = self.get_years_service(fecha, fecha_hasta)['anios']
+        dias_adic_acum = history.dias_adicionales
 
         diferencia = datetime.strptime(fecha_hasta, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT)
         diferencia2 = datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT) - datetime.strptime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT)
@@ -181,12 +183,11 @@ class hr_payslip(models.Model):
             if  int(fecha_desde.split('-')[1])  <= int(date_start.split('-')[1]) <= int(fecha_hasta.split('-')[1]):
                 factor_str = config_obj._hr_get_parameter('hr.fi.factor.dias.adicionales')
 
-                if anios == int(anios_ley_str):
-                    anios = 1
-  #              elif anios > 0 :
-   #                 anios = anios - 2
+                if anios > 0 :
+                    anios = anios - 1
 
                 dias = int(factor_str) * anios
+
                 if dias > int(maximo_str): dias = int(maximo_str)
 
             elif diferencia.days < 0:
@@ -195,6 +196,8 @@ class hr_payslip(models.Model):
                 dias = 0
             return dias
 
+
+'''
     def get_fi_dias_adicionales_inicio(self,date_start, fecha_hasta, fecha_desde, history):
         dias = 0
         config_obj = self.env['hr.config.parameter']
@@ -217,7 +220,7 @@ class hr_payslip(models.Model):
                
                 return dias
 
-
+'''
 
 
 
