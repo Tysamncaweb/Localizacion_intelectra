@@ -116,7 +116,7 @@ class hr_payslip(models.Model):
             if self.date_from and self.date_to:
                 # se le suma un dia a la fecha de finalizacion de la relacion laboral porque se considera que ese dia el empleado trabaja
                 fecha_temp = datetime.strptime(self.date_to, DEFAULT_SERVER_DATE_FORMAT)
-                fecha_temp = fecha_temp + relativedelta(days=1)
+                fecha_temp = fecha_temp
                 date_end = datetime.strftime(fecha_temp, DEFAULT_SERVER_DATE_FORMAT)
                 #TODO si se requiere se puede hacer persistir en el contrato la fecha de culminacion. Solo cuando se confirme la liquidacion
                 tiempo_servicio = self.get_years_service(self.date_from, date_end)
@@ -126,6 +126,7 @@ class hr_payslip(models.Model):
                     #employee = self.env['hr.employee'].search(['id', '=', self.employee_id.id])
 
                     months_worked_year, months_worked_year_int = self.get_year_worked_time(self.date_from, date_end)
+
 
                     return {'value': {
                         'tiempo_servicio_dias': tiempo_servicio['dias'],
@@ -167,9 +168,12 @@ class hr_payslip(models.Model):
         else:
             months_worked_year = self.get_years_service(date_start_year, ahora)
         months_worked_year_int = months_worked_year['meses']
+        months_worked_sumado = int(months_worked_year['dias'])+1
+
         year_worked_time = str(months_worked_year['meses']) + (' meses' if months_worked_year['meses'] > 1 else ' mes ') \
-                           + (' y ' + str(months_worked_year['dias']) + (
-        ' días' if months_worked_year['dias'] > 1 else ' dia') if months_worked_year['dias'] > 0 else '')
+                           + (' y ' + str(months_worked_sumado) + (
+        ' días' if months_worked_sumado > 1 else ' dia') if months_worked_sumado > 0 else '')
+
         return year_worked_time, months_worked_year_int
 
     @api.multi
