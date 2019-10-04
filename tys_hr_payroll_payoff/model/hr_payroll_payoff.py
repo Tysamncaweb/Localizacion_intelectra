@@ -207,7 +207,8 @@ class hr_payslip(models.Model):
             old_slipline_ids = slip_line_pool.search([('slip_id', '=', payslip.id)])
             #            old_slipline_ids
             if old_slipline_ids:
-                slip_line_pool.unlink()
+                payslip.line_ids.unlink()
+                #old_slipline_ids.unlink()
             if payslip.contract_id:
                 # set the list of contract for which the rules have to be applied
                 contract_ids = [payslip.contract_id.id]
@@ -215,6 +216,7 @@ class hr_payslip(models.Model):
                 # if we don't give the contract, then the rules to apply should be for all current contracts of the employee
                 contract_ids = self.get_contract(payslip.employee_id, payslip.date_from, payslip.date_to
                                                  )
+
             lines = [(0, 0, line) for line in
                      self._get_payslip_lines(contract_ids, payslip.id)]
 
