@@ -175,7 +175,7 @@
                             <t t-if="d.wh_lines.invoice_id.type == 'out_refund'">
                                 <span t-esc="d.wh_lines.invoice_id.origin"/>
                             </t>
-                        </td>
+                        </td><!---->
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <span t-esc="'{:,.2f}'.format(d.wh_lines.invoice_id.amount_total * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
