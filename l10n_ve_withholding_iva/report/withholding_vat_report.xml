@@ -5,12 +5,12 @@
         <t t-set="doc_total_amount" t-value="0"/><!--Total monto documentos-->
         <t t-set="exe_total_amount" t-value="0"/><!--total excento-->
         <t t-set="base_tax_total_amount" t-value="0"/><!--total base imponible-->
+        <t t-set="base_tax_total_amount_iva" t-value="0"/><!--total base imponible exento-->
         <t t-set="tax_total_amount" t-value="0"/><!--total impuesto causado-->
         <t t-set="wh_tax_total_amount" t-value="0"/><!--total impuesto retenido-->
         <t t-foreach="data" t-as="d">
             <t t-set="doc_total_amount" t-value="doc_total_amount+d.wh_lines.invoice_id.amount_total" />
             <!--t t-set="exe_total_amount" t-value="exe_total_amount+d.wh_lines.invoice_id.amount_total" /--> <!--El campo no esta definido en la vista. Se debe revisar-->
-            <t t-set="base_tax_total_amount" t-value="base_tax_total_amount+d.wh_lines.invoice_id.amount_untaxed" />
             <t t-set="tax_total_amount" t-value="tax_total_amount+d.wh_lines.wh_iva_rate" />
             <t t-set="wh_tax_total_amount" t-value="wh_tax_total_amount+d.total_tax_ret" />
             <table style="width:100%;">
@@ -175,18 +175,37 @@
                             <t t-if="d.wh_lines.invoice_id.type == 'out_refund'">
                                 <span t-esc="d.wh_lines.invoice_id.origin"/>
                             </t>
-                        </td><!---->
+                        </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <span t-esc="'{:,.2f}'.format(d.wh_lines.invoice_id.amount_total * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
-                        <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
+                        <t t-set="monto_iva" t-value="0.00"/>
+                        <t t-set="monto_exento" t-value="0.00"/>
 
+                        <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
+                            <t t-foreach="d.wh_lines.invoice_id.invoice_line_ids" t-as="b">
+                                <t t-if="b.invoice_line_tax_ids.amount == 0">
+                                    <t t-set="monto_exento" t-value="monto_exento + b.tasa_me"/>
+                                    <t t-set="base_tax_total_amount" t-value="base_tax_total_amount+b.tasa_me" />
+                                </t>
+                            </t>
+                            <span t-esc="'{:,.2f}'.format(monto_exento * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
-                            <span t-esc="'{:,.2f}'.format(d.wh_lines.invoice_id.amount_untaxed * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
+                            <t t-foreach="d.wh_lines.invoice_id.invoice_line_ids" t-as="b">
+                                <t t-if="b.invoice_line_tax_ids.amount == 16">
+                                    <t t-set="monto_iva" t-value="monto_iva + b.tasa_me"/>
+                                    <t t-set="base_tax_total_amount_iva" t-value="base_tax_total_amount_iva+b.tasa_me" />
+                                </t>
+                            </t>
+                            <span t-esc="'{:,.2f}'.format(monto_iva * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
-                            <span t-esc="'{:,.2f}'.format(d.wh_lines.invoice_id.tax_line_ids.tax_id.amount).replace(',', '@').replace('.', ',').replace('@', '.')"/>
+                            <t t-foreach="d.wh_lines.invoice_id.tax_line_ids" t-as="a">
+                                <t t-if="a.tax_id.amount == 16">
+                                    <span t-esc="'{:,.2f}'.format(a.tax_id.amount).replace(',', '@').replace('.', ',').replace('@', '.')"/>
+                                </t>
+                            </t>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <span t-esc="'{:,.2f}'.format(d.wh_lines.invoice_id.amount_tax * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
@@ -216,10 +235,10 @@
                             <t t-esc="'{:,.2f}'.format(doc_total_amount * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td width="6%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;padding-top:5px;padding-bottom:3px;">
-                            <!--t t-esc="'{:,.2f}'.format(exe_total_amount).replace(',', '@').replace('.', ',').replace('@', '.')" /--> <!--El campo no esta definido en la vista. Se debe revisar-->
+                            <t t-esc="'{:,.2f}'.format(base_tax_total_amount * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/> <!--El campo no esta definido en la vista. Se debe revisar-->
                         </td>
                         <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;padding-top:5px;padding-bottom:3px;">
-                            <t t-esc="'{:,.2f}'.format(base_tax_total_amount * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
+                            <t t-esc="'{:,.2f}'.format(base_tax_total_amount_iva * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;padding-top:5px;padding-bottom:3px;">
 
