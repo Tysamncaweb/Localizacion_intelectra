@@ -54,8 +54,8 @@
                                 <field name="tiempo_servicio_year" string="Años" readonly="1" force_save="1"/>
                                 <field name="tiempo_servicio_meses" readonly="1" string="Meses" force_save="1"/>
                                 <field name="tiempo_servicio_dias" string="Días" readonly="1" force_save="1"/>
-                                <field name="tiempo_servicio" readonly="1" force_save="1"/>
-                                <field name="month_worked_year_str" readonly="1" force_save="1"/>
+                                <!--field name="tiempo_servicio" readonly="1" force_save="1"/>
+                                <field name="month_worked_year_str" readonly="1" force_save="1"/-->
                                 <field name="month_worked_year" readonly="1" invisible="1" force_save="1"/>
                             </group>
 
