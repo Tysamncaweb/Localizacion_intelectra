@@ -429,7 +429,7 @@ class hr_payslip(models.Model):
         alic_b_v = self.calculo_alic_bono_vac((sal_mensual), dias_bv)
         alic_u =  self.calculo_alic_util((sal_mensual),alic_b_v)
 
-        sal_diar = (((sal_mensual)/2)/float(dias_str) + alic_b_v + alic_u)
+        sal_diar = ((sal_mensual)/float(dias_str) + alic_b_v + alic_u)
         values.update({'salario_basico':sal_mensual,
                        'salario_basico_diario':sal_mensual/float(dias_str),
                   #     'salario_prom_mensual': (sal_mensual + (promedio*4))/2,
