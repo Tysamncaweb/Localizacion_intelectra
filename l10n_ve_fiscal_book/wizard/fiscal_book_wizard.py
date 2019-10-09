@@ -256,6 +256,7 @@ class PurchaseBook(models.AbstractModel):
         sum_vat_additional_base = 0
         sum_vat_additional_tax = 0
         sum_get_wh_vat = 0
+        suma_vat_exempt = 0
 
         compras_credit = 0
         origin = 0
@@ -272,6 +273,7 @@ class PurchaseBook(models.AbstractModel):
 
             sum_compras_credit += compras_credit
             sum_total_with_iva += h.total_with_iva
+            suma_vat_exempt += h.vat_exempt
             sum_vat_general_base += h.vat_general_base
             sum_vat_general_tax += h.vat_general_tax
             sum_vat_reduced_base += h.vat_reduced_base
@@ -297,6 +299,7 @@ class PurchaseBook(models.AbstractModel):
                 'origin': origin,
                 'number': number,
                 'total_with_iva': h.total_with_iva,
+                'vat_exempt': h.vat_exempt,
                 'compras_credit': compras_credit,
                 'vat_general_base': h.vat_general_base,
                 'vat_general_rate':int(h.vat_general_base and h.vat_general_tax * 100 / h.vat_general_base),
@@ -327,6 +330,7 @@ class PurchaseBook(models.AbstractModel):
             'datos_compras': datos_compras,
             'sum_compras_credit': sum_compras_credit,
             'sum_total_with_iva': sum_total_with_iva,
+            'suma_vat_exempt': suma_vat_exempt,
             'sum_vat_general_base' : sum_vat_general_base,
             'sum_vat_general_tax': sum_vat_general_tax,
             'sum_vat_reduced_base': sum_vat_reduced_base,

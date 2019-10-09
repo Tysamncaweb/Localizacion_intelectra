@@ -134,6 +134,7 @@ class PurchaseBook(models.AbstractModel):
                 'number': number,
                 'total_with_iva': h.total_with_iva,
                 'compras_credit': compras_credit,
+                'vat_exempt': h.vat_exempt,
                 'vat_general_base': h.vat_general_base,
                 'vat_general_rate': int(h.vat_general_base and h.vat_general_tax * 100 / h.vat_general_base),
                 'vat_general_tax': h.vat_general_tax,
