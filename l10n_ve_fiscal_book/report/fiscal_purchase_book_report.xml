@@ -140,7 +140,7 @@
                                     <span t-esc="'{0:,.2f}'.format(o['total_with_iva']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!--Total compras con IVA-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
-                                    <span t-esc="o['vat_exempt']"/><!-- Compras sin Derecho a Crédito-->
+                                    <span t-esc="'{0:,.2f}'.format(o['vat_exempt']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- Compras sin Derecho a Crédito-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                   <span t-esc="'{0:,.2f}'.format(o['vat_general_base']).replace(',', 'X').replace('.', ',').replace('X', '.')"/><!-- base Imponible Alicuota General COMPRAS INTERNAS-->
