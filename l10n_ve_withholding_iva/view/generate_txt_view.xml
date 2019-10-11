@@ -49,6 +49,8 @@
                                     <field name="voucher_id"/>
                                     <field name="untaxed"/>
                                     <field name="amount_withheld"/>
+                                    <field name="tax_wh_iva_id"/>
+                                    <field name="amount_sdcf"/>
                                 </tree>
                             </field>
                             <group>

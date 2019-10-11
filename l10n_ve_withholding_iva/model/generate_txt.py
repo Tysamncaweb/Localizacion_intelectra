@@ -159,17 +159,49 @@ class TxtIva(models.Model):
             for voucher_lines in voucher.wh_lines:
                 if voucher_lines.invoice_id.state not in ['open', 'paid']:
                     continue
-                for voucher_tax_line in voucher_lines.tax_line:
+                if len(voucher_lines.tax_line) > 1:
                     txt_iva_obj.create(
                         {'partner_id': acc_part_id.id,
                          'voucher_id': voucher.id,
                          'invoice_id': voucher_lines.invoice_id.id,
                          'txt_id': txt_brw.id,
-                         'untaxed': voucher_tax_line.base,
-                         'amount_withheld': voucher_tax_line.amount_ret,
-                         'tax_wh_iva_id': voucher_tax_line.id,
+                         #'untaxed': voucher_tax_line.base,
+                         'untaxed': voucher_lines.base_ret,
+                         'amount_withheld': voucher_lines.amount_tax_ret,
+                         'amount_sdcf': self.get_amount_scdf(voucher_lines),
+                         'tax_wh_iva_id': self.get_alicuota_iva(voucher_lines),
                          })
+                else:
+                    for voucher_tax_line in voucher_lines.tax_line:
+                        txt_iva_obj.create(
+                            {'partner_id': acc_part_id.id,
+                             'voucher_id': voucher.id,
+                             'invoice_id': voucher_lines.invoice_id.id,
+                             'txt_id': txt_brw.id,
+                             'untaxed': voucher_tax_line.base,
+                             'amount_withheld': voucher_tax_line.amount_ret,
+                             'tax_wh_iva_id': voucher_tax_line.id,
+                             })
         return True
+    @api.model
+    def get_amount_scdf(self,voucher_lines):
+        amount_sdcf = 0.0
+        line_tax_obj = self.env['account.wh.iva.line.tax']
+        line_tax_bw = line_tax_obj.search([('wh_vat_line_id', '=', voucher_lines.id)])
+
+        for line_tax in line_tax_bw:
+            if line_tax.name in ['Exento','Exento (compras)','exento','exento (compras)','Exento (Compras)']:
+                amount_sdcf = line_tax.base
+        return amount_sdcf
+    @api.model
+    def get_alicuota_iva(self,voucher_lines):
+        line_tax_obj = self.env['account.wh.iva.line.tax']
+        line_tax_bw = line_tax_obj.search([('wh_vat_line_id', '=', voucher_lines.id)])
+
+        for line_tax in line_tax_bw:
+            if line_tax.amount != 0.0:
+                tax_id = line_tax.id
+        return tax_id
 
     @api.model
     def get_buyer_vendor(self, txt, txt_line):
@@ -284,8 +316,7 @@ class TxtIva(models.Model):
         tax = 0
         amount_doc = 0
         for tax_line in txt_line.invoice_id.tax_line_ids:
-            if 'SDCF' in tax_line.name or \
-                    (tax_line.base and not tax_line.amount):
+            if 'Exento (compras)' in tax_line.name or (tax_line.base and not tax_line.amount):
                 tax = tax_line.base + tax
             else:
                 amount_doc = tax_line.base + amount_doc
@@ -416,6 +447,8 @@ class TxtIvaLine(models.Model):
         help="Withholding of Value Added Tax (VAT)")
     amount_withheld = fields.Float(
         string='Amount Withheld', help='amount to withhold')
+    amount_sdcf = fields.Float(
+        string='Amount SDCF', help='amount to SDCF')
     untaxed = fields.Float(
         string='Untaxed', help='Untaxed amount')
     txt_id = fields.Many2one(

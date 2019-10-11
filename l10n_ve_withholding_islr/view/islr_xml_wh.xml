@@ -116,6 +116,8 @@
                                     <field name="base"/>
                                     <field name="porcent_rete"/>
                                     <field name="wh"/>
+                                    <field name="date_ret"/>
+
                                 </tree>
                             </field>
                             <group col="2" colspan="2">
