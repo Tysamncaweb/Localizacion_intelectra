@@ -759,11 +759,13 @@ class IslrWhDoc(models.Model):
             self.write({
                        'invoice_ids': line})
 
-        xml_ids = []
+        #xml_ids = []
+        xml_ids_obj = self.env['islr.xml.wh.line']
         for line in ret.concept_ids:
-            xml_ids += [xml.id for xml in line.xml_ids]
-     #   ixwl_obj.write( xml_ids, {
-       #                'period_id': period_id}, context=context)
+            #xml_ids_obj += [xml.id for xml in line.xml_ids]
+            xml_ids_obj = xml_ids_obj.search([('islr_wh_doc_line_id', '=', line.id)])
+            xml_ids_obj.write({'date_ret': time.strftime('%Y-%m-%d')})
+
         #self.write( ids, {'period_id': period_id}, context=context)
         # guarda en el la tabla islr.wh.doc.invoices
         iwdi_obj = self.env['islr.wh.doc.invoices'].search([('islr_wh_doc_id', '=', self.id)])

@@ -15,27 +15,25 @@ class IslrXmlWhDoc(models.Model):
     _name = "islr.xml.wh.doc"
     _description = 'Generate XML'
 
-    @api.multi
+    @api.depends('xml_ids')
     def _get_amount_total(self):
         """ Return withhold total amount
         """
-        res = {}
-        for xml in self.browse():
-            res[xml.id] = 0.0
-            for line in xml.xml_ids:
-                res[xml.id] += line.wh
-        return res
+        self.amount_total_ret = 0.0
+        for line in self.xml_ids:
+            self.amount_total_ret += line.wh
+        #return amount_ret
 
-    @api.multi
+    @api.depends('xml_ids')
     def _get_amount_total_base(self):
         """ Return base total amount
         """
-        res = {}
-        for xml in self.browse():
-            res[xml.id] = 0.0
-            for line in xml.xml_ids:
-                res[xml.id] += line.base
-        return res
+        self.amount_total_base = 0.0
+        # for xml in self.browse():
+        #   res[xml.id] = 0.0
+        for line in self.xml_ids:
+            self.amount_total_base += line.base
+        #return amount_base
 
     @api.model
     def _get_company(self):
@@ -164,9 +162,11 @@ class IslrXmlWhDoc(models.Model):
         for item in self.browse(self.ids):
             for ixwl in item.xml_ids:
                 if not ixwl.date_ret and ixwl.islr_wh_doc_inv_id:
-                    obj_ixwl.write(
-                         [ixwl.id],
-                        {'date_ret':
+                    #obj_ixwl.write(
+                    #     [ixwl.id],
+                    #    {'date_ret':
+                    #        ixwl.islr_wh_doc_inv_id.islr_wh_doc_id.date_ret})
+                     ixwl.write({'date_ret':
                             ixwl.islr_wh_doc_inv_id.islr_wh_doc_id.date_ret})
         return self.write({'state': 'confirmed'})
 
@@ -255,17 +255,16 @@ class IslrXmlWhDoc(models.Model):
             #period = time.strptime(wh_brw.period_id.date_stop, '%Y-%m-%d')
             #period2 = "%0004d%02d" % (period.tm_year, period.tm_mon)
 
-            local_ids = [str(i.id) for i in wh_brw.xml_ids]
+            local_ids = [int(i.id) for i in wh_brw.xml_ids]
             if local_ids:
                 sql = '''
                 SELECT partner_vat,control_number, porcent_rete,
                     concept_code,invoice_number,
                     SUM(COALESCE(base,0)) as base, account_invoice_id, date_ret
                 FROM islr_xml_wh_line
-                WHERE period_id= %s and id in (%s)
+                WHERE id in (%s)
                 GROUP BY partner_vat, control_number, porcent_rete, concept_code,
-                    invoice_number,account_invoice_id, date_ret''' % (
-                    wh_brw.id, ', '.join(local_ids)) #TODO#wh_brw.period_id.id
+                    invoice_number,account_invoice_id, date_ret''' % "," .join(map(str,local_ids))
                 self.env.cr.execute(sql)
                 xml_lines = self.env.cr.fetchall()
             else:

@@ -98,7 +98,7 @@
                         <button name="action_anular1" string="Invalidate" states="confirmed,done" type="object" icon="gtk-cancel"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" statusbar_colors="{&quot;confirmed&quot;:&quot;blue&quot;}"/>
                     </header>
-                    <field name="name"/>
+                        <field name="name"/>
                     <!--field name="period_id" widget="selection"/-->
                     <notebook colspan="4">
                         <page string="Invoice Withholding Lines">
