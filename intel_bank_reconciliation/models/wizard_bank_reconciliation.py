@@ -84,7 +84,6 @@ class ReportBankReconciliation(models.AbstractModel):
         account_account = self.env['account.account'].search([('id', '=', account_journal.default_credit_account_id.id)])
         banco = self.env['account.bank.statement'].search([('journal_id', '=', journal_id),
                                                            ('company_id', '=', company_id),
-                                                           ('pos_session_id', '=', False),
                                                            ('date', '>=', date_start),
                                                            ('date', '<=', end_date)])
         if banco:
