@@ -70,7 +70,7 @@ class HrEmployee(models.Model):
     ])
     identification_id_2 = fields.Char('Cedula de Identidad', size=8)
     nationality = fields.Selection(NACIONALIDAD, string="Tipo Documento", required=True)
-    rif = fields.Char('Rif', size=12, required=True)
+    rif = fields.Char('Rif', size=11, required=True)
     personal_email = fields.Char('Correo Electronico Personal', size=240, required=True)
     education = fields.Selection(NVEL_EDUCATIVO,'Nivel Educativo')
     profesion_id = fields.Many2one('hr.profesion','Profesion')
@@ -214,13 +214,13 @@ class HrEmployee(models.Model):
         if field_value:
             res = self.validate_rif_er(field_value)
             if not res:
-                raise exceptions.except_orm(('Advertencia!'), ('El rif tiene el formato incorrecto. Ej: VEV012345678 o VEE012345678. Por favor intente de nuevo'))
+                raise exceptions.except_orm(('Advertencia!'), ('El rif tiene el formato incorrecto. Ej: V-123456780. Por favor intente de nuevo'))
         return {'value':res}
 
     def validate_rif_er(self, field_value):
         res = {}
 
-        rif_obj = re.compile(r"^VE[V|E][\d]{9}", re.X)
+        rif_obj = re.compile(r"^V-[\d]{9}", re.X)
         if rif_obj.search(field_value):
             res = {
                 'rif':field_value
@@ -237,7 +237,7 @@ class HrEmployee(models.Model):
         if vals.get('rif'):
             res =self.validate_rif_er(vals.get('rif'))
             if not res:
-                raise exceptions.except_orm(('Advertencia!'), ('El rif tiene el formato incorrecto. Ej: VEV012345678 o VEE012345678. Por favor intente de nuevo'))
+                raise exceptions.except_orm(('Advertencia!'), ('El rif tiene el formato incorrecto. Ej: V-123456780. Por favor intente de nuevo'))
         if vals.get('personal_email'):
             res =self.validate_email_addrs(vals.get('personal_email'),'personal_email')
             if not res:
@@ -271,7 +271,7 @@ class HrEmployee(models.Model):
         if vals.get('rif'):
             res =self.validate_rif_er(vals.get('rif'))
             if not res:
-                raise exceptions.except_orm(('Advertencia!'), ('El rif tiene el formato incorrecto. Ej: VEV012345678 o VEE012345678. Por favor intente de nuevo'))
+                raise exceptions.except_orm(('Advertencia!'), ('El rif tiene el formato incorrecto. Ej: V-123456780. Por favor intente de nuevo'))
         if vals.get('personal_email'):
             res =self.validate_email_addrs(vals.get('personal_email'),'personal_email')
             if not res:

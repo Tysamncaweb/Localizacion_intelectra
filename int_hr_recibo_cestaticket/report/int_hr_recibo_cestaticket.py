@@ -21,7 +21,7 @@ class ReportAccountPayment(models.AbstractModel):
                 fecha_ingreso = fecha_ingreso.strftime('%d/%m/%Y')
                 cedula_letra = data['form'].employee_id.nationality
                 cedula = data['form'].employee_id.identification_id_2
-                rif = data['form'].employee_id.rif[3:11]
+                rif = data['form'].employee_id.rif[2:10]
                 rif2 = data['form'].employee_id.rif[-1]
                 cargo = data['form'].employee_id.job_id.display_name
                 banco = data['form'].employee_id.bank_account_id_emp_2.display_name

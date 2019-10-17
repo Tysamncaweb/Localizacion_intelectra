@@ -316,7 +316,7 @@ class ReportAccountPayment_5(models.AbstractModel):
             'acumulado_diciembre': self.separador_cifra(impuesto_diciembre),
             'remuneracion_diciembre': self.separador_cifra(remuneracion_diciembre),
         })
-        rif = empleado.rif[3:11]
+        rif = empleado.rif[2:10]
         rif2 = empleado.rif[-1]
         imp_rif = 'V'+'-'+ str(rif)+'-'+str(rif2)
         docs.append({

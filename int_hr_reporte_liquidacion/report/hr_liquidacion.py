@@ -34,7 +34,7 @@ class ReportAccountPayment_5(models.AbstractModel):
             raise exceptions.except_orm(_('Advertencia!'),
                                         (u'Por favor verifique que la nómina de Liquidación este en estado "Realizado"'))
 
-        rif_empleador = 'V'+'-'+str(slip_id.employee_id.coach_id.rif[3:11])+'-'+ str(slip_id.employee_id.coach_id.rif[-1])
+        rif_empleador = 'V'+'-'+str(slip_id.employee_id.coach_id.rif[2:10])+'-'+ str(slip_id.employee_id.coach_id.rif[-1])
         ci_empleado =  str(slip_id.employee_id.nationality) + '-'+ str(slip_id.employee_id.identification_id_2)
         fecha_ingreso = datetime.strptime(slip_id.date_from, '%Y-%m-%d')
         fecha_ingreso = fecha_ingreso.strftime('%d/%m/%Y')

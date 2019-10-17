@@ -30,7 +30,7 @@ class ReportAccountPayment(models.AbstractModel):
             cedula = slip.employee_id.identification_id_2
             letra_cedula = slip.employee_id.nationality
             letra_cedula2 = slip.employee_id.coach_id.nationality
-            rif = slip.employee_id.rif[3:11]
+            rif = slip.employee_id.rif[2:10]
             rif2 = slip.employee_id.rif[-1]
             cargo = slip.employee_id.job_id.display_name
             date_desde = slip.date_from
