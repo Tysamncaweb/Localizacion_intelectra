@@ -40,7 +40,7 @@
                     <td style="font-weight:bold;font-size: 1.125em;font-style: italic;border-left:1px solid;border-top:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Nro. Comprobante:</td> <!--/* 16px/16=2.5em */-->
                     <td style="font-weight:bold;font-size: 1.125em;font-style: italic;border-top:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="d.number"/></td>
                     <td style="font-weight:bold;font-size: 1.125em;font-style: italic;border-top:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px">Fecha de Contabilización:</td>
-                    <td style="font-size: 1.125em;font-style: italic;border-right:1px solid;border-top:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="model.get_date(d.date_ret)"/></td>
+                    <td style="font-size: 1.125em;font-style: italic;border-right:1px solid;border-top:1px solid;border-bottom:1px solid;padding-top:10px;padding-right:10px;padding-bottom:3px;padding-left:10px"><span t-esc="model.get_date(d.date)"/></td>
                 </tr>
                 <tr></tr>
             </table>
