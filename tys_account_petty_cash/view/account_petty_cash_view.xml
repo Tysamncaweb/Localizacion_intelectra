@@ -116,8 +116,8 @@
                             <group>
                                 <field name="name" string="Código" readonly="1"/>
                                 <field name="petty_cash_date" string="Fecha" attrs="{'readonly': [('petty_cash_status', 'in', ('approved','validate'))]}"/>
-                                <field name="petty_cash_responsible_id" string="Responsable" attrs="{'readonly': [('petty_cash_status', 'in', ('approved','validate'))]}"/>
-                                <field name="petty_cash_currency_id" string="Moneda" attrs="{'readonly': [('petty_cash_status', 'in', ('approved','validate'))]}"/>
+                                <field name="petty_cash_responsible_id" string="Responsable" attrs="{'readonly': [('petty_cash_status', '=', 'validate')]}"/>
+                                <field name="petty_cash_currency_id" string="Moneda" attrs="{'readonly': [('petty_cash_status', '=', 'validate')]}"/>
                                 <field name="disponible_move_id" string="Saldo Disponible Cuenta Contable" readonly="1"/>
                             </group>
                             <group>

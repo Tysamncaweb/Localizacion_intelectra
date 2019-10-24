@@ -312,9 +312,16 @@ class PurchaseBook(models.AbstractModel):
                 'vat_additional_tax': h.vat_additional_tax,
                 'get_wh_vat': h.get_wh_vat,
             })
+        if sum_vat_additional_base != 0:
+            sum_ali_gene_addi = sum_vat_general_base + sum_vat_additional_base
+        else:
+            sum_ali_gene_addi = sum_vat_additional_base
 
-        sum_ali_gene_addi = sum_vat_general_base + sum_vat_additional_base
-        sum_ali_gene_addi_credit = sum_vat_general_tax + sum_vat_additional_tax
+        if sum_vat_additional_tax != 0:
+            sum_ali_gene_addi_credit = sum_vat_general_tax + sum_vat_additional_tax
+        else:
+            sum_ali_gene_addi_credit = sum_vat_additional_tax
+
         total_compras_base_imponible = sum_vat_general_base + sum_ali_gene_addi + sum_vat_reduced_base
         total_compras_credit_fiscal = sum_vat_general_tax + sum_ali_gene_addi_credit + sum_vat_reduced_tax
 

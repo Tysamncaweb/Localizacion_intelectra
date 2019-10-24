@@ -43,7 +43,7 @@
                      <t t-set="b" t-value="0"/>
 
                          <table >
-                             <thead>
+                             <thead style="font-size:10px;">
                             <tr class="text-center">
                               <th colspan="12"></th>
                               <th colspan="10" class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;"><p>Compras Internas</p></th>
@@ -51,7 +51,7 @@
                               <th colspan="2" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;" class="text-center table-bordered"><p>Retenciones IVA Proveedores</p></th>
                             </tr>
                             <tr class="text-center table-bordered" style="background-color:#A4A4A4; height:60px; border: 1px solid #000000;" >
-                                <th class="text-center table-bordered" style="width:70px; vertical-align: middle; border: 1px solid #000000;">Nro. de Operación</th>
+                                <th class="text-center table-bordered" style="width:20px; vertical-align: middle; border: 1px solid #000000;">Nro. Op</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Fecha de Emisión de Documento</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de RIF</th>
                                 <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Nombre ó Razón Social</th>
@@ -79,11 +79,11 @@
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Planilla Importación</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Expediente Importación</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de Comprobante</th>
-                                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">IVA Ret (Vend.)</th>
+                                <th class="text-center table-bordered" style="width:250px; vertical-align: middle; border: 1px solid #000000;">IVA Ret (Vend.)</th>
 
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody style="font-size:10px;">
                                 <t t-set="contador" t-value="1"/>
                             <!--<t t-foreach="o.facturas_ids" t-as="factura">  -->
                               <t t-foreach="datos_compras" t-as="o" >
@@ -233,10 +233,12 @@
                                         <span t-esc="'{0:,.2f}'.format(sum_vat_additional_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                                        <span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
+                                      <span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/>
                                   </td>
                                   <td class="text-center table-bordered" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;">
                                   </td>
@@ -252,32 +254,17 @@
                         </table><br></br><br></br>
 
                         <table class="table table-bordered"  style="width:1300px; margin: 0 auto; border: 1px solid #000000; font-size: 15px;">
-                          <thead>
+                          <thead style="font-size:10px;">
                             <tr class="text-center" style="background-color:#A4A4A4; color:#000000; ">
                               <th class="text-center" style="border: 1px solid #000000; " >RESUMEN DE LIBRO DE COMPRAS</th>
                               <th class="text-center" style="border: 1px solid #000000; width:250px;">Base Imponible</th>
                               <th class="text-center" style="border: 1px solid #000000; width:250px;">Crédito Fiscal</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:10px;">
                           <tr>
                           <td style="border: 1px solid #000000; ">Compras Internas no Gravadas y/o Sin Derecho a Crédito Fiscal</td>
                           <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_vat_exempt).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                        </tr>
-                        <tr>
-                          <td style="border: 1px solid #000000; ">Importaciones gravadas Alícuota General</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                        </tr>
-                        <tr>
-                          <td style="border: 1px solid #000000; ">Importaciones gravadas por Alícuota General mas Adicional</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                        </tr>
-                        <tr>
-                          <td style="border: 1px solid #000000; ">Importaciones gravadas por Alicuota Reducida</td>
-                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                           <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr>
@@ -294,6 +281,21 @@
                           <td style="border: 1px solid #000000; ">Compras Internas gravadas por Alicuota Reducida</td>
                           <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_vat_reduced_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                           <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(sum_vat_reduced_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        </tr>
+                        <tr>
+                          <td style="border: 1px solid #000000; ">Importaciones gravadas Alícuota General</td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        </tr>
+                        <tr>
+                          <td style="border: 1px solid #000000; ">Importaciones gravadas por Alícuota General mas Adicional</td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                        </tr>
+                        <tr>
+                          <td style="border: 1px solid #000000; ">Importaciones gravadas por Alicuota Reducida</td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
+                          <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         </tr>
                         <tr class="" style="background-color:#A4A4A4; color:#000000;font-weight: bold; ">
                             <td style="border: 1px solid #000000; ">Total Compras y Créditos Fiscales</td>
