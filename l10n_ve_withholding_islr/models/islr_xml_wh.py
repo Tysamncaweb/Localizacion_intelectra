@@ -270,7 +270,9 @@ class IslrXmlWhDoc(models.Model):
             else:
                 xml_lines = []
             company_vat = rp_obj._find_accounting_partner(wh_brw.company_id.partner_id).vat[0:]
+            company_vat = company_vat.replace("-","")
             company_vat1 = wh_brw.company_id.partner_id.vat
+            company_vat1 = company_vat1.replace("-","")
             root = Element("RelacionRetencionesISLR")
             #root.attrib['RifAgente'] = rp_obj._find_accounting_partner(wh_brw.company_id.partner_id).vat[0:] if wh_brw.company_id.partner_id.vat else ''
             root.attrib['RifAgente'] = company_vat if company_vat1 else ''
