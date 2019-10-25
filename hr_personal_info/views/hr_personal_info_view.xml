@@ -55,12 +55,16 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='work_email']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
                 <xpath expr="//field[@name='coach_id']" position="replace">
                     <label for="coach_id" string="Empleador"/>
                     <div>
                         <field name="coach_id" attrs="{'required': [('manager','!=',True)]}"/>
                     </div>
                 </xpath>
+
                 <xpath expr="//field[@name='job_id']" position="replace">
                     <label for="coach_id" string="Cargo"/>
                     <div>
