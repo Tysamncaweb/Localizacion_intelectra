@@ -110,7 +110,7 @@
                                 <!--domain="[('period_id','=',period_id), ('islr_xml_wh_doc','=',False), ('type', '=', 'invoice')]"-->
                                 <tree string="Detail of the XML">
                                     <field name="partner_vat"/>
-                                    <field name="partner_id" domain="[('parent_id','=',False)]"/>
+                                    <field name="partner_id"/>
                                     <field name="invoice_number"/>
                                     <field name="concept_code"/>
                                     <field name="base"/>
@@ -182,7 +182,6 @@
                     </group>
                     <newline/>
                     <group expand="1" string="Group By...">
-                        <!--filter string="Period" domain="[]"/-->
                         <separator orientation="vertical"/>
                         <filter string="State" domain="[]" context="{'group_by':'state'}"/>
                     </group>

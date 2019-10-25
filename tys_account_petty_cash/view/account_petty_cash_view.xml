@@ -109,6 +109,7 @@
                          <button name="%(action_decrease_amount_petty_cash)d" type="action" string="Decrementar Monto" class="oe_highlight" icon="gtk-go-forward"  attrs="{'invisible':[('petty_cash_status', 'in', ('draft','approved'))]}"/>
                          <button name="%(reverse_asiento_petty_cash)d" type="action" string="Asiento de Reversión" class="oe_highlight" attrs="{'invisible':[('petty_cash_status', 'in', ('draft','approved'))]}"/>
                          <button name="cancel_petty_cash" type="object" string="Cancelar Caja Chica" class="oe_stat_button" icon="gtk-go-forward"  attrs="{'invisible':[('petty_cash_status', 'in', ('draft','approved'))]}"/>
+                         <button name="draft_petty_cash" type="object" string="Borrador" class="oe_stat_button" icon="gtk-go-forward"  attrs="{'invisible':[('petty_cash_status', 'in', ('draft','validate'))]}"/>
                          <field name="petty_cash_status" widget="statusbar"  nolabel="1" statusbar_visible="draft,approved,validate" statusbar_colors="{'approved':'blue'}"/>
                      </header>
                     <sheet string="Petty cash Validate">
@@ -126,7 +127,7 @@
                                 <field name="petty_cash_journal_id" string="Diario de Caja Chica" attrs="{'readonly': [('petty_cash_status', 'in', ('approved','validate'))]}"/>
                                 <field name="petty_cash_amount_open" string="Monto de Apertura" required="1" attrs="{'readonly': [('petty_cash_status', 'in', 'validate')]}"/>
                                 <field name="disponible" string="Saldo de Apertura Disponible " readonly="1"/>
-                                <field name="petty_cash_bank_id" string="Banco" required="1" attrs="{'readonly': [('petty_cash_status', 'in', 'validate')]}"/>
+                                <field name="petty_cash_bank_id" string="Banco" required="1" attrs="{'readonly': [('petty_cash_status', 'in', 'validate')]}" domain="[('type', 'in', ('cash','bank'))]"/>
                             </group>
                         </group>
                         <group>

@@ -8,18 +8,18 @@
             <field name="email_from" >${(object.company_id.email or 'noreply@' + object.company_id.name + '.com')|safe}</field>
             <field name="email_to" >${object.employee_id.work_email|safe}</field>
             <field name="lang">${object.company_id.lang}</field>
-            <field name="report_template" ref="hr_payroll.action_report_payslip"/>
+            <field name="report_template" ref="int_hr_recibo_nomina.action_hr_report_recibo_nomina"/>
             <field name="subject">${object.payslip_run_id.name or object.name}</field>
             <field name="body_html">
                 <![CDATA[
                     <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
-                        <p>Good day, ${object.employee_id.name}.
+                        <p>Buen Día, ${object.employee_id.name}.
                         <br/><br/>
-                        Serve the present to send you the payment receipt corresponding to the period ${object.payslip_run_id.date_start} - ${object.payslip_run_id.date_end}.
+                        El presente es para hacerle llegar el Recibo de Pago correspondiente al período ${object.date_from} - ${object.date_to}.
                         <br/><br/>
-                        I am in order.
+                        Estoy a la Orden.
                         <br/><br/>
-                        Best regards.-</p>
+                        Atentamente.-</p>
                     </div>
                 ]]>
             </field>

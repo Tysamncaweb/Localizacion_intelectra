@@ -758,8 +758,6 @@ class IslrWhDoc(models.Model):
             #lines = [(1, line.id, rl)]
             self.write({
                        'invoice_ids': line})
-
-        #xml_ids = []
         xml_ids_obj = self.env['islr.xml.wh.line']
         for line in ret.concept_ids:
             #xml_ids_obj += [xml.id for xml in line.xml_ids]
@@ -1580,6 +1578,7 @@ class IslrWhDocInvoices(models.Model):
         #TODO EVALUAR SI ESTOS CAMPOS SON REQUERIDOS EN EL XML
         #self.buyer = buyer
         #self.wh_agent = wh_agent
+        vendor = vendor.vat.replace("-","")
         if not ail_brw.concept_id:
             raise exceptions.except_orm(_('Invoice has not Withheld Concepts!'))
         return {
@@ -1598,7 +1597,7 @@ class IslrWhDocInvoices(models.Model):
             'partner_id': acc_part_id.id,  # Warning Depends if is a customer
                                            # or supplier
             'concept_id': ail_brw.concept_id.id,
-            'partner_vat': vendor.vat[2:12] if vendor.vat else str(),  # Warning Depends if is a
+            'partner_vat': vendor[0:12] if vendor else str(),  # Warning Depends if is a
                                               # customer or supplier
             'porcent_rete': 0.0,  # To be updated later
             #TODO VERIFICA QUE LOS ULTIMOS 8 DIGITOS DEL NUMERO DE CONTROL SEAN NUMERICOS.for
@@ -1608,7 +1607,7 @@ class IslrWhDocInvoices(models.Model):
                 if i.isdigit())[-8:] or 'NA',
             'account_invoice_line_id': ail_brw.id,
             'concept_code': '000',# To be updated later
-            'type': 'invoice',
+            'type': 'invoice'
         }
 
 

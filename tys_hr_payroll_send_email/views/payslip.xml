@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_payslip_done']" position="before">
-                    <button name="action_send_email" type="object" string="Send receipts by email" class="oe_highlight" attrs="{'invisible':[('state', 'in', ['draft','cancel'])]}" />
+                    <button name="action_send_email" type="object" string="Enviar Recibo de Pago por Correo" class="oe_highlight" attrs="{'invisible':[('state', 'in', ['draft','cancel'])]}" />
                 </xpath>
             </field>
         </record>

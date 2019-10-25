@@ -188,7 +188,7 @@ class Replacement_petty_cash(models.Model):
             'date_maturity': False,
             'ref': self.code.name,
             'date': self.date,
-            'partner_id': self.code.petty_cash_responsible_id.id,
+            'partner_id': self.code.petty_cash_responsible_id.partner_id.id,
             'move_id': move_id.id,
             'name': self.name,
             'journal_id': self.code.petty_cash_journal_id.id,

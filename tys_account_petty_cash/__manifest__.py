@@ -19,6 +19,7 @@ Con este módulo se realizara el registro y manejo de Caja Chica en odoo 11
         'wizard/decrease_amount_wizard_view.xml',
         'wizard/reverse_asiento.xml',
         'report/report_replacement_petty_cash.xml',
+'wizard/sin_fiscal_book.xml',
        # 'view/account_invoice_inherit.xml',
         'view/account_petty_cash_view.xml',
         'view/invoice_petty_cash_view.xml',

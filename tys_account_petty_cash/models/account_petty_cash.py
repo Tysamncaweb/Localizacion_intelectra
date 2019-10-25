@@ -125,6 +125,9 @@ class Account_petty_cash(models.Model):
         if self.reverse_move_id:
             self.write({'petty_cash_status': "cancel"})
 
+    @api.multi
+    def draft_petty_cash(self):
+        self.write({'petty_cash_status': "draft"})
 
     @api.one
     def confirm_petty_cash(self):

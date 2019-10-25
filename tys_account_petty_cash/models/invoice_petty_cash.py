@@ -337,10 +337,6 @@ class Invoice_petty_cash(models.Model):
                    VALUES (%s, %s)""", (move_line_id1.id, self.etiqueta_analitica.id))
 
 
-
-    #@api.multi
-    #def cancel_invoice_petty_cash(self):
-
     @api.multi
     def validate_invoice_petty_cash(self):
 

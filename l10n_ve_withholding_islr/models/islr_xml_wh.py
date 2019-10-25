@@ -241,7 +241,7 @@ class IslrXmlWhDoc(models.Model):
                     #'islr_xml_wh_doc_id': xml_brw.id,
                     #'period_code': "%0004d%02d" % (
                     #    period.tm_year, period.tm_mon),
-                    'company_vat': xml_brw.company_id.partner_id.vat[2:]}}
+                    'company_vat': xml_brw.company_id.partner_id.vat[0:]}}
 
     def _xml(self):
         """ Transform this document to XML format
@@ -269,8 +269,11 @@ class IslrXmlWhDoc(models.Model):
                 xml_lines = self.env.cr.fetchall()
             else:
                 xml_lines = []
+            company_vat = rp_obj._find_accounting_partner(wh_brw.company_id.partner_id).vat[0:]
+            company_vat1 = wh_brw.company_id.partner_id.vat
             root = Element("RelacionRetencionesISLR")
-            root.attrib['RifAgente'] = rp_obj._find_accounting_partner(wh_brw.company_id.partner_id).vat[2:] if wh_brw.company_id.partner_id.vat else ''
+            #root.attrib['RifAgente'] = rp_obj._find_accounting_partner(wh_brw.company_id.partner_id).vat[0:] if wh_brw.company_id.partner_id.vat else ''
+            root.attrib['RifAgente'] = company_vat if company_vat1 else ''
             root     #TODO#root.attrib['Periodo'] = period2
             for line in xml_lines:
                 partner_vat, control_number, porcent_rete, concept_code, \

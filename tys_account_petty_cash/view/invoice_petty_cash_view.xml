@@ -74,7 +74,7 @@
                                     <label for="sin_cred" attrs="{'invisible':[('type_petty_cash', '!=', 'invoice')]}"/>
                                     <div class="o_row" attrs="{'invisible':[('type_petty_cash', '!=', 'invoice')]}">
                                         <field name="sin_cred" readonly="1" attrs="{'invisible':[('type_petty_cash', '!=', 'invoice')]}"/>
-                                        <button name="sin_fiscal_book" type="object" string="Incluir" help="Click this button to change this field."  attrs="{'invisible':[('state', '=', 'validate')]}" />
+                                        <button name="%(fiscal_book12)d" type="action" string="Incluir" help="Click this button to change this field."  attrs="{'invisible':[('state', '=', 'validate'), ('sin_cred', '=', 'True')]}" />
                                     </div>
                                 </group>
                                 <group>
@@ -119,6 +119,24 @@
                  action="action_invoice_petty_cash"
                  sequence="10"
         />
+        <!--record id="wizard_invoice_fiscal_book" model="ir.ui.view">
+            <field name="name">sin.fiscal.book</field>
+                <field name="model">invoice.petty.cash</field>
+                <field name="arch" type="xml">
+                    <form string="INCLUIR EN LIBRO FISCAL">
+                        <button name="%(fiscal_book)d" type="action" string="Incluir" help="Click this button to change this field."  attrs="{'invisible':[('state', '=', 'validate'), ('sin_cred', '=', 'True')]}" />
+
+                    </form>
+                </field>
+        </record>
+        <record id="fiscal_book" model="ir.actions.act_window">
+        	<field name="name">Incluir en Libro Fiscal</field>
+        	<field name="res_model">invoice.petty.cash</field>
+        	<field name="view_type">form</field>
+        	<field name="view_mode">form</field>
+        	<field name="view_id" ref="wizard_invoice_fiscal_book"/>
+        	<field name="target">new</field>
+    	</record-->
 
         <!--record model="ir.ui.view" id="invoice_petty_cash_inherit">
             <field name="name">invoice_petty_cash.inherit</field>
