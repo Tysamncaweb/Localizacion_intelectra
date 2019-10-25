@@ -265,11 +265,11 @@ class Invoice_petty_cash(models.Model):
                                                   ('type_tax_use', '=', 'purchase')])
 
         val_invoice = {
-            'number': self.type_petty_cash + "/" + self.name,
+            'number': self.type_petty_cash,
             'move_name': self.type_petty_cash,
             'supplier_invoice_number': self.name,
             'partner_id': self.petty_cash_partner.id,
-            #'rif': self.rif,
+            # 'rif': self.rif,
             'nro_ctrl': self.invoice_nro_ctrl,
             'date_document': self.date_petty_cash,
             'date_invoice': self.date_account,
@@ -335,6 +335,7 @@ class Invoice_petty_cash(models.Model):
                 """INSERT INTO account_analytic_tag_account_invoice_line_rel
                    (account_invoice_line_id, account_analytic_tag_id)
                    VALUES (%s, %s)""", (move_line_id1.id, self.etiqueta_analitica.id))
+
 
 
     @api.multi

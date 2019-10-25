@@ -19,7 +19,7 @@
         	<field name="res_model">invoice.petty.cash</field>
         	<field name="view_type">form</field>
         	<field name="view_mode">form</field>
-        	<!--field name="view_id" ref="wizard_invoice_fiscal_book"/-->
+        	<field name="view_id" ref="wizard_invoice_fiscal_book003"/>
         	<field name="target">new</field>
     	</record>
     </data>
