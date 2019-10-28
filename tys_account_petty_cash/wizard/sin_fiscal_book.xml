@@ -3,7 +3,7 @@
     <data>
         <record id="wizard_invoice_fiscal_book003" model="ir.ui.view">
             <field name="name">sin.fiscal.book</field>
-                <field name="model">invoice.petty.cash</field>
+                <field name="model">invoice.fiscal.book</field>
                 <field name="arch" type="xml">
                     <form string="INCLUIR EN LIBRO FISCAL">
                         <separator string="Seguro que quieres hacer esto?" colspan="4" />
@@ -16,7 +16,7 @@
         </record>
         <record id="fiscal_book12" model="ir.actions.act_window">
         	<field name="name">Incluir en Libro Fiscal</field>
-        	<field name="res_model">invoice.petty.cash</field>
+        	<field name="res_model">invoice.fiscal.book</field>
         	<field name="view_type">form</field>
         	<field name="view_mode">form</field>
         	<field name="view_id" ref="wizard_invoice_fiscal_book003"/>

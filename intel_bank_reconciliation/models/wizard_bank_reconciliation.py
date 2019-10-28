@@ -99,17 +99,21 @@ class ReportBankReconciliation(models.AbstractModel):
                                                                          ('date', '>=', date_start),
                                                                          ('date', '<=', end_date),
                                                                          ('move_name', '=', False)])
-            for a in banco_line:
+            banco_line_all = self.env['account.bank.statement.line'].search([('statement_id', '=', banca.id),
+                                                                         ('company_id', '=', banca.company_id.id),
+                                                                         ('date', '>=', date_start),
+                                                                         ('date', '<=', end_date)])
+            for a in banco_line_all:
                 if a.amount > 0:
                     abono += a.amount * currency.rate_rounding
                 else:
                     cargo += a.amount * currency.rate_rounding
-
+            for b in banco_line:
                 docs.append({
-                    'description': a.name,
-                    'amount': a.amount * currency.rate_rounding,
-                    'ref': a.ref,
-                    'date': a.date,
+                    'description': b.name,
+                    'amount': b.amount * currency.rate_rounding,
+                    'ref': b.ref,
+                    'date': b.date,
                 })
         saldo_final = (amount_open + abono + cargo) * currency.rate_rounding
         diferencia = abono + cargo
