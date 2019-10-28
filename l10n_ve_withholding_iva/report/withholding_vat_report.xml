@@ -193,11 +193,10 @@
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <t t-foreach="d.wh_lines.invoice_id.invoice_line_ids" t-as="b">
-                                <!--t t-if="b.invoice_line_tax_ids.amount == 0"-->
+                                <t t-if="b.invoice_line_tax_ids.amount == 16">
                                     <t t-set="monto_iva" t-value="monto_iva + b.tasa_me"/>
                                     <t t-set="base_tax_total_amount_iva" t-value="base_tax_total_amount_iva+b.tasa_me" />
-                                
-                                <!--/t-->
+                                </t>
                             </t>
                             <span t-esc="'{:,.2f}'.format(monto_iva * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>

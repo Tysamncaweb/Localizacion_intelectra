@@ -51,6 +51,7 @@ class IslrXmlWhDoc(models.Model):
             help="Company")
     state = fields.Selection([
             ('draft', 'Draft'),
+            ('generated', 'Generated'),
             ('confirmed', 'Confirmed'),
             ('done', 'Done'),
             ('cancel', 'Cancelled')
@@ -89,6 +90,12 @@ class IslrXmlWhDoc(models.Model):
     #        'account.period', string='Period', required=True,
     #       default=lambda s: s.period_return(),
     #      help="Period when the accounts entries were done")
+    date_start = fields.Date("Fecha Inicio", required=True,
+        states={'draft': [('readonly', False)]},
+        help="Begin date of period")
+    date_end = fields.Date("fecha Fin", required=True,
+        states={'draft': [('readonly', False)]},
+        help="Begin date of period")
 
     @api.multi
     def copy(self, default=None):
@@ -104,6 +111,13 @@ class IslrXmlWhDoc(models.Model):
         })
 
         return super(IslrXmlWhDoc, self).copy(default)
+
+    @api.multi
+    def get_period(self):
+
+        split_date = self.date_end.split('-')
+
+        return str(split_date[0]) + str(split_date[1])
 
     def period_return(self):
         """ Return current period
@@ -157,18 +171,30 @@ class IslrXmlWhDoc(models.Model):
         """ Passes the document to state confirmed
         """
         # to set date_ret if don't exists
-        #context = self._context or {}
-        obj_ixwl = self.env['islr.xml.wh.line']
-        for item in self.browse(self.ids):
-            for ixwl in item.xml_ids:
-                if not ixwl.date_ret and ixwl.islr_wh_doc_inv_id:
-                    #obj_ixwl.write(
-                    #     [ixwl.id],
-                    #    {'date_ret':
-                    #        ixwl.islr_wh_doc_inv_id.islr_wh_doc_id.date_ret})
-                     ixwl.write({'date_ret':
-                            ixwl.islr_wh_doc_inv_id.islr_wh_doc_id.date_ret})
+        #obj_ixwl = self.env['islr.xml.wh.line']
+        #self.invoice_xml_ids = obj_ixwl.search([('date_ret','>=',self.date_start),
+        #                             ('date_ret','<=',self.date_end)])
+
+        #for item in self.browse(self.ids):
+        #    for ixwl in item.xml_ids:
+        #        if not ixwl.date_ret and ixwl.islr_wh_doc_inv_id:
+        #            obj_ixwl.write(
+        #                 [ixwl.id],
+        #                {'date_ret':
+        #                    ixwl.islr_wh_doc_inv_id.islr_wh_doc_id.date_ret})
+        #            ixwl.write({'date_ret':
+        #                    ixwl.islr_wh_doc_inv_id.islr_wh_doc_id.date_ret})
         return self.write({'state': 'confirmed'})
+
+    @api.multi
+    def action_generate_line_xml(self):
+        """ Passes the document to state confirmed
+        """
+        # to set date_ret if don't exists
+        obj_ixwl = self.env['islr.xml.wh.line']
+        self.invoice_xml_ids = obj_ixwl.search([('date_ret', '>=', self.date_start),
+                                                ('date_ret', '<=', self.date_end)])
+        return True
 
     @api.multi
     def action_done1(self):
@@ -253,6 +279,7 @@ class IslrXmlWhDoc(models.Model):
             wh_brw = self.browse(ixwd_id)
 
             #period = time.strptime(wh_brw.period_id.date_stop, '%Y-%m-%d')
+            period = self.get_period()
             #period2 = "%0004d%02d" % (period.tm_year, period.tm_mon)
 
             local_ids = [int(i.id) for i in wh_brw.xml_ids]
@@ -275,8 +302,13 @@ class IslrXmlWhDoc(models.Model):
             company_vat1 = company_vat1.replace("-","")
             root = Element("RelacionRetencionesISLR")
             #root.attrib['RifAgente'] = rp_obj._find_accounting_partner(wh_brw.company_id.partner_id).vat[0:] if wh_brw.company_id.partner_id.vat else ''
-            root.attrib['RifAgente'] = company_vat if company_vat1 else ''
-            root     #TODO#root.attrib['Periodo'] = period2
+            x1 = "RifAgente"
+            x2 = "Periodo"
+            root.attrib[x1] = company_vat if company_vat1 else ''
+            root.attrib[x2] = period
+
+
+
             for line in xml_lines:
                 partner_vat, control_number, porcent_rete, concept_code, \
                     invoice_number, base, inv_id, date_ret = line
@@ -301,7 +333,7 @@ class IslrXmlWhDoc(models.Model):
                 SubElement(detalle, "MontoOperacion").text = str(base)
                 SubElement(detalle, "PorcentajeRetencion").text = str(
                     porcent_rete)
-        self.indent(root)
+        #self.indent(root)
         return tostring(root, encoding="ISO-8859-1")
 
 IslrXmlWhDoc()

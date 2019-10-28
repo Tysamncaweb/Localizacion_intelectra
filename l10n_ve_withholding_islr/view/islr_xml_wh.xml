@@ -96,9 +96,15 @@
                         <button name="action_confirm1" string="Confirm" states="draft" type="object" icon="gtk-go-forward" colspan="4"/>
                         <button name="action_done1" string="Validate XML" states="confirmed" type="object" icon="gtk-ok"/>
                         <button name="action_anular1" string="Invalidate" states="confirmed,done" type="object" icon="gtk-cancel"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" statusbar_colors="{&quot;confirmed&quot;:&quot;blue&quot;}"/>
+                        <button name="action_generate_line_xml" string="Generate Line XML" states="draft" type="object" icon="gtk-go-forward"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" statusbar_colorsa="{&quot;confirmed&quot;:&quot;blue&quot;}"/>
                     </header>
-                        <field name="name"/>
+                        <field name="name" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <group col="6" colspan="4">
+                        <!--field name="period_id" widget="selection"/-->
+                        <field name="date_start" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        <field name="date_end" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                    </group>
                     <!--field name="period_id" widget="selection"/-->
                     <notebook colspan="4">
                         <page string="Invoice Withholding Lines">
@@ -157,7 +163,7 @@
 
                          </page>
                          <page string="Other information">
-                             <field name="company_id"/>
+                             <field name="company_id" attrs="{'readonly': [('state', '=', 'done')]}"/>
                          </page>
                     </notebook>
                 </form>

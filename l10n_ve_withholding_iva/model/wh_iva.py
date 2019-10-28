@@ -765,8 +765,9 @@ class AccountWhIva(models.Model):
             else:
                 if self.type in ['in_invoice', 'in_refund']:
                     self.number = consulta[-1].number_2
-            dt = time.strftime('%Y-%m-%d')
-            self.write({'date_ret': dt})
+            #dt = time.strftime('%Y-%m-%d')
+
+            self.write({'date_ret': self.date_ret})
             self.action_move_create()
             self.write({'state': 'done'})
         return True

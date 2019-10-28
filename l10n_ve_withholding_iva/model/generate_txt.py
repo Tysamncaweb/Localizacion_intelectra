@@ -374,11 +374,12 @@ class TxtIva(models.Model):
                 alicuota2 = alicuota /100
                 txt_string = (
                     txt_string + buyer + '\t' + period + '\t'
-                    +txt_line.invoice_id.date_invoice + '\t' + operation_type +
+                    +txt_line.invoice_id.date_document + '\t' + operation_type +
                     '\t' + document_type + '\t' + vendor + '\t' +
                     document_number + '\t' + control_number + '\t' +
                     self.formato_cifras(amount_total2) + '\t' +
-                    self.formato_cifras(txt_line.untaxed2) + '\t' +
+                    #self.formato_cifras(txt_line.untaxed2) + '\t' +
+                    self.formato_cifras(amount_untaxed) + '\t' +
                     self.formato_cifras(txt_line.amount_withheld2) + '\t' +
                     document_affected + '\t' + voucher_number + '\t' +
                     self.formato_cifras(amount_exempt2) + '\t' + self.formato_cifras(alicuota2) +
