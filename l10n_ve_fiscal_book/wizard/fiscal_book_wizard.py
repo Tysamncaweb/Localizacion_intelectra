@@ -397,6 +397,7 @@ class FiscalBookSaleReport(models.AbstractModel):
                 'people_type': line.people_type,
                 'export_form': '',
                 'wh_number': line.wh_number,
+                'date_wh_number': line.iwdl_id.retention_id.date_ret if line.wh_number != '' else '',
                 'invoice_number': line.invoice_number,
                 'ctrl_number': line.ctrl_number,
                 'debit_note': '',
