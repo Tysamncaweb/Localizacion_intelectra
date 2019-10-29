@@ -48,25 +48,25 @@
                             <th></th>
                         </tr>
                         <tr class="text-center table-bordered" style="background-color:#A4A4A4; height:60px; border: 1px solid #000000;">
-        	                <th class="text-center table-bordered" style="width:70px; vertical-align: middle; border: 1px solid #000000;">Nro. Operación</th>
+        	                <th class="text-center table-bordered" style="width:20px; vertical-align: middle; border: 1px solid #000000;">Nro. Op.</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Fecha Documento</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">RIF</th>
         	                <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Nombre ó Razón Social</th>
-                            <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Tipo Prov.</th>
+                            <th class="text-center table-bordered" style="width:150px; vertical-align: middle; border: 1px solid #000000;">Tipo Prov.</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Planilla de Exportación</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. De Factura</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. De Control</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Factura Afectada</th>
+        	                <th class="text-center table-bordered" style="width:100px; vertical-align: middle; border: 1px solid #000000;">Nro. De Factura</th>
+        	                <th class="text-center table-bordered" style="width:300px; vertical-align: middle; border: 1px solid #000000;">Nro. De Control</th>
+        	                <th class="text-center table-bordered" style="width:100px; vertical-align: middle; border: 1px solid #000000;">Nro. Factura Afectada</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Nota de Débito</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Nota de Crédito</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Tipo de Trans.</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Ventas Incluyendo IVA</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Ventas Internas ó Exportaciones No Gravadas </th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Ventas Internas ó Exportaciones Exoneradas</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Base Imponible</th>
+        	                <th class="text-center table-bordered" style="width:350px; vertical-align: middle; border: 1px solid #000000;">Ventas Incluyendo IVA</th>
+        	                <th class="text-center table-bordered" style="width:100px; vertical-align: middle; border: 1px solid #000000;">Ventas Internas ó Exportaciones No Gravadas </th>
+        	                <th class="text-center table-bordered" style="width:100px; vertical-align: middle; border: 1px solid #000000;">Ventas Internas ó Exportaciones Exoneradas</th>
+        	                <th class="text-center table-bordered" style="width:350px; vertical-align: middle; border: 1px solid #000000;">Base Imponible</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">% Alícuota</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Impuesto IVA</th>
-        	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">IVA Retenido (Comprador)</th>
+        	                <th class="text-center table-bordered" style="width:350px; vertical-align: middle; border: 1px solid #000000;">Impuesto IVA</th>
+        	                <th class="text-center table-bordered" style="width:350px; vertical-align: middle; border: 1px solid #000000;">IVA Retenido (Comprador)</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. De Comprobante</th>
                         </tr>
 		            </thead>
@@ -159,12 +159,12 @@
                         <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_vat_general_tax).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_get_wh_vat).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                     </tr>
-                    <tr>
+                    <!--tr>
                         <td style="border: 1px solid #000000; ">Ventas Internas gravadas por Alicuota General mas Alicuota Adicional</td>
                         <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_ali_gene_addi).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_ali_gene_addi_debit).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
                         <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(a).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
-                    </tr>
+                    </tr-->
                     <tr>
                         <td style="border: 1px solid #000000; ">Ventas Internas gravadas por Alicuota Reducida</td>
                         <td class="text-center" style="border: 1px solid #000000; "><span t-esc="'{0:,.2f}'.format(suma_vat_reduced_base).replace(',', 'X').replace('.', ',').replace('X', '.')"/></td>
