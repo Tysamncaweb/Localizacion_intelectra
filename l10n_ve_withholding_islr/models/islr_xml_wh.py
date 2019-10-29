@@ -315,9 +315,9 @@ class IslrXmlWhDoc(models.Model):
                 detalle = SubElement(root, "DetalleRetencion")
                 SubElement(detalle, "RifRetenido").text = partner_vat
                 SubElement(detalle, "NumeroFactura").text = ''.join(
-                    i for i in invoice_number if i.isdigit())[-10:] or '0'
+                    i for i in invoice_number if i.isdigit())[:] or '0'
                 SubElement(detalle, "NumeroControl").text = ''.join(
-                    i for i in control_number if i.isdigit())[-8:] or 'NA'
+                    i for i in control_number if i.isdigit())[:] or 'NA'
                 if date_ret:
                     date_ret = time.strptime(date_ret, '%Y-%m-%d')
                     SubElement(detalle, "FechaOperacion").text = time.strftime(
