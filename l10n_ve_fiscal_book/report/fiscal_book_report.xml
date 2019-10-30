@@ -51,7 +51,7 @@
         	                <th class="text-center table-bordered" style="width:20px; vertical-align: middle; border: 1px solid #000000;">Nro. Op.</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Fecha Documento</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">RIF</th>
-        	                <th class="text-center table-bordered" style="width:400px; vertical-align: middle; border: 1px solid #000000;">Nombre ó Razón Social</th>
+        	                <th class="text-center table-bordered" style="width:300px; vertical-align: middle; border: 1px solid #000000;">Nombre ó Razón Social</th>
                             <th class="text-center table-bordered" style="width:150px; vertical-align: middle; border: 1px solid #000000;">Tipo Prov.</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Planilla de Exportación</th>
         	                <th class="text-center table-bordered" style="width:100px; vertical-align: middle; border: 1px solid #000000;">Nro. De Factura</th>
@@ -68,7 +68,7 @@
         	                <th class="text-center table-bordered" style="width:350px; vertical-align: middle; border: 1px solid #000000;">Impuesto IVA</th>
         	                <th class="text-center table-bordered" style="width:350px; vertical-align: middle; border: 1px solid #000000;">IVA Retenido (Comprador)</th>
         	                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. De Comprobante</th>
-                            <th class="text-center table-bordered" style="width:250px; vertical-align: middle; border: 1px solid #000000; font-size:8px;">Fecha Comp.</th>
+                            <th class="text-center table-bordered" style="width:400px; vertical-align: middle; border: 1px solid #000000; font-size:8px;">Fecha Comp.</th>
                         </tr>
 		            </thead>
 		            <tbody style="font-size:10px;">
