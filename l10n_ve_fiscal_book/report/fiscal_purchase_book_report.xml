@@ -52,10 +52,10 @@
                             </tr>
                             <tr class="text-center table-bordered" style="background-color:#A4A4A4; height:60px; border: 1px solid #000000;" >
                                 <th class="text-center table-bordered" style="width:20px; vertical-align: middle; border: 1px solid #000000;">Nro. Op</th>
-                                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Fecha de Emisión de Documento</th>
-                                <th class="text-center table-bordered" style="width:250px; vertical-align: middle; border: 1px solid #000000;font-size:8px;">Nro. de RIF</th>
+                                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000; font-size:8px;">Fecha Emisión Doc.</th>
+                                <th class="text-center table-bordered" style="width:300px; vertical-align: middle; border: 1px solid #000000;font-size:8px;">Nro. de RIF</th>
                                 <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Nombre ó Razón Social</th>
-                                <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Tipo Prov.</th>
+                                <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000; font-size:8px;">Tipo Prov.</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de Factura</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de Control</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Nota de Crédito</th>
@@ -91,7 +91,7 @@
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;" >
                                   <span t-esc="contador"/><!-- Nro. de Operación-->
                                 </td>
-                                <td class="text-center table-bordered" style=" border: 1px solid #000000;">
+                                <td class="text-center table-bordered" style=" border: 1px solid #000000; font-size:8px;">
                                   <span t-esc="o['emission_date']"/><!-- Fecha de Transacción-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000; font-size:8px;">
@@ -100,7 +100,7 @@
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
                                     <span t-esc="o['partner_name']"/><!-- Nombre razon social-->
                                 </td>
-                                <td class="text-center table-bordered" style=" border: 1px solid #000000;">
+                                <td class="text-center table-bordered" style=" border: 1px solid #000000; font-size:8px;">
                                     <span t-esc="o['people_type']"/><!-- tipo de proveedor-->
                                 </td>
                                   <td class="text-center table-bordered" style=" border: 1px solid #000000;">
