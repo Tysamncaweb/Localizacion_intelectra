@@ -358,6 +358,7 @@ class TxtIva(models.Model):
                 control_number = self.get_number(
                     txt_line.invoice_id.nro_ctrl, 'inv_ctrl', 20)
                 document_affected = self.get_document_affected(txt_line)
+                document_affected = document_affected.replace("-","")
                 voucher_number = self.get_number(
                     txt_line.voucher_id.number, 'vou_number', 14)
                 amount_exempt, amount_untaxed = \
