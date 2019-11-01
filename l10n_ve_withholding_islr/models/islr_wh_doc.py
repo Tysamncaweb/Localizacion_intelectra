@@ -1593,7 +1593,7 @@ class IslrWhDocInvoices(models.Model):
             #TODO EN invoice_number ESTA COLOCANDO EL NUMERO DE CONTROL.
             #TODO COLOCA 0 PORQUE ESTA BUSCANDO LOS ULTIMOS 10 DIGITOS DE LA FACTURA. PARECE ALGO BIEN PARTICULAR DE ALGUN CLIENTE. PREGUNTAR
             'invoice_number': ''.join(
-                i for i in ail_brw.invoice_id.nro_ctrl
+                i for i in ail_brw.invoice_id.supplier_invoice_number
                 if i.isdigit())[-10:] or '0',
             'partner_id': acc_part_id.id,  # Warning Depends if is a customer
                                            # or supplier
