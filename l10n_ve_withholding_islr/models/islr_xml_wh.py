@@ -312,12 +312,18 @@ class IslrXmlWhDoc(models.Model):
             for line in xml_lines:
                 partner_vat, control_number, porcent_rete, concept_code, \
                     invoice_number, base, inv_id, date_ret = line
+                control_number = control_number.replace("-","")
+                invoice_number = invoice_number.replace("-","")
                 detalle = SubElement(root, "DetalleRetencion")
                 SubElement(detalle, "RifRetenido").text = partner_vat
-                SubElement(detalle, "NumeroFactura").text = ''.join(
-                    i for i in invoice_number if i.isdigit())[:] or '0'
-                SubElement(detalle, "NumeroControl").text = ''.join(
-                    i for i in control_number if i.isdigit())[:] or 'NA'
+
+                SubElement(detalle, "NumeroFactura").text = invoice_number
+                SubElement(detalle, "NumeroControl").text = control_number
+
+                #SubElement(detalle, "NumeroFactura").text = ''.join(
+                #    i for i in invoice_number if i.isdigit())[:] or '0'
+                #SubElement(detalle, "NumeroControl").text = ''.join(
+                #    i for i in control_number if i.isdigit())[:] or 'NA'
                 if date_ret:
                     date_ret = time.strptime(date_ret, '%Y-%m-%d')
                     SubElement(detalle, "FechaOperacion").text = time.strftime(
@@ -354,11 +360,11 @@ class IslrXmlWhLine(models.Model):
     partner_vat = fields.Char(
             'VAT', size=10, required=True, help="Partner VAT")
     invoice_number = fields.Char(
-            'Invoice Number', size=10, required=True,
+            'Invoice Number', size=20, required=True,
             default='0',
             help="Number of invoice")
     control_number = fields.Char(
-            'Control Number', size=8, required=True,
+            'Control Number', size=20, required=True,
             default='NA',
             help="Reference")
     concept_code = fields.Char(

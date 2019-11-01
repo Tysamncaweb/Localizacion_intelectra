@@ -1590,22 +1590,17 @@ class IslrWhDocInvoices(models.Model):
             'base': 0.0,  # To be updated later
               # We review the definition because it is in
                                  # NOT NULL
-            #TODO EN invoice_number ESTA COLOCANDO EL NUMERO DE CONTROL.
-            #TODO COLOCA 0 PORQUE ESTA BUSCANDO LOS ULTIMOS 10 DIGITOS DE LA FACTURA. PARECE ALGO BIEN PARTICULAR DE ALGUN CLIENTE. PREGUNTAR
-            'invoice_number': ''.join(
-                i for i in ail_brw.invoice_id.supplier_invoice_number
-                if i.isdigit())[-10:] or '0',
+
+            'invoice_number': ail_brw.invoice_id.supplier_invoice_number,
+
             'partner_id': acc_part_id.id,  # Warning Depends if is a customer
                                            # or supplier
             'concept_id': ail_brw.concept_id.id,
             'partner_vat': vendor[0:12] if vendor else str(),  # Warning Depends if is a
                                               # customer or supplier
             'porcent_rete': 0.0,  # To be updated later
-            #TODO VERIFICA QUE LOS ULTIMOS 8 DIGITOS DEL NUMERO DE CONTROL SEAN NUMERICOS.for
-            #TODO PARECE SER ALGO BIEN PARTICULAR DE CADA CLIENTE. PREGUNTAR
-            'control_number': ''.join(
-                i for i in ail_brw.invoice_id.nro_ctrl
-                if i.isdigit())[-8:] or 'NA',
+
+            'control_number': ail_brw.invoice_id.nro_ctrl,
             'account_invoice_line_id': ail_brw.id,
             'concept_code': '000',# To be updated later
             'type': 'invoice'
