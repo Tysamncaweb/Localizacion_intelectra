@@ -155,15 +155,18 @@
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <t t-if="d.wh_lines.invoice_id.type == 'in_refund'">
-                                <span t-esc="d.wh_lines.invoice_id.supplier_invoice_number"/>
                             </t>
-                            <t t-if="d.wh_lines.invoice_id.type == 'out_refund'"></t>
-                        </td>
-                        <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <t t-if="d.wh_lines.invoice_id.type == 'out_refund'">
                                 <span t-esc="d.wh_lines.invoice_id.number"/>
                             </t>
-                            <t t-if="d.wh_lines.invoice_id.type == 'in_refund'"></t>
+                        </td>
+                        <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
+                            <t t-if="d.wh_lines.invoice_id.type == 'out_refund'">
+
+                            </t>
+                            <t t-if="d.wh_lines.invoice_id.type == 'in_refund'">
+                                 <span t-esc="d.wh_lines.invoice_id.supplier_invoice_number"/>
+                            </t>
                         </td>
                         <td style="text-align:center;border:1px solid #000;padding-top:5px;padding-bottom:3px;">
                             <span t-esc="model.get_t_type(d.wh_lines.invoice_id.type)"/>
