@@ -960,6 +960,15 @@ class FiscalBook(models.Model):
                 tt = '01-REG'
         return tt
 
+    # Funcion que limpia el numero de factura para que no aparezca "papelanulado"
+    @api.multi
+    def get_number(self, local_inv_nbr):
+        tt = ''
+        if local_inv_nbr.find('PAPELANULADO'):
+            posicion = local_inv_nbr.find("(")
+            tt = local_inv_nbr[0:posicion]
+        return tt
+
     @api.multi
     def update_book_lines(self, fb_id):
         """ It updates the fiscal book lines values. Cretate, order and rank
@@ -1071,7 +1080,7 @@ class FiscalBook(models.Model):
                 'partner_name': rp_brw.name or 'N/A',
                 'people_type': rp_brw.people_type.upper() if rp_brw.people_type else 'N/A',
                 'partner_vat': rp_brw.vat and rp_brw.vat or 'N/A',  #TODO Revisar validación de rif en el partner. Esta guardando los partner sin rif
-                'invoice_number':local_inv_nbr,
+                'invoice_number':self.get_number(local_inv_nbr),
                 'doc_type': doc_type,
                 #'void_form':
                 #    inv_brw.name and (

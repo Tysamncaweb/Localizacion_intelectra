@@ -52,10 +52,11 @@ class WizardInvoiceNroCtrl(osv.osv_memory):
         res_company = self.env['res.company'].search([('id','=',uid)])
         if inv_brw.nro_ctrl:
             invoice = ({
+                #'number': inv_brw.number,
                 'number': '%s (%s)' % (inv_brw.number, 'PAPELANULADO_NRO_CTRL_%s' % (
                                         inv_brw.nro_ctrl and inv_brw.nro_ctrl or '')),
-                #'name': 'PAPELANULADO_NRO_CTRL_%s' % (
-                #    inv_brw.nro_ctrl and inv_brw.nro_ctrl or ''),
+                'name': 'PAPELANULADO_NRO_CTRL_%s' % (
+                    inv_brw.nro_ctrl and inv_brw.nro_ctrl or ''),
                 'comment_paper': self.comment_paper,
                 'paper_anu': True,
                 'marck_paper': False
