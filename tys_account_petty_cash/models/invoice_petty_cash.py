@@ -4,6 +4,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError, UserError
 from odoo import fields, models, api, exceptions
+import math
 
 '''class ResPartner(models.Model):
     _inherit = 'gastos.petty.cash'
@@ -79,7 +80,7 @@ class Invoice_petty_cash(models.Model):
     #campos para saber el saldo disponible de la caja chica
     disponible = fields.Monetary('Monto Disponible Caja Chica')
     apertura = fields. Monetary('Monte de Apertura Caja Chica')
-    disponible_move_id = fields.Monetary('Saldo Disponible Cuenta Contable')
+    disponible_move_id = fields.Monetary('Saldo Pendiente por liquidar')
 
 
 
@@ -92,20 +93,47 @@ class Invoice_petty_cash(models.Model):
 
     type_petty_cash = fields.Selection(TYPE_PETTY_CASH, string='Tipo Documento', default='invoice')
 
+    @api.multi
+    def get_saldo_por_liquidar(self,transitoria):
+        '''Funcion que calcula los debitos- creditos para hallar el saldo pendiente por liquidar de la cuenta
+        transitoria de la caja chica '''
+        saldo_total = 0
+        caja_obj = self.env['account.petty.cash'].browse(transitoria.id)
+        cuenta_transitoria = caja_obj.petty_cash_trans_account_id.id
+        if transitoria:
+            self.env.cr.execute('''SELECT sum(debit-credit) FROM public.account_move_line WHERE account_id = %s GROUP BY id;''',(cuenta_transitoria,))
+            saldo = self.env.cr.fetchall()
+
+            if saldo:
+                lista_saldos = [list(elem) for elem in saldo]
+                saldo_total = 0
+                for monto in lista_saldos:
+                    for m in monto:
+                        saldo_total = saldo_total + m
+            else:
+                saldo_total = 0
+
+        return saldo_total
 
 
     @api.onchange('code')
     def gastos_petty_cash(self):
         if self.code:
-            codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
-                                                                ('state', '=', 'validate')])
-
+            #codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
+            #                                                ('state', '=', 'validate')])
+            codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                            ('petty_cash_status', '=', 'validate')])
             if codigo:
-                disponible = codigo[-1].disponible
-                disponible_move_id = codigo[-1].disponible_move_id
+                disponible = codigo[-1].disponible - self.amount_total
+                #disponible_move_id = codigo[-1].disponible_move_id
+                disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                disponible_move_id = math.fabs(disponible_move_id)
             else:
-                disponible = self.code.disponible
-                disponible_move_id = self.code.disponible_move_id
+                disponible = self.code.disponible - self.amount_total
+                #disponible_move_id = self.code.disponible_move_id
+                disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                disponible_move_id = math.fabs(disponible_move_id)
+
 
             return {'value': {'transitoria': self.code.petty_cash_trans_account_id.id,
                               'disponible': disponible,
@@ -126,18 +154,24 @@ class Invoice_petty_cash(models.Model):
     @api.onchange('amount_exento')
     def amount3(self):
         if self.amount_exento:
-            codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
-                                                            ('state', '=', 'validate')])
-
+            #codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
+            #                                                ('state', '=', 'validate')])
+            codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                            ('petty_cash_status', '=', 'validate')])
             if codigo:
                 a = codigo[-1].disponible
-                b = codigo[-1].disponible_move_id
+                #b = codigo[-1].disponible_move_id
+                disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                b = math.fabs(disponible_move_id)
             else:
                 a = self.code.disponible
-                b = self.code.disponible_move_id
+                #b = self.code.disponible_move_id
+                disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                b = math.fabs(disponible_move_id)
 
             self.disponible = a - self.amount_exento
-            self.disponible_move_id = b - self.amount_exento
+            #self.disponible_move_id = b - self.amount_exento
+            self.disponible_move_id = b + self.amount_exento
 
             if self.disponible < 0:
                 raise ValidationError('El Monto Disponible es menor a cero')
@@ -151,24 +185,32 @@ class Invoice_petty_cash(models.Model):
                               }}
         else:
             self.disponible = self.code.disponible
-            self.disponible_move_id = self.code.disponible_move_id
-
+            #self.disponible_move_id = self.code.disponible_move_id
+            codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                            ('petty_cash_status', '=', 'validate')])
+            self.disponible_move_id = math.fabs(self.get_saldo_por_liquidar(codigo))
 
     @api.onchange('amount_gravable', 'tax')
     def amount4(self):
         if self.amount_gravable or self.tax:
-            codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
-                                                            ('state', '=', 'validate')])
-
+            #codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
+            #                                                ('state', '=', 'validate')])
+            codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                            ('petty_cash_status', '=', 'validate')])
             if codigo:
                 a = codigo[-1].disponible
-                b = codigo[-1].disponible_move_id
+                #b = codigo[-1].disponible_move_id
+                disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                b = math.fabs(disponible_move_id)
             else:
                 a = self.code.disponible
-                b = self.code.disponible_move_id
+                #b = self.code.disponible_move_id
+                disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                b = math.fabs(disponible_move_id)
 
             self.disponible = a - (self.amount_gravable + self.iva)
-            self.disponible_move_id = b - (self.amount_gravable + self.iva)
+            #self.disponible_move_id = b - (self.amount_gravable + self.iva)
+            self.disponible_move_id = b + (self.amount_gravable + self.iva)
 
             if self.disponible < 0:
                 raise ValidationError('El Monto Disponible es menor a cero')
@@ -183,24 +225,34 @@ class Invoice_petty_cash(models.Model):
             self.tax = 0
             self.iva = 0
             self.disponible = self.code.disponible
-            self.disponible_move_id = self.code.disponible_move_id
+            #self.disponible_move_id = self.code.disponible_move_id
+            codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                            ('petty_cash_status', '=', 'validate')])
+            self.disponible_move_id = math.fabs(self.get_saldo_por_liquidar(codigo))
 
     @api.onchange('amount_exento', 'amount_gravable', 'tax')
     def amount5(self):
         if self.amount_gravable or self.tax or self.amount_exento:
             if self.amount_gravable:
-                codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
-                                                                ('state', '=', 'validate')])
+                #codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
+                #                                                ('state', '=', 'validate')])
+                codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                                ('petty_cash_status', '=', 'validate')])
 
                 if codigo:
                     a = codigo[-1].disponible
-                    b = codigo[-1].disponible_move_id
+                    #b = codigo[-1].disponible_move_id
+                    disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                    b = math.fabs(disponible_move_id)
                 else:
                     a = self.code.disponible
-                    b = self.code.disponible_move_id
+                    #b = self.code.disponible_move_id
+                    disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                    b = math.fabs(disponible_move_id)
 
                 self.disponible = a - (self.amount_exento + self.amount_gravable + self.iva)
-                self.disponible_move_id = b - (self.amount_exento + self.amount_gravable + self.iva)
+                #self.disponible_move_id = math.fabs(b - (self.amount_exento + self.amount_gravable + self.iva))
+                self.disponible_move_id = math.fabs(b + (self.amount_exento + self.amount_gravable + self.iva))
 
                 if self.disponible < 0:
                     raise ValidationError('El Monto Disponible es menor a cero')
@@ -212,26 +264,36 @@ class Invoice_petty_cash(models.Model):
                 return {'value': {'amount_total': self.amount_gravable + self.amount_exento + self.iva,
                                   }}
             else:
-                codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
-                                                                ('state', '=', 'validate')])
-
+                #codigo = self.env['invoice.petty.cash'].search([('code', '=', self.code.id),
+                #                                                ('state', '=', 'validate')])
+                codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                                ('petty_cash_status', '=', 'validate')])
                 if codigo:
                     a = codigo[-1].disponible
-                    b = codigo[-1].disponible_move_id
+                    #b = codigo[-1].disponible_move_id
+                    disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                    b = math.fabs(disponible_move_id)
                 else:
                     a = self.code.disponible
-                    b = self.code.disponible_move_id
+                    #b = self.code.disponible_move_id
+                    disponible_move_id = self.get_saldo_por_liquidar(codigo)
+                    b = math.fabs(disponible_move_id)
 
                 self.iva = 0
                 self.disponible = a - (self.amount_exento + self.amount_gravable + self.iva)
-                self.disponible_move_id = b - (self.amount_exento + self.amount_gravable + self.iva)
+                #self.disponible_move_id = b - (self.amount_exento + self.amount_gravable + self.iva)
+                self.disponible_move_id = b + (self.amount_exento + self.amount_gravable + self.iva)
+
                 return {'value': {'amount_total': self.amount_gravable + self.amount_exento + self.iva
                                   }}
         else:
             self.tax = 0
             self.iva = 0
             self.disponible = self.code.disponible
-            self.disponible_move_id = self.code.disponible_move_id
+            #self.disponible_move_id = self.code.disponible_move_id
+            codigo = self.env['account.petty.cash'].search([('id', '=', self.code.id),
+                                                            ('petty_cash_status', '=', 'validate')])
+            self.disponible_move_id = math.fabs(self.get_saldo_por_liquidar(codigo))
 
     def _get_company(self):
         uid = self._uid

@@ -83,7 +83,7 @@
                                     <field name="reverse_move_id" string="Asiento de Reversión" readonly="1"/>
                                     <field name="apertura" string="Monto de Apertura Caja Chica" readonly="1" force_save="1"/>
                                     <field name="disponible" string="Monto Disponible Caja Chica" readonly="1" force_save="1"/>
-                                    <field name="disponible_move_id" string="Saldo Disponible Cuenta Contable" readonly="1" force_save="1"/>
+                                    <field name="disponible_move_id" string="Saldo Pendiente por liquidar" readonly="1" force_save="1"/>
                                 </group>
 
                             </group>
