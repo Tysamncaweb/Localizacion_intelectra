@@ -873,13 +873,20 @@ class FiscalBook(models.Model):
         return orphan_inv_ids and iwdl_obj.search([('invoice_id', 'in', orphan_inv_ids)]) or []
 
     def get_order_criteria_adjustment(self, book_type):
+        #return book_type == 'sale' \
+        #       and 'accounting_date asc, ctrl_number asc' \
+        #       or 'emission_date asc, invoice_number asc'
+
         return book_type == 'sale' \
-               and 'accounting_date asc, ctrl_number asc' \
+               and 'emission_date asc, ctrl_number asc' \
                or 'emission_date asc, invoice_number asc'
 
     def get_order_criteria(self, book_type):
+        #return book_type == 'sale' \
+        #   and 'accounting_date asc, invoice_number asc' \
+        #   or 'emission_date asc, invoice_number asc'
         return book_type == 'sale' \
-               and 'accounting_date asc, invoice_number asc' \
+               and 'emission_date asc, invoice_number asc' \
                or 'emission_date asc, invoice_number asc'
 
     def order_book_lines(self, fb_id):
