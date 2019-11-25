@@ -971,9 +971,13 @@ class FiscalBook(models.Model):
     @api.multi
     def get_number(self, local_inv_nbr):
         tt = ''
-        if local_inv_nbr.find('PAPELANULADO'):
+        busqueda = local_inv_nbr.find('PAPELANULADO')
+
+        if busqueda != -1: #si es distinto de -1 encontro la palabra
             posicion = local_inv_nbr.find("(")
             tt = local_inv_nbr[0:posicion]
+        else:
+            tt = local_inv_nbr
         return tt
 
     @api.multi

@@ -39,6 +39,7 @@ class Replacement_petty_cash(models.Model):
     move_id = fields.Many2one("account.move", string="Asiento Contable",
                                          help="asiento de apertura de la caja chica")
     currency_id = fields.Many2one('res.currency', string='Currency')
+    referencia = fields.Char('Referencia')
 
 
     @api.onchange('code')
