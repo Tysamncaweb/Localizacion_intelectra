@@ -50,13 +50,13 @@
                               <th colspan="5" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;" class="text-center table-bordered"><p>Compras de Importaciones</p></th>
                               <th colspan="2" style="background-color:#A4A4A4;color:#000000; border: 1px solid #000000;" class="text-center table-bordered"><p>Retenciones IVA Proveedores</p></th>
                             </tr>
-                            <tr class="text-center table-bordered" style="background-color:#A4A4A4; height:60px; border: 1px solid #000000;" >
+                            <tr class="text-center table-bordered" style="background-color:#A4A4A4; height:60px; border: 1px solid #000000; font-size:6px;" >
                                 <th class="text-center table-bordered" style="width:20px; vertical-align: middle; border: 1px solid #000000;">Nro. Op</th>
-                                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000; font-size:8px;">Fecha Emisión Doc.</th>
-                                <th class="text-center table-bordered" style="width:450px; vertical-align: middle; border: 1px solid #000000;font-size:8px;">Nro. de RIF</th>
+                                <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Fecha Emisión Doc.</th>
+                                <th class="text-center table-bordered" style="width:450px; vertical-align: middle; border: 1px solid #000000;">Nro. de RIF</th>
                                 <th class="text-center table-bordered" style="width:500px; vertical-align: middle; border: 1px solid #000000;">Nombre ó Razón Social</th>
-                                <th class="text-center table-bordered" style="width:120px; vertical-align: middle; border: 1px solid #000000; font-size:8px;">Tipo Prov.</th>
-                                <th class="text-center table-bordered" style="width:150px; vertical-align: middle; border: 1px solid #000000; font-size:8px;">Nro. de Factura</th>
+                                <th class="text-center table-bordered" style="width:120px; vertical-align: middle; border: 1px solid #000000; ">Tipo Prov.</th>
+                                <th class="text-center table-bordered" style="width:150px; vertical-align: middle; border: 1px solid #000000; ">Nro. de Factura</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. de Control</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Nota de Crédito</th>
                                 <th class="text-center table-bordered" style="width:200px; vertical-align: middle; border: 1px solid #000000;">Nro. Nota de Débito</th>
@@ -83,7 +83,7 @@
 
                             </tr>
                           </thead>
-                          <tbody style="font-size:10px;">
+                          <tbody style="font-size:6px;">
                                 <t t-set="contador" t-value="1"/>
                             <!--<t t-foreach="o.facturas_ids" t-as="factura">  -->
                               <t t-foreach="datos_compras" t-as="o" >
@@ -91,10 +91,10 @@
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;" >
                                   <span t-esc="contador"/><!-- Nro. de Operación-->
                                 </td>
-                                <td class="text-center table-bordered" style=" border: 1px solid #000000; font-size:8px;">
+                                <td class="text-center table-bordered" style=" border: 1px solid #000000; font-size:6px;">
                                   <span t-esc="o['emission_date']"/><!-- Fecha de Transacción-->
                                 </td>
-                                <td class="text-center table-bordered" style=" border: 1px solid #000000; font-size:8px;">
+                                <td class="text-center table-bordered" style=" border: 1px solid #000000; font-size:6px;">
                                     <span t-esc="o['partner_vat']"/><!-- Nro. de Rif-->
                                 </td>
                                 <td class="text-center table-bordered" style=" border: 1px solid #000000;">
@@ -107,7 +107,7 @@
                                     <t t-if="o['doc_type'] == 'N/DB'">
 
                                     </t>
-                                    <t t-if="o['doc_type'] != 'N/DB'" style="font-size:8px;">
+                                    <t t-if="o['doc_type'] != 'N/DB'" style="font-size:6px;">
                                         <span t-esc="o['invoice_number']"/><!--Nro. documento o factura-->
                                     </t>
                                 </td>

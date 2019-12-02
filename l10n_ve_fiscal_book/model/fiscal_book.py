@@ -1003,6 +1003,9 @@ class FiscalBook(models.Model):
             t_type = fb_brw.type == 'sale' and 'tp' or 'do'
             for iwdl_brw in iwdl_ids:
                 rp_brw = rp_obj._find_accounting_partner(iwdl_brw.retention_id.partner_id)
+                #para obtener el tipo de transacción
+                doc_type = self.get_doc_type(inv_id=iwdl_brw.invoice_id.id)
+
                 values = {'iwdl_id': iwdl_brw.id,
                           'type': t_type,
                           'accounting_date': iwdl_brw.date_ret or False,
@@ -1023,6 +1026,9 @@ class FiscalBook(models.Model):
                               iwdl_brw.invoice_id.date_document or
                               iwdl_brw.invoice_id.date_invoice,
                           'wh_rate': iwdl_brw.wh_iva_rate,
+                          'invoice_number': iwdl_brw.invoice_id.number or "", # se agrega el campo numero de factura para las facturas fuera de periodo
+                          'ctrl_number': iwdl_brw.invoice_id.nro_ctrl or "", # se agrega el campo numero de control para las facturas fuera de periodo
+                          'void_form': self.get_t_type(doc_type),
                           }
                 data.append((0, 0, values))
 
@@ -1127,7 +1133,7 @@ class FiscalBook(models.Model):
         #            }
 
         #           for partner_brw in cf_partner_brws:
-        #                values = common_values.copy()
+        #                values = common_values.copy()salasa
         #                values['partner_name'] = partner_brw.name or 'N/A'
         #                values['partner_vat'] = partner_brw.vat and partner_brw.vat[2:] or 'N/A'
         #                values['total_with_iva'] = self.get_cfl_sum( cf_brw.id, partner_brw.id)
