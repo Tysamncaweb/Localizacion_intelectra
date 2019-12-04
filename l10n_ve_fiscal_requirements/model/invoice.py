@@ -52,7 +52,17 @@ class AccountInvoice(models.Model):
     paper_anu = fields.Boolean('papel dañado', defeult=False)
     marck_paper = fields.Boolean(default=False)
 
+    international = fields.Boolean( 'provedoor internacional', compute='_get_international')
+    nro_planilla_impor = fields.Char('Nro de Planilla de Importacion', size=25)
+    nro_expediente_impor = fields.Char('Nro de Expediente de Importacion', size=25)
+
     # date_document = lambda *a: time.strftime('%Y-%m-%d')
+    @api.one
+    @api.depends('partner_id')
+    def _get_international(self):
+        self.international = (self.partner_id.international_supplier)
+
+
 
     def _get_journal(self, context):
         """ Return the journal which is
@@ -73,14 +83,17 @@ class AccountInvoice(models.Model):
             res = journal_obj.search(domain, limit=1)
         return res and res[0] or False
 
+
     def _unique_invoice_per_partner(self, field, value):
         """ Return false when it is found
         that the bill is not out_invoice or out_refund,
         and it is not unique to the partner.
         """
+
         ids_ivo = []
         inv_ids = []
         for inv in self:
+
             ids_ivo.append(inv.id)
             if inv.type in ('out_invoice', 'out_refund'):
                 return True
@@ -174,6 +187,8 @@ class AccountInvoice(models.Model):
                 self.nro_ctrl = False
                 return {'warning': {'title': "Advertencia!",
                                     'message': "  El Numero de control de la Factura del Proveedor ya Existe  "}}
+
+
         return super(AccountInvoice, self).write(vals)
 
     @api.onchange('supplier_invoice_number')

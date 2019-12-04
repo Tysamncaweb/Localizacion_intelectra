@@ -66,11 +66,19 @@
                     <field name="date_invoice" nolabel="1"/>
                     <label for="date_document" string="Fecha Factura"/>
                     <field name="date_document" nolabel="1" attrs="{'readonly': [('state','=','open')]}"/>
+
                 </xpath>
+
+                <xpath expr="//field[@name='date_due']" position="after">
+                    <field name="nro_planilla_impor" string="N° de Planilla de Importación" attrs="{'required': [('international', '=', True)],'readonly': [('state', 'in', ('paid','open'))]}"/>
+                    <field name="nro_expediente_impor" string="N° de Planilla de Importación" attrs="{'required': [('international', '=', True)],'readonly': [('state', 'in', ('paid','open'))]}"/>
+                </xpath>
+
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="rif" string="Rif"/>
-                    <field name="supplier_invoice_number" string="Supplier Invoice Number" required="True" />
-                    <field name="nro_ctrl" string="Número de control" required="True" attrs="{'readonly': [('state', 'in', ('paid','open'))]}"/>
+                     <field name="international" class="oe_edit_only" widget="radio" invisible="1"/>
+                    <field name="supplier_invoice_number" string="Supplier Invoice Number"/>
+                    <field name="nro_ctrl" string="Número de control"/>
                 </xpath>
                 <xpath expr="//page[@name='other_info']/group/group[2]" position="after">
                     <group>

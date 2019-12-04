@@ -85,10 +85,10 @@ class Employee(models.Model):
         return res
 
 
-    def actualizar_antiguedad(self, cr, uid):
-        print ("====Inicio Cambio de antiguedad====")
-        employee_ids = self.search(cr, uid, [])
-        employees = self.browse(cr, uid, employee_ids)
+    def actualizar_antiguedad(self):
+
+        employee_ids = self.search([])
+        employees = self.browse(employee_ids)
         values = {}
         res = {}
         ahora = datetime.now().strftime(_DATETIME_FORMAT)
@@ -99,8 +99,8 @@ class Employee(models.Model):
                 res.update({'ano_antig': diferencia.years})
                 res.update({'mes_antig': diferencia.months})
                 res.update({'dias_antig': diferencia.days})
-                self.write(cr, uid, emp.id,res)
-        print ("====Cambio de nombres Ejecutado====")
+                self.write(emp.id,res)
+
 
     @api.multi
     def write(self, values):

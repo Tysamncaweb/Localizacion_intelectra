@@ -59,7 +59,7 @@
 
 
 
-    <menuitem id="menu_historico_inicial" name="Historico Pestaciones Carga Inicial" action="action_account_menu_historico_inicial" parent="tys_hr_payroll_fideicomiso.menu_hr_historico_fideicomiso"/>
+    <menuitem id="menu_historico_inicial" name="Historico Prestaciones Carga Inicial" action="action_account_menu_historico_inicial" parent="tys_hr_payroll_fideicomiso.menu_hr_historico_fideicomiso"/>
     </data>
 </odoo>
 
