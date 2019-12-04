@@ -7,10 +7,10 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='vat']" position="replace">
-                         <field name="vat" placeholder="Ej.: V-012345678" string="RIF" />
+                         <field name="vat" placeholder="Ej.: V-012345678" string="RIF"/>
                  </xpath>
                 <xpath expr="//field[@name='category_id']" position="after">
-                        <field name="international_supplier"  attrs="{'invisible': [('customer', '=', True),('supplier','!=', True)]}"/>
+                    <field name="international_supplier"    attrs="{'invisible': [('customer', '=', True),('supplier','!=', True)]}"/>
                  </xpath>
             </field>
         </record>
