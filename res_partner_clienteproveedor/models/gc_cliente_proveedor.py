@@ -10,6 +10,7 @@ import re
 class gc_cliente_proveedor(models.Model):
     _inherit = 'res.partner'
 
+    international_supplier = fields.Boolean('Es Proveedor Internacional ?')
 
     @api.model
     def _fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
