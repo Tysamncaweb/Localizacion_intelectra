@@ -506,6 +506,8 @@ class FiscalBookSaleReport(models.AbstractModel):
         suma_total_w_iva = 0
         suma_no_taxe_sale = 0
         suma_vat_general_base = 0
+        suma_total_vat_general_base = 0
+        suma_total_vat_general_tax = 0
         suma_vat_general_tax = 0
         suma_vat_reduced_base = 0
         suma_vat_reduced_tax = 0
@@ -520,10 +522,41 @@ class FiscalBookSaleReport(models.AbstractModel):
         suma_amount_tax = 0
 
         for line in fbl_obj:
+            vat_general_base = 0
+            vat_general_rate =  0
+            vat_general_tax =  0
+
+
             if line.type == 'ntp':
                 no_taxe_sale = line.vat_general_base
             else:
                 no_taxe_sale = 0.0
+
+            if line.vat_reduced_base != 0:
+                vat_general_base = line.vat_reduced_base
+                vat_general_rate = int(line.vat_reduced_base and line.vat_reduced_tax * 100 / line.vat_reduced_base)
+                vat_general_tax = line.vat_reduced_tax
+                suma_vat_reduced_base += line.vat_reduced_base
+                suma_vat_reduced_tax += line.vat_reduced_tax
+
+            if line.vat_additional_base != 0:
+                vat_general_base = line.vat_additional_base
+                vat_general_rate = int(line.vat_additional_base and line.vat_additional_tax * 100 / line.vat_additional_base)
+                vat_general_tax = line.vat_additional_tax
+                suma_vat_additional_base += line.vat_additional_base
+                suma_vat_additional_tax += line.vat_additional_tax
+
+            if line.vat_general_base != 0:
+                vat_general_base = line.vat_general_base
+                vat_general_rate = int(line.vat_general_base and line.vat_general_tax * 100 / line.vat_general_base)
+                vat_general_tax = line.vat_general_tax
+                suma_vat_general_base += line.vat_general_base
+                suma_vat_general_tax += line.vat_general_tax
+
+
+         #   suma_vat_additional_base += line.vat_additional_base
+          #  suma_vat_additional_tax += line.vat_additional_tax
+            suma_get_wh_vat += line.get_wh_vat
 
             docs.append({
                 'rannk': line.rank,
@@ -543,9 +576,9 @@ class FiscalBookSaleReport(models.AbstractModel):
                 'total_w_iva': line.total_with_iva,
                 'no_taxe_sale': line.vat_exempt,
                 'export_sale': '',
-                'vat_general_base': line.vat_general_base,
-                'vat_general_rate': int(line.vat_general_base and line.vat_general_tax * 100 / line.vat_general_base),
-                'vat_general_tax': line.vat_general_tax,
+                'vat_general_base': vat_general_base,
+                'vat_general_rate': vat_general_rate,
+                'vat_general_tax': vat_general_tax,
                 'vat_reduced_base': line.vat_reduced_base,
                 'vat_reduced_rate': int(line.vat_reduced_base and line.vat_reduced_tax * 100 / line.vat_reduced_base),
                 'vat_reduced_tax': line.vat_reduced_tax,
@@ -557,19 +590,19 @@ class FiscalBookSaleReport(models.AbstractModel):
 
             suma_total_w_iva += line.total_with_iva
             suma_no_taxe_sale += line.vat_exempt
-            suma_vat_general_base += line.vat_general_base
-            suma_vat_general_tax += line.vat_general_tax
-            suma_vat_reduced_base += line.vat_reduced_base
-            suma_vat_reduced_tax += line.vat_reduced_tax
-            suma_vat_additional_base += line.vat_additional_base
-            suma_vat_additional_tax += line.vat_additional_tax
-            suma_get_wh_vat += line.get_wh_vat
+            suma_total_vat_general_base += line.vat_general_base + line.vat_additional_base + line.vat_reduced_base
+            suma_total_vat_general_tax +=  line.vat_general_tax + line.vat_reduced_tax + line.vat_additional_tax
+
+
+
 
             #RESUMEN LIBRO DE VENTAS
-            suma_ali_gene_addi = suma_vat_general_base + suma_vat_additional_base
-            suma_ali_gene_addi_debit = suma_vat_general_tax + suma_vat_additional_tax
-            total_ventas_base_imponible = suma_vat_general_base + suma_ali_gene_addi + suma_vat_reduced_base
-            total_ventas_debit_fiscal = suma_vat_general_tax + suma_ali_gene_addi_debit + suma_vat_reduced_tax
+            
+
+           # suma_ali_gene_addi =  suma_vat_additional_base if line.vat_additional_base else 0.0
+            #suma_ali_gene_addi_debit = suma_vat_additional_tax if line.vat_additional_tax else 0.0
+            total_ventas_base_imponible = suma_vat_general_base + suma_vat_additional_base + suma_vat_reduced_base
+            total_ventas_debit_fiscal = suma_vat_general_tax + suma_vat_additional_tax + suma_vat_reduced_tax
 
         date_start = datetime.strftime(datetime.strptime(data['form']['date_from'], DEFAULT_SERVER_DATE_FORMAT),
                                        format_new)
@@ -583,6 +616,8 @@ class FiscalBookSaleReport(models.AbstractModel):
             'a': 0.00,
             'suma_total_w_iva': suma_total_w_iva,
             'suma_no_taxe_sale': suma_no_taxe_sale,
+            'suma_total_vat_general_base': suma_total_vat_general_base,
+            'suma_total_vat_general_tax': suma_total_vat_general_tax,
             'suma_vat_general_base': suma_vat_general_base,
             'suma_vat_general_tax': suma_vat_general_tax,
             'suma_vat_reduced_base': suma_vat_reduced_base,
@@ -590,8 +625,8 @@ class FiscalBookSaleReport(models.AbstractModel):
             'suma_vat_additional_base': suma_vat_additional_base,
             'suma_vat_additional_tax': suma_vat_additional_tax,
             'suma_get_wh_vat': suma_get_wh_vat,
-            'suma_ali_gene_addi': suma_ali_gene_addi,
-            'suma_ali_gene_addi_debit': suma_ali_gene_addi_debit,
+            'suma_ali_gene_addi': suma_vat_additional_base,
+            'suma_ali_gene_addi_debit': suma_vat_additional_tax,
             'total_ventas_base_imponible': total_ventas_base_imponible,
             'total_ventas_debit_fiscal': total_ventas_debit_fiscal,
         }
