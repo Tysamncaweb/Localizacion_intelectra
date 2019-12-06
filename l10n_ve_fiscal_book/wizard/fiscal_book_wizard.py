@@ -238,6 +238,7 @@ class PurchaseBook(models.AbstractModel):
 
     _name = 'report.l10n_ve_fiscal_book.report_fiscal_purchase_book'
 
+
     @api.model
     def get_report_values(self, docids, data=None):
         format_new = "%d/%m/%Y"
@@ -258,11 +259,44 @@ class PurchaseBook(models.AbstractModel):
         sum_get_wh_vat = 0
         suma_vat_exempt = 0
 
+        vat_reduced_base = 0
+        vat_reduced_rate = 0
+        vat_reduced_tax = 0
+        vat_additional_base = 0
+        vat_additional_rate = 0
+        vat_additional_tax = 0
+
+
+        ''' COMPRAS DE IMPORTACIONES'''
+
+        sum_total_with_iva_importaciones = 0
+        sum_vat_general_base_importaciones = 0
+        sum_vat_general_tax_importaciones = 0
+        sum_vat_reduced_base_importaciones = 0
+        sum_vat_reduced_tax_importaciones = 0
+        sum_vat_additional_base_importaciones = 0
+        sum_vat_additional_tax_importaciones = 0
+
+        hola = 0
+        #######################################
         compras_credit = 0
         origin = 0
         number = 0
 
         for h in purchasebook_ids:
+            h_vat_general_base = 0.0
+            h_vat_general_rate = 0.0
+            h_vat_general_tax = 0.0
+            vat_general_base_importaciones = 0
+            vat_general_rate_importaciones = 0
+            vat_general_tax_importaciones = 0
+            vat_reduced_base = 0
+            vat_reduced_rate = 0
+            vat_reduced_tax = 0
+            vat_additional_base = 0
+            vat_additional_rate = 0
+            vat_additional_tax = 0
+            get_wh_vat = 0
 
             if h.type == 'ntp':
                 compras_credit = h.invoice_id.amount_untaxed
@@ -272,23 +306,102 @@ class PurchaseBook(models.AbstractModel):
                 number = h.invoice_id.number
 
             sum_compras_credit += compras_credit
-            sum_total_with_iva += h.total_with_iva
             suma_vat_exempt += h.vat_exempt
-            sum_vat_general_base += h.vat_general_base
-            sum_vat_general_tax += h.vat_general_tax
-            sum_vat_reduced_base += h.vat_reduced_base
-            sum_vat_reduced_tax += h.vat_reduced_tax
-            sum_vat_additional_base += h.vat_additional_base
-            sum_vat_additional_tax += h.vat_additional_tax
-            sum_get_wh_vat += h.get_wh_vat
+
+
+            if h.invoice_id.partner_id.international_supplier == False:
+                ' NO ES PROVEDOR INTERNACIONAL'
+
+                sum_vat_reduced_base += h.vat_reduced_base  # Base Imponible de alicuota Reducida
+                sum_vat_reduced_tax += h.vat_reduced_tax  # Impuesto de IVA alicuota reducida
+                sum_vat_additional_base += h.vat_additional_base  # BASE IMPONIBLE ALICUOTA ADICIONAL
+
+                sum_vat_additional_tax += h.vat_additional_tax  # IMPUESTO DE IVA ALICUOTA ADICIONAL
+                sum_total_with_iva += h.total_with_iva   # Total monto con IVA
+                sum_vat_general_base += h.vat_general_base # Base Imponible Alicuota general
+                sum_vat_general_tax += h.vat_general_tax   # Impuesto de IVA
+                h_vat_general_base = h.vat_general_base
+                h_vat_general_rate = int(h.vat_general_base and h.vat_general_tax * 100 / h.vat_general_base) if h.vat_general_base else 0.0
+                h_vat_general_tax = h.vat_general_tax if h.vat_general_tax else 0.0
+                vat_reduced_base = h.vat_reduced_base
+                vat_reduced_rate = int(h.vat_reduced_base and h.vat_reduced_tax * 100 / h.vat_reduced_base)
+                vat_reduced_tax = h.vat_reduced_tax
+                vat_additional_base = h.vat_additional_base
+                vat_additional_rate = int(h.vat_additional_base and h.vat_additional_tax * 100 / h.vat_additional_base)
+                vat_additional_tax = h.vat_additional_tax
+                get_wh_vat = h.get_wh_vat
+
+                emission_date = datetime.strftime(datetime.strptime(h.emission_date, DEFAULT_SERVER_DATE_FORMAT),
+                                                   format_new)
+
+
+
+            else:
+                'ES UN PROVEEDOR INTERNACIONAL'
+                date_impor = h.invoice_id.fecha_importacion
+                emission_date = datetime.strftime(datetime.strptime(date_impor, DEFAULT_SERVER_DATE_FORMAT),
+                                                   format_new)
+
+                get_wh_vat = 0.0
+                vat_reduced_base = 0
+                vat_reduced_rate = 0
+                vat_reduced_tax = 0
+                vat_additional_base = 0
+                vat_additional_rate = 0
+                vat_additional_tax = 0
+                vat_general_base_importaciones = h.vat_general_base
+                vat_general_rate_importaciones = int(h.vat_general_base and h.vat_general_tax * 100 / h.vat_general_base)
+                vat_general_tax_importaciones = h.vat_general_tax
+                'Suma total compras con IVA'
+                sum_total_with_iva += h.total_with_iva  # Total monto con IVA
+                sum_vat_general_base_importaciones += h.vat_general_base + h.vat_reduced_base + h.vat_additional_base # Base Imponible Alicuota general
+                sum_vat_general_tax_importaciones += h.vat_general_tax + h.vat_additional_tax + h.vat_reduced_tax  # Impuesto de IVA
+                ' Suma total de Alicuota Reducida'
+                sum_vat_reduced_base_importaciones += h.vat_reduced_base  # Base Imponible de alicuota Reducida
+                sum_vat_reduced_tax_importaciones += h.vat_reduced_tax  # Impuesto de IVA alicuota reducida
+                'Suma total de Alicuota Adicional'
+                sum_vat_additional_base_importaciones += h.vat_additional_base  # BASE IMPONIBLE ALICUOTA ADICIONAL
+                sum_vat_additional_tax_importaciones += h.vat_additional_tax  # IMPUESTO DE IVA ALICUOTA ADICIONAL
+
+            sum_get_wh_vat += h.get_wh_vat  # IVA RETENIDO
+
+            if h_vat_general_base != 0:
+                valor_base_imponible = h.vat_general_base
+                valor_alic_general = h_vat_general_rate
+                valor_iva = h_vat_general_tax
+            else:
+                valor_base_imponible = 0
+                valor_alic_general = 0
+                valor_iva = 0
+
+            if get_wh_vat != 0:
+                hola = get_wh_vat
+            else:
+                hola = 0
+
+            if h.vat_exempt != 0 :
+                vat_exempt = h.vat_exempt
+                h.total_with_iva = 0
+            else:
+                vat_exempt = 0
+                h.total_with_iva = h.total_with_iva
+            if h.invoice_id.partner_id.international_supplier == True and h.vat_reduced_base != 0:
+                vat_general_base_importaciones = h.vat_reduced_base
+                vat_general_rate_importaciones = int(h.vat_reduced_base and h.vat_reduced_tax * 100 / h.vat_reduced_base)
+                vat_general_tax_importaciones = h.vat_reduced_tax
+
+            if h.invoice_id.partner_id.international_supplier == True and h.vat_additional_base != 0:
+                vat_general_base_importaciones = h.vat_additional_base
+                vat_general_rate_importaciones = int(h.vat_additional_base and h.vat_additional_tax * 100 / h.vat_additional_base)
+                vat_general_tax_importaciones = h.vat_additional_tax
 
             datos_compras.append({
 
-                'emission_date': datetime.strftime(datetime.strptime(h.emission_date, DEFAULT_SERVER_DATE_FORMAT), format_new),
-                'partner_vat': h.partner_vat,
+                'emission_date': emission_date if emission_date else ' ',
+                'partner_vat': h.partner_vat if h.partner_vat else ' ',
                 'partner_name': h.partner_name,
                 'people_type': h.people_type,
-                'wh_number': h.wh_number,
+                'wh_number': h.wh_number if h.wh_number else ' ',
                 'invoice_number': h.invoice_number,
                 'affected_invoice': h.affected_invoice,
                 'ctrl_number': h.ctrl_number,
@@ -299,31 +412,48 @@ class PurchaseBook(models.AbstractModel):
                 'origin': origin,
                 'number': number,
                 'total_with_iva': h.total_with_iva,
-                'vat_exempt': h.vat_exempt,
+                'vat_exempt': vat_exempt,
                 'compras_credit': compras_credit,
-                'vat_general_base': h.vat_general_base,
-                'vat_general_rate':int(h.vat_general_base and h.vat_general_tax * 100 / h.vat_general_base),
-                'vat_general_tax': h.vat_general_tax,
-                'vat_reduced_base': h.vat_reduced_base,
-                'vat_reduced_rate': int(h.vat_reduced_base and h.vat_reduced_tax * 100 / h.vat_reduced_base),
-                'vat_reduced_tax': h.vat_reduced_tax,
-                'vat_additional_base': h.vat_additional_base,
-                'vat_additional_rate': int(h.vat_additional_base and h.vat_additional_tax * 100 / h.vat_additional_base),
-                'vat_additional_tax': h.vat_additional_tax,
-                'get_wh_vat': h.get_wh_vat,
+                'vat_general_base': valor_base_imponible,
+                'vat_general_rate': valor_alic_general,
+                'vat_general_tax': valor_iva,
+                'vat_reduced_base': vat_reduced_base,
+                'vat_reduced_rate': vat_reduced_rate,
+                'vat_reduced_tax': vat_reduced_tax,
+                'vat_additional_base': vat_additional_base,
+                'vat_additional_rate': vat_additional_rate,
+                'vat_additional_tax':  vat_additional_tax,
+                'get_wh_vat': hola,
+                'vat_general_base_importaciones' : vat_general_base_importaciones if vat_general_base_importaciones else 0.0,
+                'vat_general_rate_importaciones' : vat_general_rate_importaciones if vat_general_base_importaciones else 0.0,
+                'vat_general_tax_importaciones' : vat_general_tax_importaciones if vat_general_base_importaciones else 0.0,
+                'nro_planilla': h.invoice_id.nro_planilla_impor if  h.invoice_id.nro_planilla_impor else ' ',
+                'nro_expediente': h.invoice_id.nro_expediente_impor if h.invoice_id.nro_expediente_impor else ' ',
             })
         if sum_vat_additional_base != 0:
-            sum_ali_gene_addi = sum_vat_general_base + sum_vat_additional_base
+            sum_ali_gene_addi =  sum_vat_additional_base
         else:
             sum_ali_gene_addi = sum_vat_additional_base
 
         if sum_vat_additional_tax != 0:
-            sum_ali_gene_addi_credit = sum_vat_general_tax + sum_vat_additional_tax
+            sum_ali_gene_addi_credit = sum_vat_additional_tax
         else:
             sum_ali_gene_addi_credit = sum_vat_additional_tax
 
-        total_compras_base_imponible = sum_vat_general_base + sum_ali_gene_addi + sum_vat_reduced_base
-        total_compras_credit_fiscal = sum_vat_general_tax + sum_ali_gene_addi_credit + sum_vat_reduced_tax
+        ' IMPORTACIONES ALICUOTA GENERAL + ALICUOTA ADICIONAL'
+        if sum_vat_additional_base_importaciones != 0:
+            sum_ali_gene_addi_importaciones = sum_vat_general_base_importaciones + sum_vat_additional_base_importaciones
+        else:
+            sum_ali_gene_addi_importaciones = sum_vat_additional_base_importaciones
+
+        if sum_vat_additional_tax_importaciones != 0:
+            sum_ali_gene_addi_credit_importaciones = sum_vat_general_tax_importaciones + sum_vat_additional_tax_importaciones
+        else:
+            sum_ali_gene_addi_credit_importaciones = sum_vat_additional_tax_importaciones
+
+        total_compras_base_imponible = sum_vat_general_base + sum_ali_gene_addi + sum_vat_reduced_base + sum_vat_general_base_importaciones + sum_ali_gene_addi_importaciones + sum_vat_reduced_base_importaciones
+        total_compras_credit_fiscal = sum_vat_general_tax + sum_ali_gene_addi_credit + sum_vat_reduced_tax + sum_vat_general_tax_importaciones + sum_ali_gene_addi_credit_importaciones + sum_vat_reduced_tax_importaciones
+
 
 
         date_start = datetime.strftime(datetime.strptime(data['form']['date_from'], DEFAULT_SERVER_DATE_FORMAT), format_new)
@@ -347,6 +477,12 @@ class PurchaseBook(models.AbstractModel):
             'sum_get_wh_vat': sum_get_wh_vat,
             'sum_ali_gene_addi': sum_ali_gene_addi,
             'sum_ali_gene_addi_credit': sum_ali_gene_addi_credit,
+            'sum_vat_general_base_importaciones' : sum_vat_general_base_importaciones,
+            'sum_vat_general_tax_importaciones' : sum_vat_general_tax_importaciones,
+            'sum_ali_gene_addi_importaciones': sum_ali_gene_addi_importaciones,
+            'sum_ali_gene_addi_credit_importaciones': sum_ali_gene_addi_credit_importaciones,
+            'sum_vat_reduced_base_importaciones': sum_vat_reduced_base_importaciones,
+            'sum_vat_reduced_tax_importaciones': sum_vat_reduced_tax_importaciones,
             'total_compras_base_imponible': total_compras_base_imponible,
             'total_compras_credit_fiscal': total_compras_credit_fiscal,
 

@@ -1579,7 +1579,10 @@ class IslrWhDocInvoices(models.Model):
         #TODO EVALUAR SI ESTOS CAMPOS SON REQUERIDOS EN EL XML
         #self.buyer = buyer
         #self.wh_agent = wh_agent
-        vendor = vendor.vat.replace("-","")
+        if vendor.vat :
+            vendor = vendor.vat.replace("-","")
+        else:
+            vendor = str()
         if not ail_brw.concept_id:
             raise exceptions.except_orm(_('Invoice has not Withheld Concepts!'))
         return {

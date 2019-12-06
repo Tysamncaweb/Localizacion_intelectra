@@ -55,6 +55,7 @@ class AccountInvoice(models.Model):
     international = fields.Boolean( 'provedoor internacional', compute='_get_international')
     nro_planilla_impor = fields.Char('Nro de Planilla de Importacion', size=25)
     nro_expediente_impor = fields.Char('Nro de Expediente de Importacion', size=25)
+    fecha_importacion = fields.Date('Fecha de la planilla de Importación')
 
     # date_document = lambda *a: time.strftime('%Y-%m-%d')
     @api.one
