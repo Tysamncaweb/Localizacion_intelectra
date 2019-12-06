@@ -451,7 +451,7 @@ class PurchaseBook(models.AbstractModel):
         else:
             sum_ali_gene_addi_credit_importaciones = sum_vat_additional_tax_importaciones
 
-        total_compras_base_imponible = sum_vat_general_base + sum_ali_gene_addi + sum_vat_reduced_base + sum_vat_general_base_importaciones + sum_ali_gene_addi_importaciones + sum_vat_reduced_base_importaciones
+        total_compras_base_imponible = sum_vat_general_base + sum_ali_gene_addi + sum_vat_reduced_base + sum_vat_general_base_importaciones + sum_ali_gene_addi_importaciones + sum_vat_reduced_base_importaciones + suma_vat_exempt
         total_compras_credit_fiscal = sum_vat_general_tax + sum_ali_gene_addi_credit + sum_vat_reduced_tax + sum_vat_general_tax_importaciones + sum_ali_gene_addi_credit_importaciones + sum_vat_reduced_tax_importaciones
 
 
@@ -601,7 +601,7 @@ class FiscalBookSaleReport(models.AbstractModel):
 
            # suma_ali_gene_addi =  suma_vat_additional_base if line.vat_additional_base else 0.0
             #suma_ali_gene_addi_debit = suma_vat_additional_tax if line.vat_additional_tax else 0.0
-            total_ventas_base_imponible = suma_vat_general_base + suma_vat_additional_base + suma_vat_reduced_base
+            total_ventas_base_imponible = suma_vat_general_base + suma_vat_additional_base + suma_vat_reduced_base + suma_no_taxe_sale
             total_ventas_debit_fiscal = suma_vat_general_tax + suma_vat_additional_tax + suma_vat_reduced_tax
 
         date_start = datetime.strftime(datetime.strptime(data['form']['date_from'], DEFAULT_SERVER_DATE_FORMAT),
