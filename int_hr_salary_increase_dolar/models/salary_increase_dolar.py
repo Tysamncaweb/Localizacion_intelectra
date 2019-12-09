@@ -183,10 +183,10 @@ class salary_increase_ajuste_tasa(models.Model):
     state = fields.Selection([('draft', 'Borrador'),
         ('confirm', 'Confirmado'),
         ('done', 'Ejecutado')], 'Estado', default ='draft')
-    fecha_actual = fields.Date(string="Fecha de Ajuste", default=fields.Datetime.now)
+    fecha_actual = fields.Date(string="Fecha de Ajuste")
     user_id = fields.Many2one('res.users', 'Responsable',   states={'draft': [('readonly', False)]}, default=lambda s: s._uid)
     name = fields.Char("Motivo", size=64, states={'draft': [('readonly', False)]})
-    tasa = fields.Many2one('res.currency.rate',string="Factor de Corrección de Inflación",required=True)
+    tasa = fields.Many2one('res.currency.rate',string="Factor de Corrección de Inflación",required=True,  help="Por favor indique la Fecha de Ajuste para buscar la ultima tasa registrada" )
     Empleado = fields.Many2many('hr.employee')
 
     @api.multi

@@ -17,8 +17,8 @@
                         <group>
 	                        <group >
 								<field name="name" attrs="{'readonly': [('state','!=', 'draft')]}"/>
-		                        <field name="tasa" attrs="{'readonly': [('state','!=', 'draft')]}" domain="[('name', '=', fecha_actual)]" options="{'no_create': True, 'no_edit': True, 'no_open':True}" />
-		                        <field name="fecha_actual" readonly="True"/>
+                                <field name="fecha_actual" attrs="{'readonly': [('state','=', 'done')]}" required="True"/>
+		                        <field name="tasa" attrs="{'readonly': [('state','!=', 'draft')]}" domain="[('name', '=', fecha_actual)]" options="{'no_create': True, 'no_edit': True, 'no_open':True}"  />
 		                        <field name="user_id" attrs="{'readonly': [('state','=', 'done')]}" readonly="True"/>
 
 	                        </group>
