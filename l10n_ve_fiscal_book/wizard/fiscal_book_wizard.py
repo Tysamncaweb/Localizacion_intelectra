@@ -442,12 +442,12 @@ class PurchaseBook(models.AbstractModel):
 
         ' IMPORTACIONES ALICUOTA GENERAL + ALICUOTA ADICIONAL'
         if sum_vat_additional_base_importaciones != 0:
-            sum_ali_gene_addi_importaciones = sum_vat_general_base_importaciones + sum_vat_additional_base_importaciones
+            sum_ali_gene_addi_importaciones = sum_vat_additional_base_importaciones
         else:
             sum_ali_gene_addi_importaciones = sum_vat_additional_base_importaciones
 
         if sum_vat_additional_tax_importaciones != 0:
-            sum_ali_gene_addi_credit_importaciones = sum_vat_general_tax_importaciones + sum_vat_additional_tax_importaciones
+            sum_ali_gene_addi_credit_importaciones = sum_vat_additional_tax_importaciones
         else:
             sum_ali_gene_addi_credit_importaciones = sum_vat_additional_tax_importaciones
 
