@@ -519,10 +519,10 @@ class AccountWhIva(models.Model):
                     raise exceptions.ValidationError(
                         _('The partner must be withholding vat agent .'))
 
-    _sql_constraints = [
-        ('ret_num_uniq', 'unique (type,partner_id,company_id)',
-         'number must be unique by partner and document type!')
-    ]
+    #_sql_constraints = [
+    #    ('ret_num_uniq', 'unique (type,partner_id,company_id)',
+    #     'number must be unique by partner and document type!')
+    #]
 
     @api.multi
     def write(self, values):
