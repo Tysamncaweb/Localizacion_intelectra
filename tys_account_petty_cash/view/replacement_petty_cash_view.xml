@@ -45,7 +45,7 @@
                                 <field name="code" attrs="{'readonly':[('petty_cash_status', 'in', ('close','liquidado'))]}"/>
                                 <field name="petty_cash_bank_id" attrs="{'invisible':[('petty_cash_status', 'in', 'process')], 'required':[('petty_cash_status', 'in', 'close')], 'readonly':[('petty_cash_status', 'in', 'liquidado')]}"/>
                                 <field name="move_id" string="Asiento Contable" attrs="{'invisible': [('petty_cash_status', 'in', ('process','close'))], 'readonly': [('petty_cash_status', 'in','liquidado')]}"/>
-                                <field name="referencia" attrs="'readonly': [('petty_cash_status', 'in','liquidado')]}"/>
+                                <field name="referencia" attrs="{'readonly': [('petty_cash_status', 'in','liquidado')]}"/>
 
                             </group>
                             <group>
