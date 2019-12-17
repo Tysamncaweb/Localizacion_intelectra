@@ -155,12 +155,14 @@ class Replacement_petty_cash(models.Model):
         '''metodo que cambia el estatus de la reposición de En proceso a cerrado'''
         code = self._get_sequence_code()
         self.write({'petty_cash_status': "close", 'name': code})
+        ml = self.env['account.move.line']
+        move = []
 
         if self.facturas_ids:
             for factura in self.facturas_ids:
                 estado = self.env['invoice.petty.cash'].search([('id', '=', factura.id)])
                 estado.write({'state': 'cancel'})
-            return estado
+            return True
         else:
             raise ValidationError('Por favor, Ingrese algunas Facturas')
 
@@ -175,8 +177,10 @@ class Replacement_petty_cash(models.Model):
 
         vals = {
             'name': self.name,
+            'ref': self.referencia,
             'date': self.date,
-            'journal_id': self.code.petty_cash_journal_id.id,
+            'journal_id': self.petty_cash_bank_id.id,
+            #'journal_id': self.code.petty_cash_journal_id.id,
             'state': 'posted',
         }
         move_obj = self.env['account.move']
@@ -187,12 +191,13 @@ class Replacement_petty_cash(models.Model):
             'account_id': self.petty_cash_bank_id.default_debit_account_id.id,
             'company_id': company_id.id,
             'date_maturity': False,
-            'ref': self.code.name,
+            'ref': self.referencia,
             'date': self.date,
             'partner_id': self.code.petty_cash_responsible_id.partner_id.id,
             'move_id': move_id.id,
             'name': self.name,
-            'journal_id': self.code.petty_cash_journal_id.id,
+            'journal_id': self.petty_cash_bank_id.id,
+            #'journal_id': self.code.petty_cash_journal_id.id,
             'credit': self.amount_total,
             'debit': 0.0,
         }
@@ -215,7 +220,7 @@ class Replacement_petty_cash(models.Model):
                    'name': self.name}
             super(Replacement_petty_cash, self).write(res)
 
-        return True
+
 
 
 
