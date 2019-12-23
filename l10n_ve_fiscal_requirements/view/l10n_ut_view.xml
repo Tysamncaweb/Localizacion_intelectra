@@ -50,7 +50,7 @@
         </record>
 
         <record id="act_l10n_ut_tree" model="ir.actions.act_window">
-            <field name="name">Carcas</field>
+            <field name="name">Unidades tributarias</field>
             <field name="res_model">l10n.ut</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>

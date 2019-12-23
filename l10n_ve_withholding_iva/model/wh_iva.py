@@ -242,15 +242,22 @@ class AccountWhIva(models.Model):
         return context.get('type', 'in_invoice')
 
     @api.model
-    def _get_journal(self):
-
-        """ Return a iva journal depending of invoice type
-        """
-        partner_id = self._context.get('uid')
-        partner = self.env['res.partner'].search([('id','=',partner_id )])
-        purchase_journal_id = partner.purchase_journal_id.id
-        res = self.env['account.journal'].search([('id','=',purchase_journal_id)])
-        return res
+    def _get_journal(self,partner_id=None):
+        if not partner_id:
+            partner_id = self.env['res.partner'].search([('id', '=', self._context.get('uid'))])
+        if self._context.get('type') in ('out_invoice', 'out_refund'):
+            res = partner_id.purchase_sales_id
+        else:
+            res = partner_id.purchase_journal_id
+        if res:
+            return res
+        else:
+            raise exceptions.except_orm(
+                _('Configuration Incomplete.'),
+                _("I couldn't find a journal to execute the Witholding ISLR"
+                  " automatically, please create one in vendor/supplier > "
+                  "accounting > Journal retention ISLR"))
+            return False
 
 
     @api.model
