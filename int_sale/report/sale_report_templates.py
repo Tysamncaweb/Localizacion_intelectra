@@ -14,7 +14,7 @@ class SaleOrderReport(models.AbstractModel):
         docs = self.env['sale.order'].browse(docids)
         category = self.env['sale.layout_category'].search([('id','!=',0)])
         for id in category:
-            layout_category_ids.append({'id':id.id,'name':id.name, 'suma':0.0})
+            layout_category_ids.append({'id':id.id,'name':id.name,})
         ids_line = self.env['sale.order.line'].search([('order_id','=',docs.id)])
 
         for ids in ids_line:
@@ -22,12 +22,14 @@ class SaleOrderReport(models.AbstractModel):
             layout_category_ids_suma.append({'id': ids.layout_category_id.id, 'name': ids.layout_category_id.name})
             ids_product.append({'id':product,
                                 'code':ids.name,
-                                'cant':ids.product_qty,
+                                'cant':ids.product_uom_qty,
                                 'unid':ids.product_uom.name,
                                 'price_unit':ids.price_unit,
                                 'price':ids.price_subtotal,
                                 'category':ids.layout_category_id.id})
-            mrp_bom = self.env['mrp.bom'].search([('product_tmpl_id','=',product)])
+            product_product = self.env['product.product'].search([('id','=',product)])
+            product_tmpl_id= product_product.product_tmpl_id.id
+            mrp_bom = self.env['mrp.bom'].search([('product_tmpl_id','=',product_tmpl_id)])
             mrp_bom_line = self.env['mrp.bom.line'].search([('bom_id', '=', mrp_bom.id)])
 
             for bom_ids in mrp_bom_line:
