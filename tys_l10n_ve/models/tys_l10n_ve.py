@@ -54,3 +54,5 @@ class res_municipal_parish(models.Model):
     res_state_municipal_id = fields.Char("Municipio")
     name = fields.Char("Parish")
 
+#
+
