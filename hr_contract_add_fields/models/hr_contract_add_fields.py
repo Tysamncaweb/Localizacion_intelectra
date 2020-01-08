@@ -187,7 +187,7 @@ class Contract(models.Model):
                 contract_fields.update({'salary_retroactive_check': False, 'salary_retroactive_value': 0.0})
             ###########################3#DEDUCCIONES########################################33
             if contract.salary_deduction_check:
-                contract_fields.update({'deduccion_salarial_check': False, 'salary_deduction_value': '0'})
+                contract_fields.update({'salary_deduction_check': False, 'salary_deduction_value': '0'})
             if contract.ausencias_ded_check:
                 contract_fields.update({'ausencias_ded_check': False, 'ausencias_ded_value': '0'})
             if contract.prestamo_check:

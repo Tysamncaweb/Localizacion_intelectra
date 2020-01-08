@@ -175,14 +175,16 @@ class hr_payslip(models.Model):
             date_range.append(date(int(local_date[0]), int(local_date[1]), 1))  # primer dia del mes
             date_range.append(date(int(local_date[0]), int(local_date[1]),
                                    calendar.monthrange(int(local_date[0]), int(local_date[1]))[1]))  # ultimo dia del mes
-        elif local_date[1] == '01':
-            date_range.append(date(int(local_date[0]), int(local_date[1]),  int(local_date[2])))  # primer dia del mes
-            date_range.append(date(int(local_date[0]), int(local_date[1]),
-                               calendar.monthrange(int(local_date[0]), int(local_date[1]))[1]))  # ultimo dia del mes
         elif local_date[1] != '01' and tipo_trans == 'utilidad':
             date_range.append(date(int(local_date[0]), int(local_date[1]), 1))  # primer dia del mes
             date_range.append(date(int(local_date[0]), int(local_date[1]),
                                    calendar.monthrange(int(local_date[0]), int(local_date[1]))[1]))
+
+        elif local_date[1] == '01':
+            date_range.append(date(int(local_date[0]), int(local_date[1]),  int(local_date[2])))  # primer dia del mes
+            date_range.append(date(int(local_date[0]), int(local_date[1]),
+                               calendar.monthrange(int(local_date[0]), int(local_date[1]))[1]))  # ultimo dia del mes
+
 
         return date_range
 

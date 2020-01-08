@@ -1,6 +1,6 @@
 # coding: utf-8
 # from openerp import fields, models, api
-from odoo import models,fields, api , exceptions
+from odoo import models,fields, api , exceptions, _
 from odoo.exceptions import Warning
 from datetime import datetime, time, date
 from dateutil import relativedelta
@@ -173,11 +173,16 @@ class hr_payslip(models.Model):
                 mes_ult_sueldo = fecha_desde.month
                 if fecha_desde.month == 12:
                     ultimo_sueldo += sueldo_temp
-                if sueldo_temp == 0:
-                    break
+                  #  if ultimo_sueldo == 0:
+                   #     break
+       #         if sueldo_temp == 0:
+        #            continue
                 sueldo_x_mes = sueldo_temp
 
             ultimo_sueldo = ultimo_sueldo + sueldo_x_mes*(mes_pago - mes_ult_sueldo)
+            if ultimo_sueldo == 0:
+                raise exceptions.except_orm(_('Advertencia!'), (u'El empleado %s no tiene Nóminas en el período parametrizado en las Utilidades. Por Favor verifique e intente de nuevo.')%(employee_id.name))
+
         else:
             fecha_desde = datetime.strftime(
                 datetime.strptime(fecha_desde, DEFAULT_SERVER_DATE_FORMAT) + relativedelta.relativedelta(months=-1),
