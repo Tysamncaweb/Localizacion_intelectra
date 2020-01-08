@@ -28,6 +28,11 @@ class hr_payslip_run_total(models.Model):
                     tdeduc = a.id
                 if a.code == 'NET':
                     ttotal = a.id
+                if  self.check_special_struct == True:
+                    if a.code == 'ESP':
+                        tasig = a.id
+                        tdeduc = 0
+                        ttotal = a.id
         else:
             tasig = tdeduc = ttotal = 0
 
@@ -58,13 +63,17 @@ class hr__days_period(models.Model):
 
 
         for b in self:
+            cont_dias1 = 0
             date_to = datetime.strptime(b.date_to, '%Y-%m-%d')
             date_from = datetime.strptime(b.date_from, '%Y-%m-%d')
             difb = date_to - date_from
             diferencia = difb.days + 1
+            for var6 in b.worked_days_line_ids:
+                if var6.code != 'WORK100':
+                    cont_dias1 += var6.number_of_days
             for var4 in b.worked_days_line_ids:
                 if var4.code == 'WORK100':
-                    var4.write({'number_of_days': (diferencia)})
+                    var4.write({'number_of_days': (diferencia - cont_dias1)})
 
 
         for a in self:
