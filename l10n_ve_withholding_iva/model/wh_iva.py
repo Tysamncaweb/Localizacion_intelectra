@@ -244,11 +244,11 @@ class AccountWhIva(models.Model):
     @api.model
     def _get_journal(self,partner_id=None):
         if not partner_id:
-            partner_id = self.env['res.partner'].search([('id', '=', self._context.get('uid'))])
+            partner_id = self.env['res.partner'].search([('id', '=',self._context.get('uid'))])
         if self._context.get('type') in ('out_invoice', 'out_refund'):
-            res = partner_id.purchase_sales_id
+            res = partner_id.company_id.partner_id.purchase_sales_id
         else:
-            res = partner_id.purchase_journal_id
+            res = partner_id.company_id.partner_id.purchase_journal_id
         if res:
             return res
         else:
