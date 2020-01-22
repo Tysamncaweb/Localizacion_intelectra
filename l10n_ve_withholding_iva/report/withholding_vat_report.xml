@@ -245,13 +245,19 @@
                             <t t-esc="'{:,.2f}'.format(base_tax_total_amount_iva * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;padding-top:5px;padding-bottom:3px;">
+                            <t t-foreach="d.wh_lines.invoice_id.tax_line_ids" t-as="a">
+                                <t t-if="a.tax_id.amount == 16">
+                                    <span t-esc="'{:,.2f}'.format(a.tax_id.amount).replace(',', '@').replace('.', ',').replace('@', '.')"/>
+                                </t>
+                            </t>
 
                         </td>
                         <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;padding-top:5px;padding-bottom:3px;">
-
+                            <span t-esc="'{:,.2f}'.format(d.wh_lines.wh_iva_rate * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;padding-top:5px;padding-bottom:3px;">
-                            <t t-esc="'{:,.2f}'.format(tax_total_amount * sign).replace(',', '@').replace('.', ',').replace('@', '.')" />
+                            <!--t t-esc="'{:,.2f}'.format(tax_total_amount * sign).replace(',', '@').replace('.', ',').replace('@', '.')" /-->
+                            <span t-esc="'{:,.2f}'.format(d.wh_lines.invoice_id.amount_tax * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;border-right:1px solid;padding-top:5px;padding-bottom:3px;">
                             <t t-esc="'{:,.2f}'.format(wh_tax_total_amount * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
