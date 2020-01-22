@@ -256,6 +256,7 @@
                             <span t-esc="'{:,.2f}'.format(d.wh_lines.wh_iva_rate * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
                         <td width="8%" style="text-align:center;border-top:1px solid;border-bottom:1px solid;padding-top:5px;padding-bottom:3px;">
+                            <!-- se sustituye la linea-->
                             <!--t t-esc="'{:,.2f}'.format(tax_total_amount * sign).replace(',', '@').replace('.', ',').replace('@', '.')" /-->
                             <span t-esc="'{:,.2f}'.format(d.wh_lines.invoice_id.amount_tax * sign).replace(',', '@').replace('.', ',').replace('@', '.')"/>
                         </td>
