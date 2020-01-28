@@ -26,7 +26,8 @@ class SaleOrderReport(models.AbstractModel):
                                 'unid':ids.product_uom.name,
                                 'price_unit':ids.price_unit,
                                 'price':ids.price_subtotal,
-                                'category':ids.layout_category_id.id})
+                                'category':ids.layout_category_id.id,
+                                'category_name':ids.layout_category_id.name})
             product_product = self.env['product.product'].search([('id','=',product)])
             product_tmpl_id= product_product.product_tmpl_id.id
             mrp_bom = self.env['mrp.bom'].search([('product_tmpl_id','=',product_tmpl_id)])
